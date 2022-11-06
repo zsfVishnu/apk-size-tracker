@@ -9721,7 +9721,10 @@ try {
     // console.log(`The event payload: ${payload}`);
     console.log("APK size")
     console.log("%%%%%%%%%%%%%%%%%%%%%%")
-    console.log((0,external_child_process_namespaceObject.execSync)('pwd && ls && ./gradlew assemble && cd app/build/outputs/apk/debug && du -sh app-debug.apk ', { encoding: 'utf-8' }));
+    ;(0,external_child_process_namespaceObject.execSync)('pwd && ls && ./gradlew assemble', { encoding: 'utf-8' });
+    console.log((0,external_child_process_namespaceObject.execSync)('cd app/build/outputs/apk/debug && du -sh app-debug.apk', { encoding: 'utf-8' }));
+    console.log((0,external_child_process_namespaceObject.execSync)('cd app/build/outputs/apk/debug && du -sh app-debug.apk', { encoding: 'utf-8' }));
+    
     console.log("%%%%%%%%%%%%%%%%%%%%%%")
 
 } catch (error) {

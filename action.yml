@@ -1,0 +1,13 @@
+name: 'Apk size tracker'
+description: 'Track the size of apk's'
+inputs:
+  flavor:  # id of input
+    description: 'flavor of the apk to build'
+    required: true
+    default: 'staging'
+outputs:
+  size: # id of output
+    description: 'Size of the apk'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'

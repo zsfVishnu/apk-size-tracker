@@ -1,13 +1,15 @@
-const core = require('@actions/core');
-const github = require('@actions/github');
+import { getInput, setOutput, setFailed } from '@actions/core';
+import { context } from '@actions/github';
+import { execSync } from 'child_process';
+
 
 try {
-    const flavorToBuild = core.getInput('flavor');
+    const flavorToBuild = getInput('flavor');
     console.log(`Building flavor:  ${flavorToBuild}!`);
     const time = (new Date()).toTimeString();
-    core.setOutput("time", time);
+    setOutput("time", time);
     // Get the JSON webhook payload for the event that triggered the workflow
-    const payload = JSON.stringify(github.context.payload, undefined, 2)
+    const payload = JSON.stringify(context.payload, undefined, 2)
     // console.log(`The event payload: ${payload}`);
     console.log("APK size")
     console.log("%%%%%%%%%%%%%%%%%%%%%%")
@@ -15,5 +17,5 @@ try {
     console.log("%%%%%%%%%%%%%%%%%%%%%%")
 
 } catch (error) {
-    core.setFailed(error.message);
+    setFailed(error.message);
 }

@@ -9676,32 +9676,56 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__nccwpck_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
-const core = __nccwpck_require__(6024);
-const github = __nccwpck_require__(5016);
+"use strict";
+// ESM COMPAT FLAG
+__nccwpck_require__.r(__webpack_exports__);
+
+// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
+var core = __nccwpck_require__(6024);
+// EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
+var github = __nccwpck_require__(5016);
+;// CONCATENATED MODULE: external "child_process"
+const external_child_process_namespaceObject = require("child_process");
+;// CONCATENATED MODULE: ./index.js
+
+
+
+
 
 try {
-    const flavorToBuild = core.getInput('flavor');
+    const flavorToBuild = (0,core.getInput)('flavor');
     console.log(`Building flavor:  ${flavorToBuild}!`);
     const time = (new Date()).toTimeString();
-    core.setOutput("time", time);
+    (0,core.setOutput)("time", time);
     // Get the JSON webhook payload for the event that triggered the workflow
     const payload = JSON.stringify(github.context.payload, undefined, 2)
     // console.log(`The event payload: ${payload}`);
     console.log("APK size")
     console.log("%%%%%%%%%%%%%%%%%%%%%%")
-    console.log(execSync('pwd && ls && chmod +x builder.sh && ./builder.sh && cd app/build/outputs/apk/debug && du -sh app-debug.apk ', { encoding: 'utf-8' }));
+    console.log((0,external_child_process_namespaceObject.execSync)('pwd && ls && chmod +x builder.sh && ./builder.sh && cd app/build/outputs/apk/debug && du -sh app-debug.apk ', { encoding: 'utf-8' }));
     console.log("%%%%%%%%%%%%%%%%%%%%%%")
 
 } catch (error) {
-    core.setFailed(error.message);
+    (0,core.setFailed)(error.message);
 }
 })();
 

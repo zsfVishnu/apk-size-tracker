@@ -13,7 +13,7 @@ try {
     // console.log(`The event payload: ${payload}`);
     console.log("APK size")
     console.log("%%%%%%%%%%%%%%%%%%%%%%")
-    console.log(execSync('pwd && ls && chmod +x builder.sh && ./builder.sh && cd app/build/outputs/apk/debug && du -sh app-debug.apk ', { encoding: 'utf-8' }));
+    console.log(execSync('pwd && ls && ./gradlew assemble && cd app/build/outputs/apk/debug && du -sh app-debug.apk ', { encoding: 'utf-8' }));
     console.log("%%%%%%%%%%%%%%%%%%%%%%")
 
 } catch (error) {

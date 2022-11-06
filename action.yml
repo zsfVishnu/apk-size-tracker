@@ -1,5 +1,5 @@
 name: 'Apk size tracker'
-description: 'Track the size of apk's'
+description: 'Track the size of apk'
 inputs:
   flavor:  # id of input
     description: 'flavor of the apk to build'

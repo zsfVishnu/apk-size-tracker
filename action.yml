@@ -9,11 +9,5 @@ outputs:
   size: # id of output
     description: 'Size of the apk'
 runs:
-  using: 'composite'
+  using: 'node16'
   main: 'dist/index.js'
-  steps:
-    - run: echo 36Mb > sizeFile.txt
-    - uses: actions/upload-artifact@v3
-      with:
-        name: my-artifact
-        path: sizeFile.txt

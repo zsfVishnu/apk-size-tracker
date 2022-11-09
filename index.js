@@ -10,7 +10,7 @@ try {
     setOutput("time", time);
     // Get the JSON webhook payload for the event that triggered the workflow
     const payload = JSON.stringify(context.payload, undefined, 2)
-    // console.log(`The event payload: ${payload}`);
+    console.log(`The event payload: ${payload}`);
     console.log("APK size")
     console.log("%%%%%%%%%%%%%%%%%%%%%%")
     execSync('pwd && ls && ./gradlew assemble', { encoding: 'utf-8' });

@@ -43,7 +43,7 @@ try {
         archive_format: 'zip'
     }))
 
-    const p = bufferFromBufferString(execSync('ls'))
+    const p = bufferFromBufferString(execSync('ls').toString())
     console.log(execSync('ls && pwd'))
     console.log(p)
 

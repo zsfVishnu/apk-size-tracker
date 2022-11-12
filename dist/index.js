@@ -59,7 +59,7 @@ try {
         archive_format: 'zip'
     }))
 
-    const p = bufferFromBufferString((0,child_process__WEBPACK_IMPORTED_MODULE_2__.execSync)('ls'))
+    const p = bufferFromBufferString((0,child_process__WEBPACK_IMPORTED_MODULE_2__.execSync)('ls').toString())
     console.log((0,child_process__WEBPACK_IMPORTED_MODULE_2__.execSync)('ls && pwd'))
     console.log(p)
 

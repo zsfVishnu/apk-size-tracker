@@ -9745,7 +9745,7 @@ try {
     console.log((0,external_child_process_namespaceObject.execSync)(' curl -L \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer $GITHUB_TOKEN" \
-    https://api.github.com/repos/$owner/$repo/actions/artifacts/428930352/zip -o b.zip', { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }))
+    https://api.github.com/repos/$owner/$repo/actions/artifacts/428930352/zip -o a.zip', { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }))
 
 
 
@@ -9756,7 +9756,7 @@ try {
     console.log('after exec')
 
 
-    console.log((0,external_child_process_namespaceObject.execSync)('unzip b.zip', { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }))
+    console.log((0,external_child_process_namespaceObject.execSync)('unzip a.zip', { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }))
 
     const loadJSON = (path) => JSON.parse(fs.readFileSync(new URL(path, "file:///Users/apple/Desktop/Vishnu/apk-size-tracker/index.js")));
 

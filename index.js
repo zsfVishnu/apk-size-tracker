@@ -24,8 +24,8 @@ try {
     // console.log(execSync('cd app/build/outputs/apk/debug && du -sh app-debug.apk', { encoding: 'utf-8' }));
     // console.log(execSync('cd app/build/outputs/apk/debug && du -sh app-debug.apk', { encoding: 'utf-8' }));
 
-    const { owner, repo } = context
-    // const repo = context.repo
+    const owner = context.repo.owner
+    const repo = context.repo.repo
 
     console.log("Owner")
     console.log(owner)

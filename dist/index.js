@@ -28296,8 +28296,8 @@ try {
     // console.log(execSync('cd app/build/outputs/apk/debug && du -sh app-debug.apk', { encoding: 'utf-8' }));
     // console.log(execSync('cd app/build/outputs/apk/debug && du -sh app-debug.apk', { encoding: 'utf-8' }));
 
-    const { owner, repo } = github.context
-    // const repo = context.repo
+    const owner = github.context.repo.owner
+    const repo = github.context.repo.repo
 
     console.log("Owner")
     console.log(owner)

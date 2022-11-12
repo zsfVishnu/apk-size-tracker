@@ -1,10 +1,13 @@
 import { getInput, setOutput, setFailed } from '@actions/core';
 import { context } from '@actions/github';
 import { execSync } from 'child_process';
+import { Octokit } from "octokit";
+
 const core = require('@actions/core');
 const github = require('@actions/github');
 const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN');
-const octokit = github.getOctokit(GITHUB_TOKEN);
+// const octokit = github.getOctokit(GITHUB_TOKEN);
+const octokit = new Octokit({ auth: GITHUB_TOKEN });
 
 
 try {
@@ -34,6 +37,8 @@ try {
 //         body: 'Thank you for submitting a pull request! We will try to review this as soon as we can.'
 //     });
 // }
+
+
 
 async function run() {
     console.log("inside run function")

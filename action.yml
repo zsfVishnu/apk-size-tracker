@@ -5,6 +5,9 @@ inputs:
     description: 'flavor of the apk to build'
     required: true
     default: 'staging'
+  GITHUB_TOKEN:
+    description: 'GitHub token'
+    required: true
 outputs:
   size: # id of output
     description: 'Size of the apk'

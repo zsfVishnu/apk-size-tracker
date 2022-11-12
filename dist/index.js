@@ -9747,11 +9747,14 @@ try {
     -H "Authorization: Bearer $GITHUB_TOKEN" \
     https://api.github.com/repos/$owner/$repo/actions/artifacts/428930352/zip -o b.zip', { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }))
 
-    // console.log(execSync(
-    //     'ls',
-    //     { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }
-    // ).toString());
-    // console.log('after exec')
+
+
+    console.log((0,external_child_process_namespaceObject.execSync)(
+        'ls',
+        { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }
+    ).toString());
+    console.log('after exec')
+
 
     console.log((0,external_child_process_namespaceObject.execSync)('unzip b.zip', { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }))
 

@@ -59,14 +59,15 @@ try {
         archive_format: 'zip'
     }))
 
-    ;(0,child_process__WEBPACK_IMPORTED_MODULE_2__.execSync)(
+    console.log('before exec')
+    console.log((0,child_process__WEBPACK_IMPORTED_MODULE_2__.execSync)(
         'ls',
         { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }
-    ).toString();
-
-    const p = bufferFromBufferString((0,child_process__WEBPACK_IMPORTED_MODULE_2__.execSync)('ls').toString())
-    console.log((0,child_process__WEBPACK_IMPORTED_MODULE_2__.execSync)('ls && pwd'))
-    console.log(p)
+    ).toString());
+    console.log('after exec')
+    // const p = bufferFromBufferString(execSync('ls').toString())
+    // console.log(execSync('ls && pwd'))
+    // console.log(p)
 
 
 

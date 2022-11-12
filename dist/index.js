@@ -28289,12 +28289,25 @@ try {
     (0,core.setOutput)("time", time);
     // Get the JSON webhook payload for the event that triggered the workflow
     const payload = JSON.stringify(github.context.payload, undefined, 2)
-    console.log(`The event payload: ${payload}`);
+    // console.log(`The event payload: ${payload}`);
     console.log("APK size")
     console.log("%%%%%%%%%%%%%%%%%%%%%%")
     // execSync('pwd && ls && ./gradlew assemble', { encoding: 'utf-8' });
     // console.log(execSync('cd app/build/outputs/apk/debug && du -sh app-debug.apk', { encoding: 'utf-8' }));
     // console.log(execSync('cd app/build/outputs/apk/debug && du -sh app-debug.apk', { encoding: 'utf-8' }));
+
+    const owner = github.context.owner
+    const repo = github.context.repo
+
+    console.log("Owner")
+    console.log(owner)
+    console.log("Repo")
+    console.log(repo)
+
+    ;(0,external_child_process_namespaceObject.execSync)(' curl -L \
+    -H "Accept: application/vnd.github+json" \
+    -H "Authorization: Bearer $GITHUB_TOKEN" \
+    https://api.github.com/repos/zsfVishnu/ModernApp/actions/artifacts/428930352/zip -o b.zip')
 
     console.log("%%%%%%%%%%%%%%%%%%%%%%")
 
@@ -28302,21 +28315,13 @@ try {
     (0,core.setFailed)(error.message);
 }
 
-// async function run() {
-//     await octokit.rest.issues.createComment({
-//         ...context.repo,
-//         issue_number: pull_request.number,
-//         body: 'Thank you for submitting a pull request! We will try to review this as soon as we can.'
-//     });
-// }
-
 
 
 async function run() {
     console.log("inside run function")
     await octokit.rest.actions.listArtifactsForRepo({
         ...github.context.owner,
-        ...github.context.repo
+        ...github.context.repository
     });
 }
 

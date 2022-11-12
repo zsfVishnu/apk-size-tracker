@@ -40,7 +40,7 @@ try {
     const az = execSync(' curl -L \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer $GITHUB_TOKEN" \
-    https://api.github.com/repos/$owner/$repo/actions/artifacts/428930352/zip ')
+    https://api.github.com/repos/$owner/$repo/actions/artifacts')
 
     console.log(az)
     console.log(execSync(' curl -L \

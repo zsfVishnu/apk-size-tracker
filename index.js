@@ -37,22 +37,11 @@ try {
     -H "Authorization: Bearer $GITHUB_TOKEN" \
     https://api.github.com/repos/$owner/$repo/actions/artifacts/428930352/zip -o b.zip')
 
+    execSync('ls')
+
     console.log("%%%%%%%%%%%%%%%%%%%%%%")
 
 } catch (error) {
     setFailed(error.message);
 }
 
-
-
-async function run() {
-    console.log("inside run function")
-    await octokit.rest.actions.listArtifactsForRepo({
-        ...context.owner,
-        ...context.repository
-    });
-}
-
-console.log("&&&&&&&&&&&&&&&&&&")
-run();
-console.log("&&&&&&&&&&&&&&&&&&")

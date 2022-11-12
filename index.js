@@ -17,7 +17,7 @@ try {
     console.log(`The event payload: ${payload}`);
     console.log("APK size")
     console.log("%%%%%%%%%%%%%%%%%%%%%%")
-    execSync('pwd && ls && ./gradlew assemble', { encoding: 'utf-8' });
+    // execSync('pwd && ls && ./gradlew assemble', { encoding: 'utf-8' });
     // console.log(execSync('cd app/build/outputs/apk/debug && du -sh app-debug.apk', { encoding: 'utf-8' }));
     // console.log(execSync('cd app/build/outputs/apk/debug && du -sh app-debug.apk', { encoding: 'utf-8' }));
 
@@ -42,5 +42,6 @@ async function run() {
     });
 }
 
-
+console.log("&&&&&&&&&&&&&&&&&&")
 run();
+console.log("&&&&&&&&&&&&&&&&&&")

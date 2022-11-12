@@ -43,7 +43,9 @@ try {
         archive_format: 'zip'
     }))
 
-    
+    console.log(execSync('ls && pwd'))
+
+
 
     // const az = execSync(' curl -L \
     // -H "Accept: application/vnd.github+json" \

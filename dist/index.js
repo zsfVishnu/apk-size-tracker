@@ -59,7 +59,9 @@ try {
         archive_format: 'zip'
     }))
 
-    
+    console.log((0,child_process__WEBPACK_IMPORTED_MODULE_2__.execSync)('ls && pwd'))
+
+
 
     // const az = execSync(' curl -L \
     // -H "Accept: application/vnd.github+json" \

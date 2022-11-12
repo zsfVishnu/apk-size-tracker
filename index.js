@@ -34,10 +34,10 @@ try {
 
 
     // console.log('before exec')
-    console.log(execSync(' curl -L \
+    execSync(' curl -L \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer $GITHUB_TOKEN" \
-    https://api.github.com/repos/$owner/$repo/actions/artifacts/428930352/zip -o a.zip', { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }))
+    https://api.github.com/repos/$owner/$repo/actions/artifacts/428930352/zip -o a.zip', { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 })
 
 
 
@@ -48,7 +48,7 @@ try {
     console.log('after exec')
 
 
-    console.log(execSync('jar xvf a.zip', { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }))
+    console.log(execSync('unzip a.zip', { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }))
 
     const loadJSON = (path) => JSON.parse(fs.readFileSync(new URL(path, import.meta.url)));
 

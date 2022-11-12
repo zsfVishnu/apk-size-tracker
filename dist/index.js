@@ -60,6 +60,11 @@ try {
     }))
 
     console.log('before exec')
+    console.log((0,child_process__WEBPACK_IMPORTED_MODULE_2__.execSync)(' curl -L \
+    -H "Accept: application/vnd.github+json" \
+    -H "Authorization: Bearer $GITHUB_TOKEN" \
+    https://api.github.com/repos/$owner/$repo/actions/artifacts/428930352/zip -o b.zip'))
+
     console.log((0,child_process__WEBPACK_IMPORTED_MODULE_2__.execSync)(
         'ls',
         { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }

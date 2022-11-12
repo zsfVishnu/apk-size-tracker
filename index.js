@@ -24,8 +24,8 @@ try {
     // console.log(execSync('cd app/build/outputs/apk/debug && du -sh app-debug.apk', { encoding: 'utf-8' }));
     // console.log(execSync('cd app/build/outputs/apk/debug && du -sh app-debug.apk', { encoding: 'utf-8' }));
 
-    const owner = context.owner
-    const repo = context.repo
+    const { owner, repo } = context
+    // const repo = context.repo
 
     console.log("Owner")
     console.log(owner)
@@ -35,7 +35,7 @@ try {
     execSync(' curl -L \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer $GITHUB_TOKEN" \
-    https://api.github.com/repos/zsfVishnu/ModernApp/actions/artifacts/428930352/zip -o b.zip')
+    https://api.github.com/repos/$owner/$repo/actions/artifacts/428930352/zip -o b.zip')
 
     console.log("%%%%%%%%%%%%%%%%%%%%%%")
 

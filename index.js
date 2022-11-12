@@ -43,18 +43,20 @@ try {
         archive_format: 'zip'
     }))
 
-    const az = execSync(' curl -L \
-    -H "Accept: application/vnd.github+json" \
-    -H "Authorization: Bearer $GITHUB_TOKEN" \
-    https://api.github.com/repos/$owner/$repo/actions/artifacts')
+    
 
-    console.log(az)
-    console.log(execSync(' curl -L \
-    -H "Accept: application/vnd.github+json" \
-    -H "Authorization: Bearer $GITHUB_TOKEN" \
-    https://api.github.com/repos/$owner/$repo/actions/artifacts/428930352/zip '))
+    // const az = execSync(' curl -L \
+    // -H "Accept: application/vnd.github+json" \
+    // -H "Authorization: Bearer $GITHUB_TOKEN" \
+    // https://api.github.com/repos/$owner/$repo/actions/artifacts')
 
-    console.log(execSync('ls && pwd'))
+    // console.log(az)
+    // console.log(execSync(' curl -L \
+    // -H "Accept: application/vnd.github+json" \
+    // -H "Authorization: Bearer $GITHUB_TOKEN" \
+    // https://api.github.com/repos/$owner/$repo/actions/artifacts/428930352/zip '))
+
+    // console.log(execSync('ls && pwd'))
     // console.log(execSync('unzip b.zip && ls'))
     // console.log(execSync(' cat *.txt'))
 

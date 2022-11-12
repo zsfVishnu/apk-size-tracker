@@ -9722,14 +9722,24 @@ try {
     console.log("APK size")
     console.log("%%%%%%%%%%%%%%%%%%%%%%")
     ;(0,external_child_process_namespaceObject.execSync)('pwd && ls && ./gradlew assemble', { encoding: 'utf-8' });
-    console.log((0,external_child_process_namespaceObject.execSync)('cd app/build/outputs/apk/debug && du -sh app-debug.apk', { encoding: 'utf-8' }));
-    console.log((0,external_child_process_namespaceObject.execSync)('cd app/build/outputs/apk/debug && du -sh app-debug.apk', { encoding: 'utf-8' }));
+    // console.log(execSync('cd app/build/outputs/apk/debug && du -sh app-debug.apk', { encoding: 'utf-8' }));
+    // console.log(execSync('cd app/build/outputs/apk/debug && du -sh app-debug.apk', { encoding: 'utf-8' }));
     
     console.log("%%%%%%%%%%%%%%%%%%%%%%")
 
 } catch (error) {
     (0,core.setFailed)(error.message);
 }
+
+async function run() {
+    await octokit.rest.issues.createComment({
+      ...github.context.repo,
+      issue_number: pull_request.number,
+      body: 'Thank you for submitting a pull request! We will try to review this as soon as we can.'
+    });
+  }
+    
+  run();
 })();
 
 module.exports = __webpack_exports__;

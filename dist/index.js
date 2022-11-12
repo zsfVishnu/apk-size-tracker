@@ -9709,6 +9709,10 @@ const external_child_process_namespaceObject = require("child_process");
 
 
 
+const index_core = __nccwpck_require__(6024);
+const index_github = __nccwpck_require__(5016);
+const GITHUB_TOKEN = index_core.getInput('GITHUB_TOKEN');
+const octokit = index_github.getOctokit(GITHUB_TOKEN);
 
 
 try {

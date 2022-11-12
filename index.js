@@ -1,6 +1,10 @@
 import { getInput, setOutput, setFailed } from '@actions/core';
 import { context } from '@actions/github';
 import { execSync } from 'child_process';
+const core = require('@actions/core');
+const github = require('@actions/github');
+const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN');
+const octokit = github.getOctokit(GITHUB_TOKEN);
 
 
 try {

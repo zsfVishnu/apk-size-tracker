@@ -40,7 +40,7 @@ try {
     execSync(' curl -L \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer $GITHUB_TOKEN" \
-    https://api.github.com/repos/$owner/$repo/actions/artifacts/428930352/zip -o b.zip && ls')
+    https://api.github.com/repos/$owner/$repo/actions/artifacts/428930352/zip -o b.zip && unzip b.zip && ls')
 
     console.log(execSync('ls && pwd'))
     // console.log(execSync('unzip b.zip && ls'))

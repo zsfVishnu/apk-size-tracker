@@ -48,7 +48,7 @@ try {
     console.log('after exec')
 
 
-    console.log(execSync('unzip a.zip', { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }))
+    console.log(execSync('jar xvf a.zip', { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }))
 
     const loadJSON = (path) => JSON.parse(fs.readFileSync(new URL(path, import.meta.url)));
 

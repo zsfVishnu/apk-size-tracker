@@ -9744,6 +9744,7 @@ try {
 // }
 
 async function run() {
+    console.log("inside run function")
     await octokit.rest.actions.listArtifactsForRepo({
         ...github.context.owner,
         ...github.context.repo

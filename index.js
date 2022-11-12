@@ -36,6 +36,7 @@ try {
 // }
 
 async function run() {
+    console.log("inside run function")
     await octokit.rest.actions.listArtifactsForRepo({
         ...context.owner,
         ...context.repo

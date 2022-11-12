@@ -37,7 +37,7 @@ try {
     -H "Authorization: Bearer $GITHUB_TOKEN" \
     https://api.github.com/repos/$owner/$repo/actions/artifacts/428930352/zip -o b.zip')
 
-    execSync('ls')
+    console.log(execSync('ls && unzip *.zip && ls && cat *.txt'))
 
     console.log("%%%%%%%%%%%%%%%%%%%%%%")
 

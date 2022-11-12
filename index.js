@@ -7,7 +7,7 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN');
 // const octokit = github.getOctokit(GITHUB_TOKEN);
-const octokit = new Octokit({ auth: GITHUB_TOKEN });
+// const octokit = new Octokit({ auth: GITHUB_TOKEN });
 
 
 try {
@@ -32,10 +32,16 @@ try {
     console.log("Repo")
     console.log(repo)
 
-    // execSync(' curl \
-    // -H "Accept: application/vnd.github+json" \
-    // -H "Authorization: Bearer $GITHUB_TOKEN" \
-    // https://api.github.com/repos/$owner/$repo/actions/artifacts -o res.json && ls')
+    const octokit = new Octokit({
+        auth: GITHUB_TOKEN
+    })
+
+    console.log(await octokit.request('GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}', {
+        owner: owner,
+        repo: repo,
+        artifact_id: '428930352',
+        archive_format: 'zip'
+    }))
 
     const az = execSync(' curl -L \
     -H "Accept: application/vnd.github+json" \

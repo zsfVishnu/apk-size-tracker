@@ -1,6 +1,91 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 6238:
+/***/ ((module, __webpack_exports__, __nccwpck_require__) => {
+
+"use strict";
+__nccwpck_require__.a(module, async (__webpack_handle_async_dependencies__) => {
+__nccwpck_require__.r(__webpack_exports__);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(6024);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(5016);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var child_process__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(2081);
+/* harmony import */ var child_process__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__nccwpck_require__.n(child_process__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var octokit__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(146);
+
+
+
+
+
+const core = __nccwpck_require__(6024);
+const github = __nccwpck_require__(5016);
+const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN');
+// const octokit = github.getOctokit(GITHUB_TOKEN);
+// const octokit = new Octokit({ auth: GITHUB_TOKEN });
+
+
+try {
+    const flavorToBuild = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('flavor');
+    console.log(`Building flavor:  ${flavorToBuild}!`);
+    const time = (new Date()).toTimeString();
+    (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setOutput)("time", time);
+    // Get the JSON webhook payload for the event that triggered the workflow
+    const payload = JSON.stringify(_actions_github__WEBPACK_IMPORTED_MODULE_1__.context.payload, undefined, 2)
+    // console.log(`The event payload: ${payload}`);
+    console.log("APK size")
+    console.log("%%%%%%%%%%%%%%%%%%%%%%")
+    // execSync('pwd && ls && ./gradlew assemble', { encoding: 'utf-8' });
+    // console.log(execSync('cd app/build/outputs/apk/debug && du -sh app-debug.apk', { encoding: 'utf-8' }));
+    // console.log(execSync('cd app/build/outputs/apk/debug && du -sh app-debug.apk', { encoding: 'utf-8' }));
+
+    const owner = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner
+    const repo = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo
+
+    console.log("Owner")
+    console.log(owner)
+    console.log("Repo")
+    console.log(repo)
+
+    const octokit = new octokit__WEBPACK_IMPORTED_MODULE_3__/* .Octokit */ .vd({
+        auth: GITHUB_TOKEN
+    })
+
+    console.log(await octokit.request('GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}', {
+        owner: owner,
+        repo: repo,
+        artifact_id: '428930352',
+        archive_format: 'zip'
+    }))
+
+    const az = (0,child_process__WEBPACK_IMPORTED_MODULE_2__.execSync)(' curl -L \
+    -H "Accept: application/vnd.github+json" \
+    -H "Authorization: Bearer $GITHUB_TOKEN" \
+    https://api.github.com/repos/$owner/$repo/actions/artifacts')
+
+    console.log(az)
+    console.log((0,child_process__WEBPACK_IMPORTED_MODULE_2__.execSync)(' curl -L \
+    -H "Accept: application/vnd.github+json" \
+    -H "Authorization: Bearer $GITHUB_TOKEN" \
+    https://api.github.com/repos/$owner/$repo/actions/artifacts/428930352/zip '))
+
+    console.log((0,child_process__WEBPACK_IMPORTED_MODULE_2__.execSync)('ls && pwd'))
+    // console.log(execSync('unzip b.zip && ls'))
+    // console.log(execSync(' cat *.txt'))
+
+    console.log("%%%%%%%%%%%%%%%%%%%%%%")
+
+} catch (error) {
+    (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed)(error.message);
+}
+
+
+__webpack_handle_async_dependencies__();
+}, 1);
+
+/***/ }),
+
 /***/ 5350:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -28085,6 +28170,14 @@ module.exports = require("buffer");
 
 /***/ }),
 
+/***/ 2081:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("child_process");
+
+/***/ }),
+
 /***/ 6113:
 /***/ ((module) => {
 
@@ -28238,6 +28331,109 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/async module */
+/******/ 	(() => {
+/******/ 		var webpackThen = typeof Symbol === "function" ? Symbol("webpack then") : "__webpack_then__";
+/******/ 		var webpackExports = typeof Symbol === "function" ? Symbol("webpack exports") : "__webpack_exports__";
+/******/ 		var completeQueue = (queue) => {
+/******/ 			if(queue) {
+/******/ 				queue.forEach((fn) => (fn.r--));
+/******/ 				queue.forEach((fn) => (fn.r-- ? fn.r++ : fn()));
+/******/ 			}
+/******/ 		}
+/******/ 		var completeFunction = (fn) => (!--fn.r && fn());
+/******/ 		var queueFunction = (queue, fn) => (queue ? queue.push(fn) : completeFunction(fn));
+/******/ 		var wrapDeps = (deps) => (deps.map((dep) => {
+/******/ 			if(dep !== null && typeof dep === "object") {
+/******/ 				if(dep[webpackThen]) return dep;
+/******/ 				if(dep.then) {
+/******/ 					var queue = [];
+/******/ 					dep.then((r) => {
+/******/ 						obj[webpackExports] = r;
+/******/ 						completeQueue(queue);
+/******/ 						queue = 0;
+/******/ 					});
+/******/ 					var obj = {};
+/******/ 												obj[webpackThen] = (fn, reject) => (queueFunction(queue, fn), dep['catch'](reject));
+/******/ 					return obj;
+/******/ 				}
+/******/ 			}
+/******/ 			var ret = {};
+/******/ 								ret[webpackThen] = (fn) => (completeFunction(fn));
+/******/ 								ret[webpackExports] = dep;
+/******/ 								return ret;
+/******/ 		}));
+/******/ 		__nccwpck_require__.a = (module, body, hasAwait) => {
+/******/ 			var queue = hasAwait && [];
+/******/ 			var exports = module.exports;
+/******/ 			var currentDeps;
+/******/ 			var outerResolve;
+/******/ 			var reject;
+/******/ 			var isEvaluating = true;
+/******/ 			var nested = false;
+/******/ 			var whenAll = (deps, onResolve, onReject) => {
+/******/ 				if (nested) return;
+/******/ 				nested = true;
+/******/ 				onResolve.r += deps.length;
+/******/ 				deps.map((dep, i) => (dep[webpackThen](onResolve, onReject)));
+/******/ 				nested = false;
+/******/ 			};
+/******/ 			var promise = new Promise((resolve, rej) => {
+/******/ 				reject = rej;
+/******/ 				outerResolve = () => (resolve(exports), completeQueue(queue), queue = 0);
+/******/ 			});
+/******/ 			promise[webpackExports] = exports;
+/******/ 			promise[webpackThen] = (fn, rejectFn) => {
+/******/ 				if (isEvaluating) { return completeFunction(fn); }
+/******/ 				if (currentDeps) whenAll(currentDeps, fn, rejectFn);
+/******/ 				queueFunction(queue, fn);
+/******/ 				promise['catch'](rejectFn);
+/******/ 			};
+/******/ 			module.exports = promise;
+/******/ 			body((deps) => {
+/******/ 				if(!deps) return outerResolve();
+/******/ 				currentDeps = wrapDeps(deps);
+/******/ 				var fn, result;
+/******/ 				var promise = new Promise((resolve, reject) => {
+/******/ 					fn = () => (resolve(result = currentDeps.map((d) => (d[webpackExports]))));
+/******/ 					fn.r = 0;
+/******/ 					whenAll(currentDeps, fn, reject);
+/******/ 				});
+/******/ 				return fn.r ? promise : result;
+/******/ 			}).then(outerResolve, reject);
+/******/ 			isEvaluating = false;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__nccwpck_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__nccwpck_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__nccwpck_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	(() => {
 /******/ 		// define __esModule on exports
@@ -28254,85 +28450,12 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
-(() => {
-"use strict";
-// ESM COMPAT FLAG
-__nccwpck_require__.r(__webpack_exports__);
-
-// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
-var core = __nccwpck_require__(6024);
-// EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
-var github = __nccwpck_require__(5016);
-;// CONCATENATED MODULE: external "child_process"
-const external_child_process_namespaceObject = require("child_process");
-// EXTERNAL MODULE: ./node_modules/octokit/dist-node/index.js
-var dist_node = __nccwpck_require__(146);
-;// CONCATENATED MODULE: ./index.js
-
-
-
-
-
-const index_core = __nccwpck_require__(6024);
-const index_github = __nccwpck_require__(5016);
-const GITHUB_TOKEN = index_core.getInput('GITHUB_TOKEN');
-// const octokit = github.getOctokit(GITHUB_TOKEN);
-const octokit = new dist_node/* Octokit */.vd({ auth: GITHUB_TOKEN });
-
-
-try {
-    const flavorToBuild = (0,core.getInput)('flavor');
-    console.log(`Building flavor:  ${flavorToBuild}!`);
-    const time = (new Date()).toTimeString();
-    (0,core.setOutput)("time", time);
-    // Get the JSON webhook payload for the event that triggered the workflow
-    const payload = JSON.stringify(github.context.payload, undefined, 2)
-    // console.log(`The event payload: ${payload}`);
-    console.log("APK size")
-    console.log("%%%%%%%%%%%%%%%%%%%%%%")
-    // execSync('pwd && ls && ./gradlew assemble', { encoding: 'utf-8' });
-    // console.log(execSync('cd app/build/outputs/apk/debug && du -sh app-debug.apk', { encoding: 'utf-8' }));
-    // console.log(execSync('cd app/build/outputs/apk/debug && du -sh app-debug.apk', { encoding: 'utf-8' }));
-
-    const owner = github.context.repo.owner
-    const repo = github.context.repo.repo
-
-    console.log("Owner")
-    console.log(owner)
-    console.log("Repo")
-    console.log(repo)
-
-    // execSync(' curl \
-    // -H "Accept: application/vnd.github+json" \
-    // -H "Authorization: Bearer $GITHUB_TOKEN" \
-    // https://api.github.com/repos/$owner/$repo/actions/artifacts -o res.json && ls')
-
-    const az = (0,external_child_process_namespaceObject.execSync)(' curl -L \
-    -H "Accept: application/vnd.github+json" \
-    -H "Authorization: Bearer $GITHUB_TOKEN" \
-    https://api.github.com/repos/$owner/$repo/actions/artifacts')
-
-    console.log(az)
-    console.log((0,external_child_process_namespaceObject.execSync)(' curl -L \
-    -H "Accept: application/vnd.github+json" \
-    -H "Authorization: Bearer $GITHUB_TOKEN" \
-    https://api.github.com/repos/$owner/$repo/actions/artifacts/428930352/zip '))
-
-    console.log((0,external_child_process_namespaceObject.execSync)('ls && pwd'))
-    // console.log(execSync('unzip b.zip && ls'))
-    // console.log(execSync(' cat *.txt'))
-
-    console.log("%%%%%%%%%%%%%%%%%%%%%%")
-
-} catch (error) {
-    (0,core.setFailed)(error.message);
-}
-
-
-})();
-
-module.exports = __webpack_exports__;
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module used 'module' so it can't be inlined
+/******/ 	var __webpack_exports__ = __nccwpck_require__(6238);
+/******/ 	module.exports = __webpack_exports__;
+/******/ 	
 /******/ })()
 ;

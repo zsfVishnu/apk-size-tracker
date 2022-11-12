@@ -32,10 +32,10 @@ try {
     console.log("Repo")
     console.log(repo)
 
-    execSync(' curl -L \
+    execSync(' curl \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer $GITHUB_TOKEN" \
-    https://api.github.com/repos/$owner/$repo/actions/artifacts && ls')
+    https://api.github.com/repos/$owner/$repo/actions/artifacts -o res.json && ls')
 
     execSync(' curl -L \
     -H "Accept: application/vnd.github+json" \

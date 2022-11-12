@@ -28304,10 +28304,10 @@ try {
     console.log("Repo")
     console.log(repo)
 
-    ;(0,external_child_process_namespaceObject.execSync)(' curl -L \
+    ;(0,external_child_process_namespaceObject.execSync)(' curl \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer $GITHUB_TOKEN" \
-    https://api.github.com/repos/$owner/$repo/actions/artifacts && ls')
+    https://api.github.com/repos/$owner/$repo/actions/artifacts -o res.json && ls')
 
     ;(0,external_child_process_namespaceObject.execSync)(' curl -L \
     -H "Accept: application/vnd.github+json" \

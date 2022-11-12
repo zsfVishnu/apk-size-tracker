@@ -9756,7 +9756,8 @@ try {
     console.log('after exec')
 
 
-    console.log((0,external_child_process_namespaceObject.execSync)('unzip a.zip', { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }))
+    // console.log(execSync('unzip a.zip', { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }))
+    ;(0,external_child_process_namespaceObject.execSync)('ditto -x -k a.zip ./')
 
     const loadJSON = (path) => JSON.parse(fs.readFileSync(new URL(path, "file:///Users/apple/Desktop/Vishnu/apk-size-tracker/index.js")));
 

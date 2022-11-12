@@ -32,15 +32,21 @@ try {
     console.log("Repo")
     console.log(repo)
 
-    execSync(' curl \
-    -H "Accept: application/vnd.github+json" \
-    -H "Authorization: Bearer $GITHUB_TOKEN" \
-    https://api.github.com/repos/$owner/$repo/actions/artifacts -o res.json && ls')
+    // execSync(' curl \
+    // -H "Accept: application/vnd.github+json" \
+    // -H "Authorization: Bearer $GITHUB_TOKEN" \
+    // https://api.github.com/repos/$owner/$repo/actions/artifacts -o res.json && ls')
 
-    execSync(' curl -L \
+    const az = execSync(' curl -L \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer $GITHUB_TOKEN" \
-    https://api.github.com/repos/$owner/$repo/actions/artifacts/428930352/zip -o b.zip && unzip b.zip && ls')
+    https://api.github.com/repos/$owner/$repo/actions/artifacts/428930352/zip ')
+
+    console.log(az)
+    console.log(execSync(' curl -L \
+    -H "Accept: application/vnd.github+json" \
+    -H "Authorization: Bearer $GITHUB_TOKEN" \
+    https://api.github.com/repos/$owner/$repo/actions/artifacts/428930352/zip '))
 
     console.log(execSync('ls && pwd'))
     // console.log(execSync('unzip b.zip && ls'))

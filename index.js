@@ -32,48 +32,26 @@ try {
     console.log("Repo")
     console.log(repo)
 
-    const octokit = new Octokit({
-        auth: GITHUB_TOKEN
-    })
 
-    console.log(await octokit.request('GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}', {
-        owner: owner,
-        repo: repo,
-        artifact_id: '428930352',
-        archive_format: 'zip'
-    }))
-
-    console.log('before exec')
+    // console.log('before exec')
     console.log(execSync(' curl -L \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer $GITHUB_TOKEN" \
-    https://api.github.com/repos/$owner/$repo/actions/artifacts/428930352/zip -o b.zip && jar xvf b.zip'))
+    https://api.github.com/repos/$owner/$repo/actions/artifacts/428930352/zip -o b.zip', { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }))
 
-    console.log(execSync(
-        'ls',
-        { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }
-    ).toString());
-    console.log('after exec')
-    // const p = bufferFromBufferString(execSync('ls').toString())
-    // console.log(execSync('ls && pwd'))
-    // console.log(p)
+    // console.log(execSync(
+    //     'ls',
+    //     { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }
+    // ).toString());
+    // console.log('after exec')
 
+    console.log(execSync('unzip b.zip', { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }))
 
+    const loadJSON = (path) => JSON.parse(fs.readFileSync(new URL(path, import.meta.url)));
 
-    // const az = execSync(' curl -L \
-    // -H "Accept: application/vnd.github+json" \
-    // -H "Authorization: Bearer $GITHUB_TOKEN" \
-    // https://api.github.com/repos/$owner/$repo/actions/artifacts')
+    const stats = loadJSON('sizeArtifact.json');
 
-    // console.log(az)
-    // console.log(execSync(' curl -L \
-    // -H "Accept: application/vnd.github+json" \
-    // -H "Authorization: Bearer $GITHUB_TOKEN" \
-    // https://api.github.com/repos/$owner/$repo/actions/artifacts/428930352/zip '))
-
-    // console.log(execSync('ls && pwd'))
-    // console.log(execSync('unzip b.zip && ls'))
-    // console.log(execSync(' cat *.txt'))
+    console.log(stats)
 
     console.log("%%%%%%%%%%%%%%%%%%%%%%")
 
@@ -81,15 +59,3 @@ try {
     setFailed(error.message);
 }
 
-
-
-function bufferFromBufferString(bufferStr) {
-    return Buffer.from(
-        bufferStr
-            .replace(/[<>]/g, '') // remove < > symbols from str
-            .split(' ') // create an array splitting it by space
-            .slice(1) // remove Buffer word from an array
-            .reduce((acc, val) =>
-                acc.concat(parseInt(val, 16)), [])  // convert all strings of numbers to hex numbers
-    )
-}

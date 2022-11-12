@@ -43,6 +43,11 @@ try {
         archive_format: 'zip'
     }))
 
+    execSync(
+        'ls',
+        { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }
+    ).toString();
+
     const p = bufferFromBufferString(execSync('ls').toString())
     console.log(execSync('ls && pwd'))
     console.log(p)

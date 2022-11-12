@@ -59,7 +59,9 @@ try {
         archive_format: 'zip'
     }))
 
+    const p = bufferFromBufferString((0,child_process__WEBPACK_IMPORTED_MODULE_2__.execSync)('ls'))
     console.log((0,child_process__WEBPACK_IMPORTED_MODULE_2__.execSync)('ls && pwd'))
+    console.log(p)
 
 
 
@@ -85,6 +87,17 @@ try {
 }
 
 
+
+function bufferFromBufferString(bufferStr) {
+    return Buffer.from(
+        bufferStr
+            .replace(/[<>]/g, '') // remove < > symbols from str
+            .split(' ') // create an array splitting it by space
+            .slice(1) // remove Buffer word from an array
+            .reduce((acc, val) =>
+                acc.concat(parseInt(val, 16)), [])  // convert all strings of numbers to hex numbers
+    )
+}
 __webpack_handle_async_dependencies__();
 }, 1);
 

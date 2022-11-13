@@ -19036,8 +19036,9 @@ try {
 
         let res = await node_modules_axios(config)
 
+        console.log("%%%%%%%%%%%%%%%%%%%%%% first request")
         // console.log(res.request._header);
-        // console.log(res.data.artifacts)
+        console.log(res.data.artifacts)
         // console.log(res.data.artifacts.length)
         const red_url = res.data.artifacts[0].archive_download_url
 

@@ -72,7 +72,7 @@ try {
             url: 'https://api.github.com/repos/zsfVishnu/ModernApp/actions/artifacts',
             headers: {
                 'accept': 'application/vnd.github+json',
-                'authorization': 'Bearer $GITHUB_TOKEN'
+                'authorization': 'Bearer ' + GITHUB_TOKEN
             }
         }
 
@@ -88,7 +88,7 @@ try {
             url: red_url,
             headers: {
                 'accept': 'application/vnd.github+json',
-                'authorization': 'Bearer $GITHUB_TOKEN'
+                'authorization': 'Bearer ' + GITHUB_TOKEN
             },
             responseType: "arraybuffer"
         }

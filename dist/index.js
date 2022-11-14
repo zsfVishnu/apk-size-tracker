@@ -48,41 +48,6 @@ try {
     const owner = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.owner
     const repo = _actions_github__WEBPACK_IMPORTED_MODULE_1__.context.repo.repo
 
-    // console.log("Owner")
-    // console.log(owner)
-    // console.log("Repo")
-    // console.log(repo)
-
-
-    // // console.log('before exec')
-    // execSync(' curl -L \
-    // -H "Accept: application/vnd.github+json" \
-    // -H "Authorization: Bearer $GITHUB_TOKEN" \
-    // https://api.github.com/repos/$owner/$repo/actions/artifacts/428930352/zip -o a.zip', { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 })
-
-
-
-    // console.log(execSync(
-    //     'ls',
-    //     { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }
-    // ).toString());
-    // console.log('after exec')
-
-
-    // console.log(execSync('unzip a.zip', { encoding: 'utf8', maxBuffer: 50 * 1024 * 1024 }))
-    // // execSync('ditto -x -k a.zip ./')
-
-    // const loadJSON = (path) => JSON.parse(fs.readFileSync(new URL(path, import.meta.url)));
-
-    // const stats = loadJSON('sizeArtifact.json');
-
-    // console.log(stats)
-
-    // console.log("%%%%%%%%%%%%%%%%%%%%%%")
-
-
-
-
     async function makeRequest() {
 
         const config = {
@@ -98,7 +63,7 @@ try {
 
         console.log("%%%%%%%%%%%%%%%%%%%%%% first request")
         // console.log(res.request._header);
-        console.log(res.data.artifacts)
+        // console.log(res.data.artifacts)
         // console.log(res.data.artifacts.length)
         const red_url = res.data.artifacts[0].archive_download_url
 
@@ -113,9 +78,6 @@ try {
         }
 
         let res2 = await (0,axios__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .ZP)(config2)
-        // console.log(res2.request._header);
-        // console.log(res2)
-        // console.log(res2.data)
 
 
 
@@ -129,19 +91,20 @@ try {
         console.log(zip.getEntries().length)
         console.log(zip.readAsText(zipEntries[0]))
 
-        // search for "index.html" which should be there
+
         for (var i = 0; i < zipEntries.length; i++) {
             console.log(zip.readAsText(zipEntries[i]));
         }
 
         const p = JSON.parse(zip.readAsText(zipEntries[0])).master_size
 
-        console.log("Size of master : " + p)
+
         return p;
 
     }
 
     async function postComment(p) {
+        console.log("inside post comment")
         const config = {
             method: 'POST',
             url: 'https://api.github.com/repos/zsfVishnu/ModernApp/issues/1/comments',
@@ -151,11 +114,14 @@ try {
             },
             data: { "body": " size of master branch : " + p }
         }
+        ;(0,axios__WEBPACK_IMPORTED_MODULE_3__/* ["default"] */ .ZP)(config)
+        console.log("end of post comment")
     }
 
 
     const feat_s = await makeRequest();
-    postComment(feat_s);
+    await postComment(feat_s);
+    console.log("end of function call")
 
 
 

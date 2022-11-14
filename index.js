@@ -136,7 +136,7 @@ try {
     }
 
 
-    const feat_s = makeRequest();
+    const feat_s = await makeRequest();
     postComment(feat_s);
 
 

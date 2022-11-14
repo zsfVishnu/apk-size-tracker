@@ -116,14 +116,28 @@ try {
             console.log(zip.readAsText(zipEntries[i]));
         }
 
-        // and to extract it into current working directory
-        // zip.extractAllTo('.', true);
+        const p = JSON.parse(zip.readAsText(zipEntries[0])).master_size
 
+        console.log("Size of master : " + p)
+        return p;
 
     }
 
+    async function postComment(p) {
+        const config = {
+            method: 'POST',
+            url: 'https://api.github.com/repos/zsfVishnu/ModernApp/issues/1/comments',
+            headers: {
+                'accept': 'application/vnd.github+json',
+                'authorization': 'Bearer ' + GITHUB_TOKEN
+            },
+            data: { "body": " size of master branch : " + p }
+        }
+    }
 
-    makeRequest();
+
+    const feat_s = makeRequest();
+    postComment(feat_s);
 
 
 

@@ -12,7 +12,7 @@ try {
     const flavorToBuild = getInput('flavor');
     console.log(`Building flavor:  ${flavorToBuild}!`);
     const featSize = getFeatureBranchSize()
-    const masterSize = await getMasterSizeFromArtifact(context, GITHUB_TOKEN)
+    const masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN)
     await postComment(featSize, masterSize, GITHUB_TOKEN);
 
 } catch (error) {

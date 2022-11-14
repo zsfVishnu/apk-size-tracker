@@ -58,7 +58,7 @@ try {
     const flavorToBuild = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('flavor');
     console.log(`Building flavor:  ${flavorToBuild}!`);
     const featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .W)()
-    const masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(_actions_github__WEBPACK_IMPORTED_MODULE_1__.context, GITHUB_TOKEN)
+    const masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN)
     await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .postComment */ .w)(featSize, masterSize, GITHUB_TOKEN);
 
 } catch (error) {
@@ -4165,15 +4165,18 @@ const {
 // EXTERNAL MODULE: ./node_modules/adm-zip/adm-zip.js
 var adm_zip = __nccwpck_require__(3301);
 var adm_zip_default = /*#__PURE__*/__nccwpck_require__.n(adm_zip);
+// EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
+var github = __nccwpck_require__(5016);
 ;// CONCATENATED MODULE: ./network.js
 
 
 
 
-async function getMasterSizeFromArtifact(context, GITHUB_TOKEN) {
 
-    const owner = context.repo.owner
-    const repo = context.repo.repo
+async function getMasterSizeFromArtifact(GITHUB_TOKEN) {
+
+    const owner = github.context.repo.owner
+    const repo = github.context.repo.repo
 
     const config = {
         method: 'GET',
@@ -4208,6 +4211,8 @@ async function getMasterSizeFromArtifact(context, GITHUB_TOKEN) {
 
 
 async function postComment(featSize, masterSize, GITHUB_TOKEN) {
+    const owner = github.context.repo.owner
+    const repo = github.context.repo.repo
     const config = {
         method: 'POST',
         url: `https://api.github.com/repos/${owner}/${repo}/issues/1/comments`,

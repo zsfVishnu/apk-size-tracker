@@ -1,8 +1,9 @@
 import { Octokit } from "octokit";
 import axios from 'axios'
 import AdmZip from 'adm-zip'
+import { context } from '@actions/github';
 
-export async function getMasterSizeFromArtifact(context, GITHUB_TOKEN) {
+export async function getMasterSizeFromArtifact(GITHUB_TOKEN) {
 
     const owner = context.repo.owner
     const repo = context.repo.repo
@@ -40,6 +41,8 @@ export async function getMasterSizeFromArtifact(context, GITHUB_TOKEN) {
 
 
 export async function postComment(featSize, masterSize, GITHUB_TOKEN) {
+    const owner = context.repo.owner
+    const repo = context.repo.repo
     const config = {
         method: 'POST',
         url: `https://api.github.com/repos/${owner}/${repo}/issues/1/comments`,

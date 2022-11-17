@@ -26,8 +26,7 @@ function evaluateDiff(payload, currentSize) {
 
 function getFeatureBranchSize() {
     (0,external_child_process_namespaceObject.execSync)('./gradlew assemble', { encoding: 'utf-8' });
-    (0,external_child_process_namespaceObject.execSync)('cd app/build/outputs/apk/debug && du -k app-debug.apk', { encoding: 'utf-8' });
-    const apkSize = (0,external_child_process_namespaceObject.execSync)('cd app/build/outputs/apk/debug && du -sh app-debug.apk', { encoding: 'utf-8' }).trim().split(/\s+/)[0];
+    const apkSize = (0,external_child_process_namespaceObject.execSync)('cd app/build/outputs/apk/debug && du -k app-debug.apk', { encoding: 'utf-8' }).trim().split(/\s+/)[0];
     return apkSize
 }
 
@@ -37,7 +36,7 @@ function getDeltaPayload(masterSize, featSize) {
     const payload = `master branch size : ${masterSize} \n
                     feature branch size : ${featSize} \n
                     ${del} in size      : ${delta} KB
-                    ${del} in size      : ${delta/1024} MB`
+                    ${del} in size      : ${delta / 1024} MB`
 
     return payload
 }

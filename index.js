@@ -1,6 +1,6 @@
 import { getInput, setOutput, setFailed } from '@actions/core';
 import { context } from '@actions/github';
-import { getFeatureBranchSize } from './evaluator';
+import { getFeatureBranchSize, getDeltaPayload } from './evaluator';
 import { getMasterSizeFromArtifact, postComment } from './network';
 
 const core = require('@actions/core');

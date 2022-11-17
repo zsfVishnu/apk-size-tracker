@@ -8,10 +8,9 @@
 
 // EXPORTS
 __nccwpck_require__.d(__webpack_exports__, {
+  "a": () => (/* binding */ getDeltaPayload),
   "W": () => (/* binding */ getFeatureBranchSize)
 });
-
-// UNUSED EXPORTS: getDeltaPayload
 
 ;// CONCATENATED MODULE: external "child_process"
 const external_child_process_namespaceObject = require("child_process");
@@ -72,7 +71,7 @@ try {
     console.log(`Building flavor:  ${flavorToBuild}!`);
     const masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN)
     const featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .W)()
-    const deltaPayload = getDeltaPayload(masterSize, featSize)
+    const deltaPayload = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getDeltaPayload */ .a)(masterSize, featSize)
     await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .postComment */ .w)(deltaPayload, GITHUB_TOKEN);
 
 } catch (error) {

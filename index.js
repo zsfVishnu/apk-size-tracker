@@ -11,9 +11,10 @@ const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN');
 try {
     const flavorToBuild = getInput('flavor');
     console.log(`Building flavor:  ${flavorToBuild}!`);
-    const featSize = getFeatureBranchSize()
     const masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN)
-    await postComment(featSize, masterSize, GITHUB_TOKEN);
+    const featSize = getFeatureBranchSize()
+    const deltaPayload = getDeltaPayload(masterSize, featSize)
+    await postComment(deltaPayload, GITHUB_TOKEN);
 
 } catch (error) {
     setFailed(error.message);

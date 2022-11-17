@@ -39,8 +39,10 @@ export async function getMasterSizeFromArtifact(GITHUB_TOKEN) {
     return JSON.parse(zip.readAsText(zipEntries[0])).master_size
 }
 
+async function createAndPushMasterArtifact() { }
 
-export async function postComment(featSize, masterSize, GITHUB_TOKEN) {
+
+export async function postComment(deltaPayload, GITHUB_TOKEN) {
     const owner = context.repo.owner
     const repo = context.repo.repo
     const config = {
@@ -50,7 +52,7 @@ export async function postComment(featSize, masterSize, GITHUB_TOKEN) {
             'accept': 'application/vnd.github+json',
             'authorization': 'Bearer ' + GITHUB_TOKEN
         },
-        data: { "body": " size of feature branch : " + featSize + "\n size of master branch : " + masterSize + "\n diff in size : " + (featSize - masterSize) }
+        data: { "body": deltaPayload }
     }
     axios(config)
 }

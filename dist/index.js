@@ -11,6 +11,8 @@ __nccwpck_require__.d(__webpack_exports__, {
   "W": () => (/* binding */ getFeatureBranchSize)
 });
 
+// UNUSED EXPORTS: getDeltaPayload
+
 ;// CONCATENATED MODULE: external "child_process"
 const external_child_process_namespaceObject = require("child_process");
 ;// CONCATENATED MODULE: ./evaluator.js
@@ -25,9 +27,20 @@ function evaluateDiff(payload, currentSize) {
 
 function getFeatureBranchSize() {
     (0,external_child_process_namespaceObject.execSync)('./gradlew assemble', { encoding: 'utf-8' });
-    (0,external_child_process_namespaceObject.execSync)('cd app/build/outputs/apk/debug && du -sh app-debug.apk', { encoding: 'utf-8' });
+    (0,external_child_process_namespaceObject.execSync)('cd app/build/outputs/apk/debug && du -k app-debug.apk', { encoding: 'utf-8' });
     const apkSize = (0,external_child_process_namespaceObject.execSync)('cd app/build/outputs/apk/debug && du -sh app-debug.apk', { encoding: 'utf-8' }).trim().split(/\s+/)[0];
     return apkSize
+}
+
+function getDeltaPayload(masterSize, featSize) {
+    const delta = masterSize - featSize
+    const del = delta > 0 ? "Increase" : "Decrease"
+    const payload = `master branch size : ${masterSize} \n
+                    feature branch size : ${featSize} \n
+                    ${del} in size      : ${delta} KB
+                    ${del} in size      : ${delta/1024} MB`
+
+    return payload
 }
 
 /***/ }),
@@ -57,9 +70,10 @@ const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN');
 try {
     const flavorToBuild = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('flavor');
     console.log(`Building flavor:  ${flavorToBuild}!`);
-    const featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .W)()
     const masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN)
-    await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .postComment */ .w)(featSize, masterSize, GITHUB_TOKEN);
+    const featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .W)()
+    const deltaPayload = getDeltaPayload(masterSize, featSize)
+    await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .postComment */ .w)(deltaPayload, GITHUB_TOKEN);
 
 } catch (error) {
     (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed)(error.message);
@@ -4209,8 +4223,10 @@ async function getMasterSizeFromArtifact(GITHUB_TOKEN) {
     return JSON.parse(zip.readAsText(zipEntries[0])).master_size
 }
 
+async function createAndPushMasterArtifact() { }
 
-async function postComment(featSize, masterSize, GITHUB_TOKEN) {
+
+async function postComment(deltaPayload, GITHUB_TOKEN) {
     const owner = github.context.repo.owner
     const repo = github.context.repo.repo
     const config = {
@@ -4220,7 +4236,7 @@ async function postComment(featSize, masterSize, GITHUB_TOKEN) {
             'accept': 'application/vnd.github+json',
             'authorization': 'Bearer ' + GITHUB_TOKEN
         },
-        data: { "body": " size of feature branch : " + featSize + "\n size of master branch : " + masterSize + "\n diff in size : " + (featSize - masterSize) }
+        data: { "body": deltaPayload }
     }
     node_modules_axios(config)
 }

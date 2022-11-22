@@ -41,9 +41,12 @@ __nccwpck_require__.d(__webpack_exports__, {
   "W": () => (/* binding */ getFeatureBranchSize)
 });
 
+// EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
+var github = __nccwpck_require__(5016);
 ;// CONCATENATED MODULE: external "child_process"
 const external_child_process_namespaceObject = require("child_process");
 ;// CONCATENATED MODULE: ./evaluator.js
+
 
 
 function evaluateDiff(payload, currentSize) {
@@ -66,7 +69,7 @@ function getFeatureBranchSize(flavorToBuild, buildPath) {
 function getDeltaPayload(masterSize, featSize) {
   const delta = masterSize - featSize;
   const del = delta < 0 ? "Increase" : "Decrease";
-  const payload = `
+  let payload = `
 
    | Info  | Value | \n | ------------- | ------------- | \n | Master branch size (in MB) | ${
      masterSize / 1024
@@ -76,13 +79,24 @@ function getDeltaPayload(masterSize, featSize) {
     delta
   )} | \n | ${del} in size  (in MB)  | ${Math.abs(delta) / 1024} | `;
 
-  console.log(payload);
-  console.log("***********");
-  console.log(payload.toString);
-  return payload.toString();
+  return getFileDiff(payload);
 }
 
-function getFileDiff() {}
+function getFileDiff(payload) {
+  console.log("current branch : " + github.context.ref);
+  const gOut = (0,external_child_process_namespaceObject.execSync)(
+    `./scripts/git-file-size-diff.sh master..${github.context.ref}`,
+    {
+      encoding: "utf-8",
+    }
+  ).split(/\s+/);
+
+  let temp = "";
+  for (let i = 0; i < gOut.length / 2; i += 2) {
+    temp += `\n | ${gOut[i + 1]} (in KB) | ${gOut[i]} |`;
+  }
+  return payload.toString() + temp.toString();
+}
 
 
 /***/ }),

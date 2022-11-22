@@ -1,3 +1,4 @@
+import { context } from "@actions/github";
 import { execSync } from "child_process";
 
 function evaluateDiff(payload, currentSize) {
@@ -20,7 +21,7 @@ export function getFeatureBranchSize(flavorToBuild, buildPath) {
 export function getDeltaPayload(masterSize, featSize) {
   const delta = masterSize - featSize;
   const del = delta < 0 ? "Increase" : "Decrease";
-  const payload = `
+  let payload = `
 
    | Info  | Value | \n | ------------- | ------------- | \n | Master branch size (in MB) | ${
      masterSize / 1024
@@ -30,10 +31,21 @@ export function getDeltaPayload(masterSize, featSize) {
     delta
   )} | \n | ${del} in size  (in MB)  | ${Math.abs(delta) / 1024} | `;
 
-  console.log(payload);
-  console.log("***********");
-  console.log(payload.toString);
-  return payload.toString();
+  return getFileDiff(payload);
 }
 
-function getFileDiff() {}
+function getFileDiff(payload) {
+  console.log("current branch : " + context.ref);
+  const gOut = execSync(
+    `./scripts/git-file-size-diff.sh master..${context.ref}`,
+    {
+      encoding: "utf-8",
+    }
+  ).split(/\s+/);
+
+  let temp = "";
+  for (let i = 0; i < gOut.length / 2; i += 2) {
+    temp += `\n | ${gOut[i + 1]} (in KB) | ${gOut[i]} |`;
+  }
+  return payload.toString() + temp.toString();
+}

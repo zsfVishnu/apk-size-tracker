@@ -38,8 +38,9 @@ export function getDeltaPayload(masterSize, featSize) {
 function getFileDiff(payload) {
   const gOut = fileDiff(context.payload.pull_request.head.ref).split(/\s+/);
 
+  console.log(gOut);
   let temp =
-    "\n Filewise diff \n | Info  | Value | \n | ------------- | ------------- |";
+    "\n \n  Filewise diff \n | Info  | Value | \n | ------------- | ------------- |";
   for (let i = 0; i < gOut.length / 2; i += 2) {
     temp += `\n | ${gOut[i + 1]} (in KB) | ${gOut[i]} |`;
   }

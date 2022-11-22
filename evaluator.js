@@ -30,9 +30,10 @@ export function getDeltaPayload(masterSize, featSize) {
     delta
   )} | \n | ${del} in size  (in MB)  | ${Math.abs(delta) / 1024} | `;
 
-  return payload;
+  console.log(payload);
+  console.log("***********");
+  console.log(payload.toString);
+  return payload.toString();
 }
 
-function getFileDiff() {
-    
-}
+function getFileDiff() {}

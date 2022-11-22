@@ -1,6 +1,35 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 2873:
+/***/ ((__unused_webpack_module, __webpack_exports__, __nccwpck_require__) => {
+
+"use strict";
+/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
+/* harmony export */   "k": () => (/* binding */ noArtifactFoundError),
+/* harmony export */   "t": () => (/* binding */ noFlavorFoundError)
+/* harmony export */ });
+function noArtifactFoundError() {
+  let err = new Error(
+    "No apk metric artifact found. Please add the apk-metric-upload action to the master/main branch"
+  );
+  err.description =
+    "No apk metric artifact found. Please add the apk-metric-upload action to the master/main branch";
+  throw err;
+}
+
+function noFlavorFoundError() {
+  let err = new Error(
+    "No debug flavor found. Please make sure to specify a debug flavor"
+  );
+  err.description =
+    "No debug flavor found. Please make sure to specify a debug flavor";
+  throw err;
+}
+
+
+/***/ }),
+
 /***/ 3074:
 /***/ ((__unused_webpack_module, __webpack_exports__, __nccwpck_require__) => {
 
@@ -18,28 +47,33 @@ const external_child_process_namespaceObject = require("child_process");
 
 
 function evaluateDiff(payload, currentSize) {
-    const masterSize = payload.masterSize
-    const diff = masterSize - currentSize
-    return diff
+  const masterSize = payload.masterSize;
+  const diff = masterSize - currentSize;
+  return diff;
 }
 
-
-function getFeatureBranchSize() {
-    (0,external_child_process_namespaceObject.execSync)('./gradlew assemble', { encoding: 'utf-8' });
-    const apkSize = (0,external_child_process_namespaceObject.execSync)('cd app/build/outputs/apk/debug && du -k app-debug.apk', { encoding: 'utf-8' }).trim().split(/\s+/)[0];
-    return apkSize
+function getFeatureBranchSize(flavorToBuild, buildPath) {
+  const apkSuffix = flavorToBuild.toLowerCase();
+  (0,external_child_process_namespaceObject.execSync)(`./gradlew assemble${flavorToBuild}`, { encoding: "utf-8" }); //handle flavor casing
+  const apkSize = (0,external_child_process_namespaceObject.execSync)(`cd ${buildPath} && du -k app-${apkSuffix}.apk`, {
+    encoding: "utf-8",
+  })
+    .trim()
+    .split(/\s+/)[0];
+  return apkSize;
 }
 
 function getDeltaPayload(masterSize, featSize) {
-    const delta = masterSize - featSize
-    const del = delta > 0 ? "Increase" : "Decrease"
-    const payload = `master branch size : ${masterSize} \n
-                    feature branch size : ${featSize} \n
+  const delta = masterSize - featSize;
+  const del = delta > 0 ? "Increase" : "Decrease";
+  const payload = `master branch size (in MB) : ${masterSize / 1024} \n
+                    feature branch size (in MB) : ${featSize / 1024} \n
                     ${del} in size      : ${delta} KB
-                    ${del} in size      : ${delta / 1024} MB`
+                    ${del} in size      : ${delta / 1024} MB`;
 
-    return payload
+  return payload;
 }
+
 
 /***/ }),
 
@@ -55,6 +89,8 @@ __nccwpck_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _evaluator__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(3074);
 /* harmony import */ var _network__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(9498);
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_4__ = __nccwpck_require__(759);
+
 
 
 
@@ -62,20 +98,21 @@ __nccwpck_require__.r(__webpack_exports__);
 
 const core = __nccwpck_require__(6024);
 const github = __nccwpck_require__(5016);
-const GITHUB_TOKEN = core.getInput('GITHUB_TOKEN');
-
+const GITHUB_TOKEN = core.getInput("GITHUB_TOKEN");
 
 try {
-    const flavorToBuild = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)('flavor');
-    console.log(`Building flavor:  ${flavorToBuild}!`);
-    const masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN)
-    const featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .W)()
-    const deltaPayload = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getDeltaPayload */ .a)(masterSize, featSize)
-    await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .postComment */ .w)(deltaPayload, GITHUB_TOKEN);
-
+  const flavorToBuild = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("flavor");
+  console.log(`Building flavor:  ${flavorToBuild}!`);
+  const pascalFlavor = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getPascalCase */ .R)(flavorToBuild);
+  const buildPath = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getBuildPath */ .H)(flavorToBuild);
+  const masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN);
+  const featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .W)(pascalFlavor, buildPath);
+  const deltaPayload = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getDeltaPayload */ .a)(masterSize, featSize);
+  await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .postComment */ .w)(deltaPayload, GITHUB_TOKEN);
 } catch (error) {
-    (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed)(error.message);
+  (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed)(error.message);
 }
+
 __webpack_handle_async_dependencies__();
 }, 1);
 
@@ -4179,6 +4216,8 @@ var adm_zip = __nccwpck_require__(3301);
 var adm_zip_default = /*#__PURE__*/__nccwpck_require__.n(adm_zip);
 // EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
 var github = __nccwpck_require__(5016);
+// EXTERNAL MODULE: ./error.js
+var error = __nccwpck_require__(2873);
 ;// CONCATENATED MODULE: ./network.js
 
 
@@ -4186,58 +4225,65 @@ var github = __nccwpck_require__(5016);
 
 
 async function getMasterSizeFromArtifact(GITHUB_TOKEN) {
+  const owner = github.context.repo.owner;
+  const repo = github.context.repo.repo;
 
-    const owner = github.context.repo.owner
-    const repo = github.context.repo.repo
+  const config = {
+    method: "GET",
+    url: `https://api.github.com/repos/${owner}/${repo}/actions/artifacts`,
+    headers: {
+      accept: "application/vnd.github+json",
+      authorization: "Bearer " + GITHUB_TOKEN,
+    },
+  };
 
-    const config = {
-        method: 'GET',
-        url: `https://api.github.com/repos/${owner}/${repo}/actions/artifacts`,
-        headers: {
-            'accept': 'application/vnd.github+json',
-            'authorization': 'Bearer ' + GITHUB_TOKEN
-        }
-    }
+  const artifacts = await (await node_modules_axios(config)).data.artifacts;
 
-    let res = await node_modules_axios(config)
-    const red_url = res.data.artifacts[0].archive_download_url
+  if (artifacts.length === 0) {
+    (0,error/* noArtifactFoundError */.k)();
+  } else {
+    for (let i = 0; i < artifacts.length; i++) {
+      const red_url = artifacts[i].archive_download_url;
 
-    const config2 = {
-        method: 'GET',
+      const config2 = {
+        method: "GET",
         url: red_url,
         headers: {
-            'accept': 'application/vnd.github+json',
-            'authorization': 'Bearer ' + GITHUB_TOKEN
+          accept: "application/vnd.github+json",
+          authorization: "Bearer " + GITHUB_TOKEN,
         },
-        responseType: "arraybuffer"
-    }
+        responseType: "arraybuffer",
+      };
 
-    let res2 = await node_modules_axios(config2)
-    var zip = new (adm_zip_default())(res2.data);
-    var zipEntries = zip.getEntries();
-    for (var i = 0; i < zipEntries.length; i++) {
-        console.log(zip.readAsText(zipEntries[i]));
+      let res2 = await node_modules_axios(config2);
+      var zip = new (adm_zip_default())(res2.data);
+      var zipEntries = zip.getEntries();
+      for (let i = 0; i < zipEntries.length; i++) {
+        if (zipEntries[i].entryName === `apk-metric.json`) {
+          return JSON.parse(zip.readAsText(zipEntries[i])).master_size;
+        }
+      }
+      (0,error/* noArtifactFoundError */.k)();
     }
-    return JSON.parse(zip.readAsText(zipEntries[0])).master_size
+  }
 }
-
-async function createAndPushMasterArtifact() { }
-
 
 async function postComment(deltaPayload, GITHUB_TOKEN) {
-    const owner = github.context.repo.owner
-    const repo = github.context.repo.repo
-    const config = {
-        method: 'POST',
-        url: `https://api.github.com/repos/${owner}/${repo}/issues/1/comments`,
-        headers: {
-            'accept': 'application/vnd.github+json',
-            'authorization': 'Bearer ' + GITHUB_TOKEN
-        },
-        data: { "body": deltaPayload }
-    }
-    node_modules_axios(config)
+  const payload = JSON.stringify(github.context.payload, undefined, 2);
+  const owner = github.context.repo.owner;
+  const repo = github.context.repo.repo;
+  const config = {
+    method: "POST",
+    url: `https://api.github.com/repos/${owner}/${repo}/issues/1/comments`,
+    headers: {
+      accept: "application/vnd.github+json",
+      authorization: "Bearer " + GITHUB_TOKEN,
+    },
+    data: { body: deltaPayload },
+  };
+  node_modules_axios(config);
 }
+
 
 /***/ }),
 
@@ -18854,6 +18900,49 @@ function wrappy (fn, cb) {
     }
     return ret
   }
+}
+
+
+/***/ }),
+
+/***/ 759:
+/***/ ((__unused_webpack_module, __webpack_exports__, __nccwpck_require__) => {
+
+"use strict";
+/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
+/* harmony export */   "R": () => (/* binding */ getPascalCase),
+/* harmony export */   "H": () => (/* binding */ getBuildPath)
+/* harmony export */ });
+/* harmony import */ var _error__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(2873);
+
+
+function getPascalCase(s) {
+  s = s.toLowerCase();
+  s = s.trim();
+  if (s === "debug") {
+    return "Debug";
+  }
+
+  if (s.includes("debug")) {
+    const fl = s.split("debug")[0];
+    return fl.charAt(0).toUpperCase() + fl.slice(1) + "Debug";
+  }
+  (0,_error__WEBPACK_IMPORTED_MODULE_0__/* .noFlavorFoundError */ .t)();
+}
+
+function getBuildPath(s) {
+  let outputPath = "app/build/outputs/apk/";
+  s = s.toLowerCase();
+  s = s.trim();
+  if (s === "debug") {
+    return outputPath + "debug/";
+  }
+
+  if (s.includes("debug")) {
+    const fl = s.split("debug")[0];
+    return outputPath + fl + "/debug/";
+  }
+  (0,_error__WEBPACK_IMPORTED_MODULE_0__/* .noFlavorFoundError */ .t)();
 }
 
 

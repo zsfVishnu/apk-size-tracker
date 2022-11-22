@@ -19,13 +19,13 @@ export function getFeatureBranchSize(flavorToBuild, buildPath) {
 
 export function getDeltaPayload(masterSize, featSize) {
   const delta = masterSize - featSize;
-  const del = delta > 0 ? "Increase" : "Decrease";
-  const payload = ` | Info                       | Number              |
-                    |----------------------------|---------------------|
-                    | master branch size (in MB) | ${masterSize / 1024}|
-                    | feature branch size (in MB)| ${featSize / 1024}  |
-                    | ${del} in size             | ${delta} KB         |
-                    | ${del} in size             | ${delta / 1024} MB   |`;
+  const del = delta < 0 ? "Increase" : "Decrease";
+  const payload = ` | Info                       | Number               |
+                    | ---------------------------|--------------------- |
+                    | master branch size (in MB) | ${masterSize / 1024} |
+                    | feature branch size (in MB)| ${featSize / 1024}   |
+                    | ${del} in size             | ${Math.abs(delta)} KB |
+                    | ${del} in size             | ${Math.abs(delta) / 1024} MB |`;
 
   return payload;
 }

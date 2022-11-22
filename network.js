@@ -4,12 +4,9 @@ import { context } from "@actions/github";
 import { noArtifactFoundError } from "./error";
 
 export async function getMasterSizeFromArtifact(GITHUB_TOKEN) {
-  const owner = context.repo.owner;
-  const repo = context.repo.repo;
-
   const config = {
     method: "GET",
-    url: `https://api.github.com/repos/${owner}/${repo}/actions/artifacts`,
+    url: `https://api.github.com/repos/${context.repo.owner}/${context.repo.repo}/actions/artifacts`,
     headers: {
       accept: "application/vnd.github+json",
       authorization: "Bearer " + GITHUB_TOKEN,
@@ -48,15 +45,9 @@ export async function getMasterSizeFromArtifact(GITHUB_TOKEN) {
 }
 
 export async function postComment(deltaPayload, GITHUB_TOKEN) {
-  console.log(context);
-  console.log(context.payload.number);
-
-  const owner = context.repo.owner;
-  const repo = context.repo.repo;
-  const issueNumber = context.payload.number;
   const config = {
     method: "POST",
-    url: `https://api.github.com/repos/${owner}/${repo}/issues/${issueNumber}/comments`,
+    url: `https://api.github.com/repos/${context.repo.owner}/${context.repo.repo}/issues/${context.payload.number}/comments`,
     headers: {
       accept: "application/vnd.github+json",
       authorization: "Bearer " + GITHUB_TOKEN,

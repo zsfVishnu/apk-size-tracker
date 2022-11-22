@@ -65,13 +65,13 @@ function getFeatureBranchSize(flavorToBuild, buildPath) {
 
 function getDeltaPayload(masterSize, featSize) {
   const delta = masterSize - featSize;
-  const del = delta > 0 ? "Increase" : "Decrease";
-  const payload = ` | Info                       | Number              |
-                    |----------------------------|---------------------|
-                    | master branch size (in MB) | ${masterSize / 1024}|
-                    | feature branch size (in MB)| ${featSize / 1024}  |
-                    | ${del} in size             | ${delta} KB         |
-                    | ${del} in size             | ${delta / 1024} MB   |`;
+  const del = delta < 0 ? "Increase" : "Decrease";
+  const payload = ` | Info                       | Number               |
+                    | ---------------------------|--------------------- |
+                    | master branch size (in MB) | ${masterSize / 1024} |
+                    | feature branch size (in MB)| ${featSize / 1024}   |
+                    | ${del} in size             | ${Math.abs(delta)} KB |
+                    | ${del} in size             | ${Math.abs(delta) / 1024} MB |`;
 
   return payload;
 }
@@ -4227,12 +4227,9 @@ var error = __nccwpck_require__(2873);
 
 
 async function getMasterSizeFromArtifact(GITHUB_TOKEN) {
-  const owner = github.context.repo.owner;
-  const repo = github.context.repo.repo;
-
   const config = {
     method: "GET",
-    url: `https://api.github.com/repos/${owner}/${repo}/actions/artifacts`,
+    url: `https://api.github.com/repos/${github.context.repo.owner}/${github.context.repo.repo}/actions/artifacts`,
     headers: {
       accept: "application/vnd.github+json",
       authorization: "Bearer " + GITHUB_TOKEN,
@@ -4271,15 +4268,9 @@ async function getMasterSizeFromArtifact(GITHUB_TOKEN) {
 }
 
 async function postComment(deltaPayload, GITHUB_TOKEN) {
-  console.log(github.context);
-  console.log(github.context.payload.number);
-
-  const owner = github.context.repo.owner;
-  const repo = github.context.repo.repo;
-  const issueNumber = github.context.payload.number;
   const config = {
     method: "POST",
-    url: `https://api.github.com/repos/${owner}/${repo}/issues/${issueNumber}/comments`,
+    url: `https://api.github.com/repos/${github.context.repo.owner}/${github.context.repo.repo}/issues/${github.context.payload.number}/comments`,
     headers: {
       accept: "application/vnd.github+json",
       authorization: "Bearer " + GITHUB_TOKEN,

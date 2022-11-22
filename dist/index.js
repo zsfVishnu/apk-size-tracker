@@ -66,24 +66,22 @@ function getFeatureBranchSize(flavorToBuild, buildPath) {
 function getDeltaPayload(masterSize, featSize) {
   const delta = masterSize - featSize;
   const del = delta < 0 ? "Increase" : "Decrease";
-  const payload =
-    " \
-  | Info  | Value | \
-    | ------------- | ------------- | \
-    | Master branch size (in MB) | sample  | \
-    ";
+  const payload = `
 
-  // | Info  | Value |
-  // | ------------- | ------------- |
-  // | Master branch size (in MB) | ${masterSize / 1024}  |
-  // | Feature branch size (in MB)  | ${featSize / 1024} |
-  // | ${del} in size  (in KB)  | ${Math.abs(delta)} |
-  // | ${del} in size  (in MB)  | ${Math.abs(delta) / 1024} | `;
+   | Info  | Value | \n | ------------- | ------------- | \n | Master branch size (in MB) | ${
+     masterSize / 1024
+   }  | \n | Feature branch size (in MB)  | ${
+    featSize / 1024
+  } | \n| ${del} in size  (in KB)  | ${Math.abs(
+    delta
+  )} | \n | ${del} in size  (in MB)  | ${Math.abs(delta) / 1024} | `;
 
   return payload;
 }
 
-function getFileDiff() {}
+function getFileDiff() {
+    
+}
 
 
 /***/ }),

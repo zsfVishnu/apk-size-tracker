@@ -66,10 +66,15 @@ function getFeatureBranchSize(flavorToBuild, buildPath) {
 function getDeltaPayload(masterSize, featSize) {
   const delta = masterSize - featSize;
   const del = delta > 0 ? "Increase" : "Decrease";
-  const payload = `master branch size (in MB) : ${masterSize / 1024} \n
-                    feature branch size (in MB) : ${featSize / 1024} \n
-                    ${del} in size      : ${delta} KB
-                    ${del} in size      : ${delta / 1024} MB`;
+  const payload = ` |----------------------------|---------------------|
+                    | master branch size (in MB) | ${masterSize / 1024}|
+                    |----------------------------|---------------------|
+                    | feature branch size (in MB)| ${featSize / 1024}  |
+                    |----------------------------|---------------------|
+                    | ${del} in size             | ${delta} KB         |
+                    |----------------------------|---------------------|
+                    | ${del} in size             |${delta / 1024} MB   |
+                    |----------------------------|---------------------|`;
 
   return payload;
 }
@@ -4260,7 +4265,7 @@ async function getMasterSizeFromArtifact(GITHUB_TOKEN) {
       var zipEntries = zip.getEntries();
       for (let i = 0; i < zipEntries.length; i++) {
         if (zipEntries[i].entryName === `apk-metric.json`) {
-          return JSON.parse(zip.readAsText(zipEntries[i])).master_size;
+          return JSON.parse(zip.readAsText(zipEntries[i]))[`master size`];
         }
       }
       (0,error/* noArtifactFoundError */.k)();

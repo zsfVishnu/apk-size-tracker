@@ -30,7 +30,7 @@ export function getBuildPath(s) {
   noFlavorFoundError();
 }
 
-export function fileDiff(featBranch) {
+export function fileDiff() {
   return execSync(
     `#!/bin/bash
 USAGE='[--cached] [<rev-list-options>...]
@@ -38,7 +38,7 @@ USAGE='[--cached] [<rev-list-options>...]
 Show file size changes between two commits or the index and a commit.'
 
 . "$(git --exec-path)/git-sh-setup"
-args=$(git rev-parse --sq "master..${featBranch}")
+args=$(git rev-parse --sq --cached master)
 [ -n "$args" ] || usage
 cmd="diff-tree -r"
 [[ $args =~ "--cached" ]] && cmd="diff-index"
@@ -58,7 +58,7 @@ eval "git $cmd $args" | {
     total=$(( $total + $bytes ))
     printf '%d\t%s\n' $bytes "$P"
   done
-  echo total $total
+  echo $total total
 }`,
     { encoding: "utf-8" }
   );

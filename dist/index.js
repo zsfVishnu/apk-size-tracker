@@ -81,7 +81,7 @@ function getDeltaPayload(masterSize, featSize) {
 }
 
 function getFileDiff(payload) {
-  const gOut = (0,_utils__WEBPACK_IMPORTED_MODULE_2__/* .fileDiff */ .yw)(_actions_github__WEBPACK_IMPORTED_MODULE_0__.context.payload.pull_request.head.ref).split(/\s+/);
+  const gOut = (0,_utils__WEBPACK_IMPORTED_MODULE_2__/* .fileDiff */ .yw)().split(/\s+/);
 
   console.log(gOut);
   let temp =
@@ -18961,7 +18961,7 @@ function getBuildPath(s) {
   (0,_error__WEBPACK_IMPORTED_MODULE_1__/* .noFlavorFoundError */ .t)();
 }
 
-function fileDiff(featBranch) {
+function fileDiff() {
   return (0,child_process__WEBPACK_IMPORTED_MODULE_0__.execSync)(
     `#!/bin/bash
 USAGE='[--cached] [<rev-list-options>...]
@@ -18969,7 +18969,7 @@ USAGE='[--cached] [<rev-list-options>...]
 Show file size changes between two commits or the index and a commit.'
 
 . "$(git --exec-path)/git-sh-setup"
-args=$(git rev-parse --sq "master..${featBranch}")
+args=$(git rev-parse --sq --cached master)
 [ -n "$args" ] || usage
 cmd="diff-tree -r"
 [[ $args =~ "--cached" ]] && cmd="diff-index"
@@ -18989,7 +18989,7 @@ eval "git $cmd $args" | {
     total=$(( $total + $bytes ))
     printf '%d\t%s\n' $bytes "$P"
   done
-  echo total $total
+  echo $total total
 }`,
     { encoding: "utf-8" }
   );

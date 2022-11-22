@@ -4272,11 +4272,11 @@ async function getMasterSizeFromArtifact(GITHUB_TOKEN) {
 
 async function postComment(deltaPayload, GITHUB_TOKEN) {
   console.log(github.context);
-  console.log(github.context.payload.issueNumber);
+  console.log(github.context.payload.number);
 
   const owner = github.context.repo.owner;
   const repo = github.context.repo.repo;
-  const issueNumber = github.context.payload.issueNumber;
+  const issueNumber = github.context.payload.number;
   const config = {
     method: "POST",
     url: `https://api.github.com/repos/${owner}/${repo}/issues/${issueNumber}/comments`,

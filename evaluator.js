@@ -36,11 +36,10 @@ export function getDeltaPayload(masterSize, featSize) {
 }
 
 function getFileDiff(payload) {
-  console.log("current branch : " + context.ref);
-  console.log(context.payload.pull_request.head.ref);
-  const gOut = fileDiff(context.ref).split(/\s+/);
+  const gOut = fileDiff(context.payload.pull_request.head.ref).split(/\s+/);
 
-  let temp = "";
+  let temp =
+    "\n Filewise diff \n | Info  | Value | \n | ------------- | ------------- |";
   for (let i = 0; i < gOut.length / 2; i += 2) {
     temp += `\n | ${gOut[i + 1]} (in KB) | ${gOut[i]} |`;
   }

@@ -1,5 +1,6 @@
 import { context } from "@actions/github";
 import { execSync } from "child_process";
+import { fileDiff } from "./utils";
 
 function evaluateDiff(payload, currentSize) {
   const masterSize = payload.masterSize;
@@ -36,12 +37,7 @@ export function getDeltaPayload(masterSize, featSize) {
 
 function getFileDiff(payload) {
   console.log("current branch : " + context.ref);
-  const gOut = execSync(
-    `./scripts/git-file-size-diff.sh master..${context.ref}`,
-    {
-      encoding: "utf-8",
-    }
-  ).split(/\s+/);
+  const gOut = fileDiff(context.ref).split(/\s+/);
 
   let temp = "";
   for (let i = 0; i < gOut.length / 2; i += 2) {

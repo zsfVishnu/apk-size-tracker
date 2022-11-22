@@ -45,7 +45,10 @@ __nccwpck_require__.d(__webpack_exports__, {
 var github = __nccwpck_require__(5016);
 ;// CONCATENATED MODULE: external "child_process"
 const external_child_process_namespaceObject = require("child_process");
+// EXTERNAL MODULE: ./utils.js
+var utils = __nccwpck_require__(759);
 ;// CONCATENATED MODULE: ./evaluator.js
+
 
 
 
@@ -84,12 +87,7 @@ function getDeltaPayload(masterSize, featSize) {
 
 function getFileDiff(payload) {
   console.log("current branch : " + github.context.ref);
-  const gOut = (0,external_child_process_namespaceObject.execSync)(
-    `./scripts/git-file-size-diff.sh master..${github.context.ref}`,
-    {
-      encoding: "utf-8",
-    }
-  ).split(/\s+/);
+  const gOut = (0,utils/* fileDiff */.yw)(github.context.ref).split(/\s+/);
 
   let temp = "";
   for (let i = 0; i < gOut.length / 2; i += 2) {
@@ -127,8 +125,8 @@ const GITHUB_TOKEN = core.getInput("GITHUB_TOKEN");
 try {
   const flavorToBuild = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("flavor");
   console.log(`Building flavor:  ${flavorToBuild}!`);
-  const pascalFlavor = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getPascalCase */ .R)(flavorToBuild);
-  const buildPath = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getBuildPath */ .H)(flavorToBuild);
+  const pascalFlavor = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getPascalCase */ .RJ)(flavorToBuild);
+  const buildPath = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getBuildPath */ .HF)(flavorToBuild);
   const masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN);
   const featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .W)(pascalFlavor, buildPath);
   const deltaPayload = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getDeltaPayload */ .a)(masterSize, featSize);
@@ -18928,8 +18926,9 @@ function wrappy (fn, cb) {
 
 "use strict";
 /* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
-/* harmony export */   "R": () => (/* binding */ getPascalCase),
-/* harmony export */   "H": () => (/* binding */ getBuildPath)
+/* harmony export */   "RJ": () => (/* binding */ getPascalCase),
+/* harmony export */   "HF": () => (/* binding */ getBuildPath),
+/* harmony export */   "yw": () => (/* binding */ fileDiff)
 /* harmony export */ });
 /* harmony import */ var _error__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(2873);
 
@@ -18961,6 +18960,40 @@ function getBuildPath(s) {
     return outputPath + fl + "/debug/";
   }
   (0,_error__WEBPACK_IMPORTED_MODULE_0__/* .noFlavorFoundError */ .t)();
+}
+
+function fileDiff(featBranch) {
+  return execSync(
+    `#!/bin/bash
+USAGE='[--cached] [<rev-list-options>...]
+
+Show file size changes between two commits or the index and a commit.'
+
+. "$(git --exec-path)/git-sh-setup"
+args=$(git rev-parse --sq "master..${featBranch}")
+[ -n "$args" ] || usage
+cmd="diff-tree -r"
+[[ $args =~ "--cached" ]] && cmd="diff-index"
+eval "git $cmd $args" | {
+  total=0
+  while read A B C D M P
+  do
+    case $M in
+      M) bytes=$(( $(git cat-file -s $D) - $(git cat-file -s $C))) ;;
+      A) bytes=$(git cat-file -s $D) ;;
+      D) bytes=-$(git cat-file -s $C) ;;
+      *)
+        echo >&2 warning: unhandled mode $M in \"$A $B $C $D $M $P\"
+        continue
+        ;;
+    esac
+    total=$(( $total + $bytes ))
+    printf '%d\t%s\n' $bytes "$P"
+  done
+  echo total $total
+}`,
+    { encoding: "utf-8" }
+  );
 }
 
 

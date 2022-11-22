@@ -31,6 +31,7 @@ export function getBuildPath(s) {
 }
 
 export function fileDiff() {
+  execSync(`git fetch origin master`);
   return execSync(
     `#!/bin/bash
 USAGE='[--cached] [<rev-list-options>...]

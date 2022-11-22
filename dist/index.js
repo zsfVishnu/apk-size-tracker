@@ -66,15 +66,12 @@ function getFeatureBranchSize(flavorToBuild, buildPath) {
 function getDeltaPayload(masterSize, featSize) {
   const delta = masterSize - featSize;
   const del = delta > 0 ? "Increase" : "Decrease";
-  const payload = ` |----------------------------|---------------------|
+  const payload = ` | Info                       | Number              |
+                    |----------------------------|---------------------|
                     | master branch size (in MB) | ${masterSize / 1024}|
-                    |----------------------------|---------------------|
                     | feature branch size (in MB)| ${featSize / 1024}  |
-                    |----------------------------|---------------------|
                     | ${del} in size             | ${delta} KB         |
-                    |----------------------------|---------------------|
-                    | ${del} in size             |${delta / 1024} MB   |
-                    |----------------------------|---------------------|`;
+                    | ${del} in size             | ${delta / 1024} MB   |`;
 
   return payload;
 }
@@ -4274,13 +4271,15 @@ async function getMasterSizeFromArtifact(GITHUB_TOKEN) {
 }
 
 async function postComment(deltaPayload, GITHUB_TOKEN) {
-  const payload = JSON.stringify(github.context.payload, undefined, 2);
-  console.log(payload);
+  console.log(github.context);
+  console.log(github.context.payload.issueNumber);
+
   const owner = github.context.repo.owner;
   const repo = github.context.repo.repo;
+  const issueNumber = github.context.payload.issueNumber;
   const config = {
     method: "POST",
-    url: `https://api.github.com/repos/${owner}/${repo}/issues/1/comments`,
+    url: `https://api.github.com/repos/${owner}/${repo}/issues/${issueNumber}/comments`,
     headers: {
       accept: "application/vnd.github+json",
       authorization: "Bearer " + GITHUB_TOKEN,

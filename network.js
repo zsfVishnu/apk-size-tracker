@@ -48,13 +48,15 @@ export async function getMasterSizeFromArtifact(GITHUB_TOKEN) {
 }
 
 export async function postComment(deltaPayload, GITHUB_TOKEN) {
-  const payload = JSON.stringify(context.payload, undefined, 2);
-  console.log(payload);
+  console.log(context);
+  console.log(context.payload.issueNumber);
+
   const owner = context.repo.owner;
   const repo = context.repo.repo;
+  const issueNumber = context.payload.issueNumber;
   const config = {
     method: "POST",
-    url: `https://api.github.com/repos/${owner}/${repo}/issues/1/comments`,
+    url: `https://api.github.com/repos/${owner}/${repo}/issues/${issueNumber}/comments`,
     headers: {
       accept: "application/vnd.github+json",
       authorization: "Bearer " + GITHUB_TOKEN,

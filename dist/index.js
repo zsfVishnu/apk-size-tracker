@@ -66,10 +66,12 @@ function getFeatureBranchSize(flavorToBuild, buildPath) {
 function getDeltaPayload(masterSize, featSize) {
   const delta = masterSize - featSize;
   const del = delta < 0 ? "Increase" : "Decrease";
-  const payload = `
-  | Info  | Value |
-    | ------------- | ------------- |
-    | Master branch size (in MB) | sample  | `;
+  const payload =
+    " \
+  | Info  | Value | \
+    | ------------- | ------------- | \
+    | Master branch size (in MB) | sample  | \
+    ";
 
   // | Info  | Value |
   // | ------------- | ------------- |

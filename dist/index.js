@@ -4270,6 +4270,7 @@ async function getMasterSizeFromArtifact(GITHUB_TOKEN) {
 
 async function postComment(deltaPayload, GITHUB_TOKEN) {
   const payload = JSON.stringify(github.context.payload, undefined, 2);
+  console.log(payload);
   const owner = github.context.repo.owner;
   const repo = github.context.repo.repo;
   const config = {

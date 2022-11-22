@@ -37,6 +37,7 @@ export function getDeltaPayload(masterSize, featSize) {
 
 function getFileDiff(payload) {
   console.log("current branch : " + context.ref);
+  console.log(context.payload.pull_request.head.ref);
   const gOut = fileDiff(context.ref).split(/\s+/);
 
   let temp = "";

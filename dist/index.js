@@ -30,24 +30,19 @@ function noFlavorFoundError() {
 
 /***/ }),
 
-/***/ 3074:
+/***/ 4074:
 /***/ ((__unused_webpack_module, __webpack_exports__, __nccwpck_require__) => {
 
 "use strict";
-
-// EXPORTS
-__nccwpck_require__.d(__webpack_exports__, {
-  "a": () => (/* binding */ getDeltaPayload),
-  "W": () => (/* binding */ getFeatureBranchSize)
-});
-
-// EXTERNAL MODULE: ./node_modules/@actions/github/lib/github.js
-var github = __nccwpck_require__(5016);
-;// CONCATENATED MODULE: external "child_process"
-const external_child_process_namespaceObject = require("child_process");
-// EXTERNAL MODULE: ./utils.js
-var utils = __nccwpck_require__(759);
-;// CONCATENATED MODULE: ./evaluator.js
+/* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
+/* harmony export */   "W": () => (/* binding */ getFeatureBranchSize),
+/* harmony export */   "a": () => (/* binding */ getDeltaPayload)
+/* harmony export */ });
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(5016);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var child_process__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(2081);
+/* harmony import */ var child_process__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(child_process__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(759);
 
 
 
@@ -60,8 +55,8 @@ function evaluateDiff(payload, currentSize) {
 
 function getFeatureBranchSize(flavorToBuild, buildPath) {
   const apkSuffix = flavorToBuild.toLowerCase();
-  (0,external_child_process_namespaceObject.execSync)(`./gradlew assemble${flavorToBuild}`, { encoding: "utf-8" }); //handle flavor casing
-  const apkSize = (0,external_child_process_namespaceObject.execSync)(`cd ${buildPath} && du -k app-${apkSuffix}.apk`, {
+  (0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`./gradlew assemble${flavorToBuild}`, { encoding: "utf-8" }); //handle flavor casing
+  const apkSize = (0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`cd ${buildPath} && du -k app-${apkSuffix}.apk`, {
     encoding: "utf-8",
   })
     .trim()
@@ -86,8 +81,9 @@ function getDeltaPayload(masterSize, featSize) {
 }
 
 function getFileDiff(payload) {
-  console.log("current branch : " + github.context.ref);
-  const gOut = (0,utils/* fileDiff */.yw)(github.context.ref).split(/\s+/);
+  console.log("current branch : " + _actions_github__WEBPACK_IMPORTED_MODULE_0__.context.ref);
+  console.log(_actions_github__WEBPACK_IMPORTED_MODULE_0__.context.payload.pull_request.head.ref);
+  const gOut = (0,_utils__WEBPACK_IMPORTED_MODULE_2__/* .fileDiff */ .yw)(_actions_github__WEBPACK_IMPORTED_MODULE_0__.context.ref).split(/\s+/);
 
   let temp = "";
   for (let i = 0; i < gOut.length / 2; i += 2) {
@@ -109,7 +105,7 @@ __nccwpck_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(5016);
 /* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _evaluator__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(3074);
+/* harmony import */ var _evaluator__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(4074);
 /* harmony import */ var _network__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(9498);
 /* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_4__ = __nccwpck_require__(759);
 
@@ -18930,7 +18926,10 @@ function wrappy (fn, cb) {
 /* harmony export */   "HF": () => (/* binding */ getBuildPath),
 /* harmony export */   "yw": () => (/* binding */ fileDiff)
 /* harmony export */ });
-/* harmony import */ var _error__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(2873);
+/* harmony import */ var _error__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(2873);
+/* harmony import */ var child_process__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(2081);
+/* harmony import */ var child_process__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(child_process__WEBPACK_IMPORTED_MODULE_0__);
+
 
 
 function getPascalCase(s) {
@@ -18944,7 +18943,7 @@ function getPascalCase(s) {
     const fl = s.split("debug")[0];
     return fl.charAt(0).toUpperCase() + fl.slice(1) + "Debug";
   }
-  (0,_error__WEBPACK_IMPORTED_MODULE_0__/* .noFlavorFoundError */ .t)();
+  (0,_error__WEBPACK_IMPORTED_MODULE_1__/* .noFlavorFoundError */ .t)();
 }
 
 function getBuildPath(s) {
@@ -18959,11 +18958,11 @@ function getBuildPath(s) {
     const fl = s.split("debug")[0];
     return outputPath + fl + "/debug/";
   }
-  (0,_error__WEBPACK_IMPORTED_MODULE_0__/* .noFlavorFoundError */ .t)();
+  (0,_error__WEBPACK_IMPORTED_MODULE_1__/* .noFlavorFoundError */ .t)();
 }
 
 function fileDiff(featBranch) {
-  return execSync(
+  return (0,child_process__WEBPACK_IMPORTED_MODULE_0__.execSync)(
     `#!/bin/bash
 USAGE='[--cached] [<rev-list-options>...]
 
@@ -19028,6 +19027,14 @@ module.exports = eval("require")("original-fs");
 
 "use strict";
 module.exports = require("assert");
+
+/***/ }),
+
+/***/ 2081:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("child_process");
 
 /***/ }),
 

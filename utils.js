@@ -1,4 +1,5 @@
 import { noFlavorFoundError } from "./error";
+import { execSync } from "child_process";
 
 export function getPascalCase(s) {
   s = s.toLowerCase();

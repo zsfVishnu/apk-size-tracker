@@ -36,7 +36,7 @@ export function getDeltaPayload(masterSize, featSize) {
 }
 
 function getFileDiff(payload) {
-  const gOut = fileDiff().split(/\s+/);
+  const gOut = fileDiff(context).split(/\s+/);
 
   console.log(gOut);
   let temp =

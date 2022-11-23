@@ -81,7 +81,7 @@ function getDeltaPayload(masterSize, featSize) {
 }
 
 function getFileDiff(payload) {
-  const gOut = (0,_utils__WEBPACK_IMPORTED_MODULE_2__/* .fileDiff */ .yw)().split(/\s+/);
+  const gOut = (0,_utils__WEBPACK_IMPORTED_MODULE_2__/* .fileDiff */ .yw)(_actions_github__WEBPACK_IMPORTED_MODULE_0__.context).split(/\s+/);
 
   console.log(gOut);
   let temp =
@@ -18926,9 +18926,12 @@ function wrappy (fn, cb) {
 /* harmony export */   "HF": () => (/* binding */ getBuildPath),
 /* harmony export */   "yw": () => (/* binding */ fileDiff)
 /* harmony export */ });
-/* harmony import */ var _error__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(2873);
+/* harmony import */ var _error__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(2873);
 /* harmony import */ var child_process__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(2081);
 /* harmony import */ var child_process__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(child_process__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(5016);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
+
 
 
 
@@ -18943,7 +18946,7 @@ function getPascalCase(s) {
     const fl = s.split("debug")[0];
     return fl.charAt(0).toUpperCase() + fl.slice(1) + "Debug";
   }
-  (0,_error__WEBPACK_IMPORTED_MODULE_1__/* .noFlavorFoundError */ .t)();
+  (0,_error__WEBPACK_IMPORTED_MODULE_2__/* .noFlavorFoundError */ .t)();
 }
 
 function getBuildPath(s) {
@@ -18958,12 +18961,12 @@ function getBuildPath(s) {
     const fl = s.split("debug")[0];
     return outputPath + fl + "/debug/";
   }
-  (0,_error__WEBPACK_IMPORTED_MODULE_1__/* .noFlavorFoundError */ .t)();
+  (0,_error__WEBPACK_IMPORTED_MODULE_2__/* .noFlavorFoundError */ .t)();
 }
 
 function fileDiff() {
   console.log("****");
-  console.log((0,child_process__WEBPACK_IMPORTED_MODULE_0__.execSync)(`git branch`, { encoding: "utf-8" }));
+  console.log((0,child_process__WEBPACK_IMPORTED_MODULE_0__.execSync)(`${_actions_github__WEBPACK_IMPORTED_MODULE_1__.context.base.ref}`, { encoding: "utf-8" }));
   console.log((0,child_process__WEBPACK_IMPORTED_MODULE_0__.execSync)(`git fetch`, { encoding: "utf-8" }));
   console.log((0,child_process__WEBPACK_IMPORTED_MODULE_0__.execSync)(`git branch --list`, { encoding: "utf-8" }));
   console.log("****");
@@ -18974,7 +18977,7 @@ USAGE='[--cached] [<rev-list-options>...]
 Show file size changes between two commits or the index and a commit.'
 
 . "$(git --exec-path)/git-sh-setup"
-args=$(git rev-parse --sq --cached origin/master)
+args=$(git rev-parse --sq --cached ${_actions_github__WEBPACK_IMPORTED_MODULE_1__.context.base.ref})
 [ -n "$args" ] || usage
 cmd="diff-tree -r"
 [[ $args =~ "--cached" ]] && cmd="diff-index"

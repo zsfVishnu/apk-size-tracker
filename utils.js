@@ -34,8 +34,10 @@ export function getBuildPath(s) {
 export function fileDiff() {
   console.log("****");
   console.log(execSync(`${context.base.ref}`, { encoding: "utf-8" }));
-  console.log(execSync(`git fetch`, { encoding: "utf-8" }));
-  console.log(execSync(`git branch --list`, { encoding: "utf-8" }));
+  console.log(execSync(`git fetch --all`, { encoding: "utf-8" }));
+  console.log(
+    execSync(`git fetch origin master:master`, { encoding: "utf-8" })
+  );
   console.log("****");
   return execSync(
     `#!/bin/bash
@@ -44,7 +46,8 @@ USAGE='[--cached] [<rev-list-options>...]
 Show file size changes between two commits or the index and a commit.'
 
 . "$(git --exec-path)/git-sh-setup"
-args=$(git rev-parse --sq --cached ${context.base.ref})
+git fetch origin master:master
+args=$(git rev-parse --sq --cached origin/master)
 [ -n "$args" ] || usage
 cmd="diff-tree -r"
 [[ $args =~ "--cached" ]] && cmd="diff-index"

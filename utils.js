@@ -33,7 +33,6 @@ export function getBuildPath(s) {
 
 export function fileDiff() {
   console.log("****");
-  console.log(execSync(`${context.base.ref}`, { encoding: "utf-8" }));
   console.log(execSync(`git fetch --all`, { encoding: "utf-8" }));
   console.log(
     execSync(`git fetch origin master:master`, { encoding: "utf-8" })

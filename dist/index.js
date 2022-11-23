@@ -18966,7 +18966,6 @@ function getBuildPath(s) {
 
 function fileDiff() {
   console.log("****");
-  console.log((0,child_process__WEBPACK_IMPORTED_MODULE_0__.execSync)(`${_actions_github__WEBPACK_IMPORTED_MODULE_1__.context.base.ref}`, { encoding: "utf-8" }));
   console.log((0,child_process__WEBPACK_IMPORTED_MODULE_0__.execSync)(`git fetch --all`, { encoding: "utf-8" }));
   console.log(
     (0,child_process__WEBPACK_IMPORTED_MODULE_0__.execSync)(`git fetch origin master:master`, { encoding: "utf-8" })

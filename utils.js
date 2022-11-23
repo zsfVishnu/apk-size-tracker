@@ -31,8 +31,11 @@ export function getBuildPath(s) {
   noFlavorFoundError();
 }
 
-export function fileDiff() {
+export function fileDiff(mb, fb) {
+  console.log("****CONTEXT****");
+  console.log(context);
   console.log("****");
+  console.log(context.issue);
   console.log("****");
   return execSync(
     `#!/bin/bash
@@ -41,7 +44,7 @@ USAGE='[--cached] [<rev-list-options>...]
 Show file size changes between two commits or the index and a commit.'
 
 . "$(git --exec-path)/git-sh-setup"
-args=$(git rev-parse --sq --cached master)
+args=$(git rev-parse --sq --cached origin/master)
 [ -n "$args" ] || usage
 cmd="diff-tree -r"
 [[ $args =~ "--cached" ]] && cmd="diff-index"

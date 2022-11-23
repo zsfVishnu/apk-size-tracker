@@ -18964,8 +18964,11 @@ function getBuildPath(s) {
   (0,_error__WEBPACK_IMPORTED_MODULE_2__/* .noFlavorFoundError */ .t)();
 }
 
-function fileDiff() {
+function fileDiff(mb, fb) {
+  console.log("****CONTEXT****");
+  console.log(_actions_github__WEBPACK_IMPORTED_MODULE_1__.context);
   console.log("****");
+  console.log(_actions_github__WEBPACK_IMPORTED_MODULE_1__.context.issue);
   console.log("****");
   return (0,child_process__WEBPACK_IMPORTED_MODULE_0__.execSync)(
     `#!/bin/bash
@@ -18974,7 +18977,7 @@ USAGE='[--cached] [<rev-list-options>...]
 Show file size changes between two commits or the index and a commit.'
 
 . "$(git --exec-path)/git-sh-setup"
-args=$(git rev-parse --sq --cached master)
+args=$(git rev-parse --sq --cached origin/master)
 [ -n "$args" ] || usage
 cmd="diff-tree -r"
 [[ $args =~ "--cached" ]] && cmd="diff-index"

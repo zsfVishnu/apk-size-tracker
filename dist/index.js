@@ -18962,7 +18962,9 @@ function getBuildPath(s) {
 }
 
 function fileDiff() {
-  (0,child_process__WEBPACK_IMPORTED_MODULE_0__.execSync)(`git branch`, { encoding: "utf-8" });
+  console.log("****");
+  console.log((0,child_process__WEBPACK_IMPORTED_MODULE_0__.execSync)(`git branch`, { encoding: "utf-8" }));
+  console.log("****");
   return (0,child_process__WEBPACK_IMPORTED_MODULE_0__.execSync)(
     `#!/bin/bash
 USAGE='[--cached] [<rev-list-options>...]

@@ -31,7 +31,9 @@ export function getBuildPath(s) {
 }
 
 export function fileDiff() {
-  execSync(`git branch`, { encoding: "utf-8" });
+  console.log("****");
+  console.log(execSync(`git branch`, { encoding: "utf-8" }));
+  console.log("****");
   return execSync(
     `#!/bin/bash
 USAGE='[--cached] [<rev-list-options>...]

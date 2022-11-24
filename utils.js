@@ -44,7 +44,7 @@ USAGE='[--cached] [<rev-list-options>...]
 Show file size changes between two commits or the index and a commit.'
 
 . "$(git --exec-path)/git-sh-setup"
-args=$(git rev-parse --sq origin/master..pull/4/merge)
+args=$(git rev-parse --sq origin/master..origin/test3)
 [ -n "$args" ] || usage
 cmd="diff-tree -r"
 [[ $args =~ "--cached" ]] && cmd="diff-index"

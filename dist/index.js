@@ -7,9 +7,9 @@
 "use strict";
 /* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
 /* harmony export */   "kV": () => (/* binding */ noArtifactFoundError),
-/* harmony export */   "tX": () => (/* binding */ noFlavorFoundError),
-/* harmony export */   "Y8": () => (/* binding */ thresholdExceededError)
+/* harmony export */   "tX": () => (/* binding */ noFlavorFoundError)
 /* harmony export */ });
+/* unused harmony export thresholdExceededError */
 function noArtifactFoundError() {
   let err = new Error(
     "No apk metric artifact found. Please add the apk-metric-upload action to the master/main branch"
@@ -19024,7 +19024,7 @@ async function handleThreshold(
 
     await (0,_network__WEBPACK_IMPORTED_MODULE_2__/* .postComment */ .w)(payload.toString(), GITHUB_TOKEN);
     console.log(payload);
-    (0,_error__WEBPACK_IMPORTED_MODULE_3__/* .thresholdExceededError */ .Y8)();
+    // thresholdExceededError();
   }
 }
 

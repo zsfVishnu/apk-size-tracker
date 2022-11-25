@@ -81,6 +81,6 @@ export async function handleThreshold(
 
     await postComment(payload.toString(), GITHUB_TOKEN);
     console.log(payload);
-    thresholdExceededError();
+    // thresholdExceededError();
   }
 }

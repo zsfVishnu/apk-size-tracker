@@ -7,9 +7,13 @@
 "use strict";
 /* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
 /* harmony export */   "kV": () => (/* binding */ noArtifactFoundError),
-/* harmony export */   "tX": () => (/* binding */ noFlavorFoundError)
+/* harmony export */   "tX": () => (/* binding */ noFlavorFoundError),
+/* harmony export */   "Y8": () => (/* binding */ thresholdExceededError)
 /* harmony export */ });
-/* unused harmony export thresholdExceededError */
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(6024);
+/* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
+
+
 function noArtifactFoundError() {
   let err = new Error(
     "No apk metric artifact found. Please add the apk-metric-upload action to the master/main branch"
@@ -29,9 +33,10 @@ function noFlavorFoundError() {
 }
 
 function thresholdExceededError() {
-  let err = new Error("Feature branch size exceeded the threshold provided");
-  err.description = "Feature branch size exceeded the threshold provided";
-  throw err;
+  //   let err = new Error("Feature branch size exceeded the threshold provided");
+  //   err.description = "Feature branch size exceeded the threshold provided";
+  //   throw err;
+  (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed)("Feature branch size exceeded the threshold provided");
 }
 
 
@@ -18935,12 +18940,12 @@ function wrappy (fn, cb) {
 /* harmony export */   "yw": () => (/* binding */ fileDiff),
 /* harmony export */   "qo": () => (/* binding */ handleThreshold)
 /* harmony export */ });
-/* harmony import */ var _error__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(2873);
-/* harmony import */ var child_process__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(2081);
-/* harmony import */ var child_process__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(child_process__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(5016);
-/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _network__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(9498);
+/* harmony import */ var _error__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(2873);
+/* harmony import */ var child_process__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(2081);
+/* harmony import */ var child_process__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(child_process__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(5016);
+/* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _network__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(9498);
 
 
 
@@ -18957,7 +18962,7 @@ function getPascalCase(s) {
     const fl = s.split("debug")[0];
     return fl.charAt(0).toUpperCase() + fl.slice(1) + "Debug";
   }
-  (0,_error__WEBPACK_IMPORTED_MODULE_3__/* .noFlavorFoundError */ .tX)();
+  (0,_error__WEBPACK_IMPORTED_MODULE_0__/* .noFlavorFoundError */ .tX)();
 }
 
 function getBuildPath(s) {
@@ -18972,11 +18977,11 @@ function getBuildPath(s) {
     const fl = s.split("debug")[0];
     return outputPath + fl + "/debug/";
   }
-  (0,_error__WEBPACK_IMPORTED_MODULE_3__/* .noFlavorFoundError */ .tX)();
+  (0,_error__WEBPACK_IMPORTED_MODULE_0__/* .noFlavorFoundError */ .tX)();
 }
 
 function fileDiff(mb, fb) {
-  return (0,child_process__WEBPACK_IMPORTED_MODULE_0__.execSync)(
+  return (0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(
     `#!/bin/bash
 USAGE='[--cached] [<rev-list-options>...]
 
@@ -19015,16 +19020,15 @@ async function handleThreshold(
   threshold,
   GITHUB_TOKEN
 ) {
-  const diff = featSize - masterSize;
-  console.log(diff);
+  const diff = (featSize - masterSize) / 1024;
   if (diff > threshold) {
     let payload = `WORKFLOW FAILED DUE TO EXCEEDING THRESHOLD!!! \n \n \n 
 
    | Threshold  | Actual Delta | \n | ------------- | ------------- | \n | ${threshold} MB | ${diff} MB |  `;
 
-    await (0,_network__WEBPACK_IMPORTED_MODULE_2__/* .postComment */ .w)(payload.toString(), GITHUB_TOKEN);
+    await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .postComment */ .w)(payload.toString(), GITHUB_TOKEN);
     console.log(payload);
-    // thresholdExceededError();
+    (0,_error__WEBPACK_IMPORTED_MODULE_0__/* .thresholdExceededError */ .Y8)();
   }
 }
 

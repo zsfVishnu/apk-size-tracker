@@ -72,8 +72,7 @@ export async function handleThreshold(
   threshold,
   GITHUB_TOKEN
 ) {
-  const diff = featSize - masterSize;
-  console.log(diff);
+  const diff = (featSize - masterSize) / 1024;
   if (diff > threshold) {
     let payload = `WORKFLOW FAILED DUE TO EXCEEDING THRESHOLD!!! \n \n \n 
 
@@ -81,6 +80,6 @@ export async function handleThreshold(
 
     await postComment(payload.toString(), GITHUB_TOKEN);
     console.log(payload);
-    // thresholdExceededError();
+    thresholdExceededError();
   }
 }

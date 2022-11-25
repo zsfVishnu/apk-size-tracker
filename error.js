@@ -1,3 +1,5 @@
+import { setFailed } from "@actions/core";
+
 export function noArtifactFoundError() {
   let err = new Error(
     "No apk metric artifact found. Please add the apk-metric-upload action to the master/main branch"
@@ -17,7 +19,8 @@ export function noFlavorFoundError() {
 }
 
 export function thresholdExceededError() {
-  let err = new Error("Feature branch size exceeded the threshold provided");
-  err.description = "Feature branch size exceeded the threshold provided";
-  throw err;
+  //   let err = new Error("Feature branch size exceeded the threshold provided");
+  //   err.description = "Feature branch size exceeded the threshold provided";
+  //   throw err;
+  setFailed("Feature branch size exceeded the threshold provided");
 }

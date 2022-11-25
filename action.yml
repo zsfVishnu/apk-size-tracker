@@ -1,16 +1,16 @@
-name: 'Apk size tracker'
-description: 'Track the size of apk'
+name: "Apk size tracker"
+description: "Track the size of apk"
 inputs:
-  flavor:  # id of input
-    description: 'flavor of the apk to build'
+  flavor: # id of input
+    description: "flavor of the apk to build"
     required: true
-    default: 'staging'
+    default: "staging"
   GITHUB_TOKEN:
-    description: 'GitHub token'
+    description: "GitHub token"
     required: true
-outputs:
-  size: # id of output
-    description: 'Size of the apk'
+  threshold:
+    description: "Permissible size threshold above which merging will be blocked"
+    required: false
 runs:
-  using: 'node16'
-  main: 'dist/index.js'
+  using: "node16"
+  main: "dist/index.js"

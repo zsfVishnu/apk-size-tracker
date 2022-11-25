@@ -15,3 +15,9 @@ export function noFlavorFoundError() {
     "No debug flavor found. Please make sure to specify a debug flavor";
   throw err;
 }
+
+export function thresholdExceededError() {
+  let err = new Error("Feature branch size exceeded the threshold provided");
+  err.description = "Feature branch size exceeded the threshold provided";
+  throw err;
+}

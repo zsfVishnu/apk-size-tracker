@@ -6,8 +6,9 @@
 
 "use strict";
 /* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
-/* harmony export */   "k": () => (/* binding */ noArtifactFoundError),
-/* harmony export */   "t": () => (/* binding */ noFlavorFoundError)
+/* harmony export */   "kV": () => (/* binding */ noArtifactFoundError),
+/* harmony export */   "tX": () => (/* binding */ noFlavorFoundError),
+/* harmony export */   "Y8": () => (/* binding */ thresholdExceededError)
 /* harmony export */ });
 function noArtifactFoundError() {
   let err = new Error(
@@ -24,6 +25,12 @@ function noFlavorFoundError() {
   );
   err.description =
     "No debug flavor found. Please make sure to specify a debug flavor";
+  throw err;
+}
+
+function thresholdExceededError() {
+  let err = new Error("Feature branch size exceeded the threshold provided");
+  err.description = "Feature branch size exceeded the threshold provided";
   throw err;
 }
 
@@ -119,6 +126,7 @@ const GITHUB_TOKEN = core.getInput("GITHUB_TOKEN");
 
 try {
   const flavorToBuild = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("flavor");
+  const threshold = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("threshold");
   console.log(`Building flavor:  ${flavorToBuild}!`);
   const pascalFlavor = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getPascalCase */ .RJ)(flavorToBuild);
   const buildPath = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getBuildPath */ .HF)(flavorToBuild);
@@ -126,6 +134,7 @@ try {
   const featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .W)(pascalFlavor, buildPath);
   const deltaPayload = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getDeltaPayload */ .a)(masterSize, featSize);
   await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .postComment */ .w)(deltaPayload, GITHUB_TOKEN);
+  (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .handleThreshold */ .qo)(masterSize, featSize, threshold, GITHUB_TOKEN);
 } catch (error) {
   (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed)(error.message);
 }
@@ -4254,7 +4263,7 @@ async function getMasterSizeFromArtifact(GITHUB_TOKEN) {
   const artifacts = await (await node_modules_axios(config)).data.artifacts;
 
   if (artifacts.length === 0) {
-    (0,error/* noArtifactFoundError */.k)();
+    (0,error/* noArtifactFoundError */.kV)();
   } else {
     for (let i = 0; i < artifacts.length; i++) {
       const red_url = artifacts[i].archive_download_url;
@@ -4277,7 +4286,7 @@ async function getMasterSizeFromArtifact(GITHUB_TOKEN) {
           return JSON.parse(zip.readAsText(zipEntries[i]))[`master size`];
         }
       }
-      (0,error/* noArtifactFoundError */.k)();
+      (0,error/* noArtifactFoundError */.kV)();
     }
   }
 }
@@ -18923,13 +18932,16 @@ function wrappy (fn, cb) {
 /* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
 /* harmony export */   "RJ": () => (/* binding */ getPascalCase),
 /* harmony export */   "HF": () => (/* binding */ getBuildPath),
-/* harmony export */   "yw": () => (/* binding */ fileDiff)
+/* harmony export */   "yw": () => (/* binding */ fileDiff),
+/* harmony export */   "qo": () => (/* binding */ handleThreshold)
 /* harmony export */ });
-/* harmony import */ var _error__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(2873);
+/* harmony import */ var _error__WEBPACK_IMPORTED_MODULE_3__ = __nccwpck_require__(2873);
 /* harmony import */ var child_process__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(2081);
 /* harmony import */ var child_process__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(child_process__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(5016);
 /* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _network__WEBPACK_IMPORTED_MODULE_2__ = __nccwpck_require__(9498);
+
 
 
 
@@ -18945,7 +18957,7 @@ function getPascalCase(s) {
     const fl = s.split("debug")[0];
     return fl.charAt(0).toUpperCase() + fl.slice(1) + "Debug";
   }
-  (0,_error__WEBPACK_IMPORTED_MODULE_2__/* .noFlavorFoundError */ .t)();
+  (0,_error__WEBPACK_IMPORTED_MODULE_3__/* .noFlavorFoundError */ .tX)();
 }
 
 function getBuildPath(s) {
@@ -18960,15 +18972,10 @@ function getBuildPath(s) {
     const fl = s.split("debug")[0];
     return outputPath + fl + "/debug/";
   }
-  (0,_error__WEBPACK_IMPORTED_MODULE_2__/* .noFlavorFoundError */ .t)();
+  (0,_error__WEBPACK_IMPORTED_MODULE_3__/* .noFlavorFoundError */ .tX)();
 }
 
 function fileDiff(mb, fb) {
-  console.log("****CONTEXT****");
-  console.log(_actions_github__WEBPACK_IMPORTED_MODULE_1__.context);
-  console.log("****");
-  console.log(_actions_github__WEBPACK_IMPORTED_MODULE_1__.context.issue);
-  console.log("****");
   return (0,child_process__WEBPACK_IMPORTED_MODULE_0__.execSync)(
     `#!/bin/bash
 USAGE='[--cached] [<rev-list-options>...]
@@ -19000,6 +19007,23 @@ eval "git $cmd $args" | {
 }`,
     { encoding: "utf-8" }
   );
+}
+
+async function handleThreshold(
+  featSize,
+  masterSize,
+  threshold,
+  GITHUB_TOKEN
+) {
+  const diff = featSize - masterSize;
+  if (diff > threshold) {
+    let payload = `WORKFLOW FAILED DUE TO EXCEEDING THRESHOLD!!! \n \n \n 
+
+   | Threshold  | Actual Delta | \n | ------------- | ------------- | \n | ${threshold} MB | ${diff} MB |  `;
+
+    await (0,_network__WEBPACK_IMPORTED_MODULE_2__/* .postComment */ .w)(payload.toString(), GITHUB_TOKEN);
+    (0,_error__WEBPACK_IMPORTED_MODULE_3__/* .thresholdExceededError */ .Y8)();
+  }
 }
 
 

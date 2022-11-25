@@ -1,6 +1,7 @@
-import { noFlavorFoundError } from "./error";
+import { noFlavorFoundError, thresholdExceededError } from "./error";
 import { execSync } from "child_process";
 import { context } from "@actions/github";
+import { postComment } from "./network";
 
 export function getPascalCase(s) {
   s = s.toLowerCase();
@@ -32,11 +33,6 @@ export function getBuildPath(s) {
 }
 
 export function fileDiff(mb, fb) {
-  console.log("****CONTEXT****");
-  console.log(context);
-  console.log("****");
-  console.log(context.issue);
-  console.log("****");
   return execSync(
     `#!/bin/bash
 USAGE='[--cached] [<rev-list-options>...]
@@ -68,4 +64,21 @@ eval "git $cmd $args" | {
 }`,
     { encoding: "utf-8" }
   );
+}
+
+export async function handleThreshold(
+  featSize,
+  masterSize,
+  threshold,
+  GITHUB_TOKEN
+) {
+  const diff = featSize - masterSize;
+  if (diff > threshold) {
+    let payload = `WORKFLOW FAILED DUE TO EXCEEDING THRESHOLD!!! \n \n \n 
+
+   | Threshold  | Actual Delta | \n | ------------- | ------------- | \n | ${threshold} MB | ${diff} MB |  `;
+
+    await postComment(payload.toString(), GITHUB_TOKEN);
+    thresholdExceededError();
+  }
 }

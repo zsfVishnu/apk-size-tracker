@@ -19018,12 +19018,12 @@ async function handleThreshold(
   const diff = featSize - masterSize;
   console.log(diff);
   if (diff > threshold) {
-    console.log("inside threshold function");
     let payload = `WORKFLOW FAILED DUE TO EXCEEDING THRESHOLD!!! \n \n \n 
 
    | Threshold  | Actual Delta | \n | ------------- | ------------- | \n | ${threshold} MB | ${diff} MB |  `;
 
     await (0,_network__WEBPACK_IMPORTED_MODULE_2__/* .postComment */ .w)(payload.toString(), GITHUB_TOKEN);
+    console.log(payload);
     (0,_error__WEBPACK_IMPORTED_MODULE_3__/* .thresholdExceededError */ .Y8)();
   }
 }

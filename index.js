@@ -11,11 +11,12 @@ const GITHUB_TOKEN = core.getInput("GITHUB_TOKEN");
 try {
   const flavorToBuild = getInput("flavor");
   const threshold = getInput("threshold");
+  const isRN = getInput("is-react-native");
   console.log(`Building flavor:  ${flavorToBuild}!`);
-  const pascalFlavor = getPascalCase(flavorToBuild);
+  // const pascalFlavor = getPascalCase(flavorToBuild);
   const buildPath = getBuildPath(flavorToBuild);
   const masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN);
-  const featSize = getFeatureBranchSize(pascalFlavor, buildPath);
+  const featSize = getFeatureBranchSize(flavorToBuild, buildPath, isRN);
   const deltaPayload = getDeltaPayload(masterSize, featSize);
   await postComment(deltaPayload, GITHUB_TOKEN);
   handleThreshold(masterSize, featSize, threshold, GITHUB_TOKEN);

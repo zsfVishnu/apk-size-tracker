@@ -19,8 +19,9 @@ export function noFlavorFoundError() {
 }
 
 export function thresholdExceededError() {
-  //   let err = new Error("Feature branch size exceeded the threshold provided");
-  //   err.description = "Feature branch size exceeded the threshold provided";
-  //   throw err;
   setFailed("Feature branch size exceeded the threshold provided");
+}
+
+export function buildPathError() {
+  setFailed("Build Path error. Make sure the flavor provided is correct");
 }

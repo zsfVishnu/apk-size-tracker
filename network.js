@@ -36,7 +36,7 @@ export async function getMasterSizeFromArtifact(GITHUB_TOKEN) {
       var zipEntries = zip.getEntries();
       for (let i = 0; i < zipEntries.length; i++) {
         if (zipEntries[i].entryName === `apk-metric.json`) {
-          return JSON.parse(zip.readAsText(zipEntries[i]))[`master size`];
+          return JSON.parse(zip.readAsText(zipEntries[i]))[`master_size`];
         }
       }
       noArtifactFoundError();

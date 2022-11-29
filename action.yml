@@ -11,6 +11,10 @@ inputs:
   threshold:
     description: "Permissible size threshold above which merging will be blocked"
     required: false
+  is-react-native:
+    description: "is it a react native project"
+    required: false
+    default: false
 runs:
   using: "node16"
   main: "dist/index.js"

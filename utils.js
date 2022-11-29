@@ -4,14 +4,13 @@ import { context } from "@actions/github";
 import { postComment } from "./network";
 
 export function getPascalCase(s) {
-  s = s.toLowerCase();
   s = s.trim();
-  if (s === "debug") {
+  if (s.toLowerCase() === "debug") {
     return "Debug";
   }
 
-  if (s.includes("debug")) {
-    const fl = s.split("debug")[0];
+  if (s.includes("Debug")) {
+    const fl = s.split("Debug")[0];
     return fl.charAt(0).toUpperCase() + fl.slice(1) + "Debug";
   }
   noFlavorFoundError();
@@ -19,17 +18,29 @@ export function getPascalCase(s) {
 
 export function getBuildPath(s) {
   let outputPath = "app/build/outputs/apk/";
-  s = s.toLowerCase();
   s = s.trim();
-  if (s === "debug") {
+  if (s.toLowerCase() === "debug") {
     return outputPath + "debug/";
   }
 
-  if (s.includes("debug")) {
-    const fl = s.split("debug")[0];
+  if (s.includes("Debug")) {
+    const fl = s.split("Debug")[0];
     return outputPath + fl + "/debug/";
   }
-  noFlavorFoundError();
+  buildPathError();
+}
+
+export function getApkName(s) {
+  s = s.trim();
+  if (s.toLowerCase() === "debug") {
+    return "app-debug.apk";
+  }
+
+  if (s.includes("Debug")) {
+    const fl = s.split("Debug")[0];
+    return "app-" + fl + "-debug.apk";
+  }
+  apkNameError();
 }
 
 export function fileDiff(mb, fb) {

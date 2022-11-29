@@ -1,6 +1,6 @@
 import { context } from "@actions/github";
 import { execSync } from "child_process";
-import { fileDiff } from "./utils";
+import { fileDiff, getApkName, getPascalCase } from "./utils";
 
 function evaluateDiff(payload, currentSize) {
   const masterSize = payload.masterSize;
@@ -8,14 +8,41 @@ function evaluateDiff(payload, currentSize) {
   return diff;
 }
 
-export function getFeatureBranchSize(flavorToBuild, buildPath) {
-  const apkSuffix = flavorToBuild.toLowerCase();
-  execSync(`./gradlew assemble${flavorToBuild}`, { encoding: "utf-8" }); //handle flavor casing
-  const apkSize = execSync(`cd ${buildPath} && du -k app-${apkSuffix}.apk`, {
+export function getFeatureBranchSize(fb, buildPath, isRN) {
+  const apkName = getApkName(fb);
+  const flavorToBuild = getPascalCase(fb);
+
+  return isRN === "true"
+    ? getRNFeatureBranchSize(apkName, flavorToBuild, buildPath)
+    : getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath);
+}
+
+function getRNFeatureBranchSize(apkName, flavorToBuild, buildPath) {
+  console.log(
+    execSync(`cd android && ./gradlew assemble${flavorToBuild}`, {
+      encoding: "utf-8",
+    })
+  );
+
+  const sizeOp = execSync(`cd android/${buildPath} && du -k ${apkName}`, {
     encoding: "utf-8",
-  })
-    .trim()
-    .split(/\s+/)[0];
+  });
+
+  console.log(sizeOp);
+
+  const apkSize =
+    typeof sizeOp === `string` ? sizeOp.trim().split(/\s+/)[0] : 0;
+
+  return apkSize;
+}
+
+function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
+  execSync(`./gradlew assemble${flavorToBuild}`, { encoding: "utf-8" });
+  const sizeOp = execSync(`cd ${buildPath} && du -k ${apkName}`, {
+    encoding: "utf-8",
+  });
+  const apkSize =
+    typeof sizeOp === `string` ? sizeOp.trim().split(/\s+/)[0] : 0;
   return apkSize;
 }
 

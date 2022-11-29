@@ -10,6 +10,7 @@
 /* harmony export */   "tX": () => (/* binding */ noFlavorFoundError),
 /* harmony export */   "Y8": () => (/* binding */ thresholdExceededError)
 /* harmony export */ });
+/* unused harmony export buildPathError */
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(6024);
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
 
@@ -33,10 +34,11 @@ function noFlavorFoundError() {
 }
 
 function thresholdExceededError() {
-  //   let err = new Error("Feature branch size exceeded the threshold provided");
-  //   err.description = "Feature branch size exceeded the threshold provided";
-  //   throw err;
   (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed)("Feature branch size exceeded the threshold provided");
+}
+
+function buildPathError() {
+  setFailed("Build Path error. Make sure the flavor provided is correct");
 }
 
 
@@ -65,14 +67,41 @@ function evaluateDiff(payload, currentSize) {
   return diff;
 }
 
-function getFeatureBranchSize(flavorToBuild, buildPath) {
-  const apkSuffix = flavorToBuild.toLowerCase();
-  (0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`./gradlew assemble${flavorToBuild}`, { encoding: "utf-8" }); //handle flavor casing
-  const apkSize = (0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`cd ${buildPath} && du -k app-${apkSuffix}.apk`, {
+function getFeatureBranchSize(fb, buildPath, isRN) {
+  const apkName = (0,_utils__WEBPACK_IMPORTED_MODULE_2__/* .getApkName */ .sJ)(fb);
+  const flavorToBuild = (0,_utils__WEBPACK_IMPORTED_MODULE_2__/* .getPascalCase */ .RJ)(fb);
+
+  return isRN === "true"
+    ? getRNFeatureBranchSize(apkName, flavorToBuild, buildPath)
+    : getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath);
+}
+
+function getRNFeatureBranchSize(apkName, flavorToBuild, buildPath) {
+  console.log(
+    (0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`cd android && ./gradlew assemble${flavorToBuild}`, {
+      encoding: "utf-8",
+    })
+  );
+
+  const sizeOp = (0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`cd android/${buildPath} && du -k ${apkName}`, {
     encoding: "utf-8",
-  })
-    .trim()
-    .split(/\s+/)[0];
+  });
+
+  console.log(sizeOp);
+
+  const apkSize =
+    typeof sizeOp === `string` ? sizeOp.trim().split(/\s+/)[0] : 0;
+
+  return apkSize;
+}
+
+function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
+  (0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`./gradlew assemble${flavorToBuild}`, { encoding: "utf-8" });
+  const sizeOp = (0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`cd ${buildPath} && du -k ${apkName}`, {
+    encoding: "utf-8",
+  });
+  const apkSize =
+    typeof sizeOp === `string` ? sizeOp.trim().split(/\s+/)[0] : 0;
   return apkSize;
 }
 
@@ -132,11 +161,12 @@ const GITHUB_TOKEN = core.getInput("GITHUB_TOKEN");
 try {
   const flavorToBuild = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("flavor");
   const threshold = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("threshold");
+  const isRN = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("is-react-native");
   console.log(`Building flavor:  ${flavorToBuild}!`);
-  const pascalFlavor = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getPascalCase */ .RJ)(flavorToBuild);
+  // const pascalFlavor = getPascalCase(flavorToBuild);
   const buildPath = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getBuildPath */ .HF)(flavorToBuild);
   const masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN);
-  const featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .W)(pascalFlavor, buildPath);
+  const featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .W)(flavorToBuild, buildPath, isRN);
   const deltaPayload = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getDeltaPayload */ .a)(masterSize, featSize);
   await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .postComment */ .w)(deltaPayload, GITHUB_TOKEN);
   (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .handleThreshold */ .qo)(masterSize, featSize, threshold, GITHUB_TOKEN);
@@ -4288,7 +4318,7 @@ async function getMasterSizeFromArtifact(GITHUB_TOKEN) {
       var zipEntries = zip.getEntries();
       for (let i = 0; i < zipEntries.length; i++) {
         if (zipEntries[i].entryName === `apk-metric.json`) {
-          return JSON.parse(zip.readAsText(zipEntries[i]))[`master size`];
+          return JSON.parse(zip.readAsText(zipEntries[i]))[`master_size`];
         }
       }
       (0,error/* noArtifactFoundError */.kV)();
@@ -18937,6 +18967,7 @@ function wrappy (fn, cb) {
 /* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
 /* harmony export */   "RJ": () => (/* binding */ getPascalCase),
 /* harmony export */   "HF": () => (/* binding */ getBuildPath),
+/* harmony export */   "sJ": () => (/* binding */ getApkName),
 /* harmony export */   "yw": () => (/* binding */ fileDiff),
 /* harmony export */   "qo": () => (/* binding */ handleThreshold)
 /* harmony export */ });
@@ -18952,14 +18983,13 @@ function wrappy (fn, cb) {
 
 
 function getPascalCase(s) {
-  s = s.toLowerCase();
   s = s.trim();
-  if (s === "debug") {
+  if (s.toLowerCase() === "debug") {
     return "Debug";
   }
 
-  if (s.includes("debug")) {
-    const fl = s.split("debug")[0];
+  if (s.includes("Debug")) {
+    const fl = s.split("Debug")[0];
     return fl.charAt(0).toUpperCase() + fl.slice(1) + "Debug";
   }
   (0,_error__WEBPACK_IMPORTED_MODULE_0__/* .noFlavorFoundError */ .tX)();
@@ -18967,17 +18997,29 @@ function getPascalCase(s) {
 
 function getBuildPath(s) {
   let outputPath = "app/build/outputs/apk/";
-  s = s.toLowerCase();
   s = s.trim();
-  if (s === "debug") {
+  if (s.toLowerCase() === "debug") {
     return outputPath + "debug/";
   }
 
-  if (s.includes("debug")) {
-    const fl = s.split("debug")[0];
+  if (s.includes("Debug")) {
+    const fl = s.split("Debug")[0];
     return outputPath + fl + "/debug/";
   }
-  (0,_error__WEBPACK_IMPORTED_MODULE_0__/* .noFlavorFoundError */ .tX)();
+  buildPathError();
+}
+
+function getApkName(s) {
+  s = s.trim();
+  if (s.toLowerCase() === "debug") {
+    return "app-debug.apk";
+  }
+
+  if (s.includes("Debug")) {
+    const fl = s.split("Debug")[0];
+    return "app-" + fl + "-debug.apk";
+  }
+  apkNameError();
 }
 
 function fileDiff(mb, fb) {

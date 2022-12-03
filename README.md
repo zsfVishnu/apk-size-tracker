@@ -1,4 +1,4 @@
-# apk-size-tracker
+# Apk-size-tracker
 
 The size of an app is one of the most crucial metrics that affects its adoption.
 The installation rate of an app is mostly inversely proportional to its size. 
@@ -13,7 +13,8 @@ to help you track any increase in app size.
 ## apk-metric-upload
 
 For us to compare the feature branch size with the latest master, we continuously
-monitor master branch merges as well. The apk-metric-upload action takes care of
+monitor master branch merges as well. The [apk-metric-upload](https://github.com/zsfVishnu/apk-metric-upload)
+action takes care of
 this easily. Please add this action to your workflow and merge to master before
 using the size tracker action.
 
@@ -74,6 +75,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
+          
+      - name: Install dependencies
+        run: yarn install
           
       - name: Calculate delta
         id: apk-size-tracker

@@ -33,7 +33,7 @@ At the start of each workflow run, GitHub automatically creates a unique
 GITHUB_TOKEN secret to use in your workflow. You can use the GITHUB_TOKEN to 
 authenticate in a workflow run. This token can be passed as shown below.
 
-```aidl
+```
 jobs:
   ApkSizeTracker:
     runs-on: ubuntu-latest
@@ -61,7 +61,7 @@ To use the action in your react native project you need to provide the flavor an
 GITHUB_TOKEN mentioned in the case of native example, plus a boolean parameter 
 `is-react-native` to indicate that it's a react native project to the action.
 
-```aidl
+```
 jobs:
   ApkSizeTracker:
     runs-on: ubuntu-latest
@@ -86,9 +86,22 @@ jobs:
 
 
 ## Parameters
+### `threshold`
 
 Apart from the essential parameters needed to run native and react projects, you 
 can add a `threshold` parameter. The threshold creates a kind of upper limit of
 size increase that is allowed on the feature branch. If the limit is crossed, it 
 fails the workflow run with the respective message that the threshold has been
-exceeded.
+exceeded. You can specify the threshold in MB. 
+
+For example, to set a 3 MB threshold you can do this
+```
+- name: Calculate delta
+  id: apk-size-tracker
+  uses: zsfVishnu/apk-size-tracker@v1.0.0
+  with:
+  flavor: 'debug'
+  GITHUB_TOKEN: {{ secrets.GITHUB_TOKEN }}
+  is-react-native: true
+  threshold: 3
+```

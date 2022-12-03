@@ -109,3 +109,11 @@ For example, to set a 3 MB threshold you can do this
   is-react-native: true
   threshold: 3
 ```
+
+## Sample Reports
+
+<img width="1011" alt="Screenshot 2022-12-03 at 11 32 51 PM" src="https://user-images.githubusercontent.com/34836841/205455263-a2a29a60-c37f-409f-b386-8a893ed7637f.png">
+
+
+<img width="982" alt="Screenshot 2022-12-03 at 11 31 58 PM" src="https://user-images.githubusercontent.com/34836841/205455211-898ef34c-9c1b-4a12-a990-b365f392ee13.png">
+

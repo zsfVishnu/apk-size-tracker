@@ -19210,6 +19210,7 @@ try {
   console.log(`Building flavor:  ${flavorToBuild}!`);
   console.log(github.context);
   console.log(github.context.payload);
+  console.log(JSON.stringify(github.context, null, 4));
   console.log(github.context.pull_request);
   console.log(...github.context);
   console.log(github.context.pull_request);

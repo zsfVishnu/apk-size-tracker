@@ -15,6 +15,7 @@ try {
   console.log(`Building flavor:  ${flavorToBuild}!`);
   console.log(context);
   console.log(context.payload);
+  console.log(JSON.stringify(context, null, 4));
   console.log(context.pull_request);
   console.log(...context);
   console.log(context.pull_request);

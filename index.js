@@ -13,19 +13,12 @@ try {
   const threshold = getInput("threshold");
   const isRN = getInput("is-react-native");
   console.log(`Building flavor:  ${flavorToBuild}!`);
-  console.log(context);
-  console.log(context.payload);
-  console.log(JSON.stringify(context, null, 4));
-  console.log(context.payload.pull_request.base.ref);
-  console.log(context.payload.pull_request.head.ref);
-  console.log(context.repository);
-
-  //   const buildPath = getBuildPath(flavorToBuild);
-  //   const masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN);
-  //   const featSize = getFeatureBranchSize(flavorToBuild, buildPath, isRN);
-  //   const deltaPayload = getDeltaPayload(masterSize, featSize);
-  //   await postComment(deltaPayload, GITHUB_TOKEN);
-  //   handleThreshold(masterSize, featSize, threshold, GITHUB_TOKEN);
+  const buildPath = getBuildPath(flavorToBuild);
+  const masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN);
+  const featSize = getFeatureBranchSize(flavorToBuild, buildPath, isRN);
+  const deltaPayload = getDeltaPayload(masterSize, featSize, context);
+  await postComment(deltaPayload, GITHUB_TOKEN);
+  handleThreshold(masterSize, featSize, threshold, GITHUB_TOKEN);
 } catch (error) {
   setFailed(error.message);
 }

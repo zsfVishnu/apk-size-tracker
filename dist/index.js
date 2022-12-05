@@ -19211,13 +19211,16 @@ try {
   console.log(github.context);
   console.log(github.context.payload);
   console.log(github.context.pull_request);
+  console.log(github.context.pull_request.head);
+  console.log(github.context.pull_request.head.ref);
   console.log(github.context.repository);
-//   const buildPath = getBuildPath(flavorToBuild);
-//   const masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN);
-//   const featSize = getFeatureBranchSize(flavorToBuild, buildPath, isRN);
-//   const deltaPayload = getDeltaPayload(masterSize, featSize);
-//   await postComment(deltaPayload, GITHUB_TOKEN);
-//   handleThreshold(masterSize, featSize, threshold, GITHUB_TOKEN);
+  console.log(...github.context);
+  //   const buildPath = getBuildPath(flavorToBuild);
+  //   const masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN);
+  //   const featSize = getFeatureBranchSize(flavorToBuild, buildPath, isRN);
+  //   const deltaPayload = getDeltaPayload(masterSize, featSize);
+  //   await postComment(deltaPayload, GITHUB_TOKEN);
+  //   handleThreshold(masterSize, featSize, threshold, GITHUB_TOKEN);
 } catch (error) {
   (0,core.setFailed)(error.message);
 }

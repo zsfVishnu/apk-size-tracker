@@ -16,9 +16,8 @@ try {
   console.log(context);
   console.log(context.payload);
   console.log(JSON.stringify(context, null, 4));
-  console.log(context.pull_request);
-  console.log(...context);
-  console.log(context.pull_request);
+  console.log(context.payload.pull_request.base.ref);
+  console.log(context.payload.pull_request.head.ref);
   console.log(context.repository);
 
   //   const buildPath = getBuildPath(flavorToBuild);

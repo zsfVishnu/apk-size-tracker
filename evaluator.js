@@ -65,6 +65,9 @@ export function getDeltaPayload(masterSize, featSize) {
 function getFileDiff(payload) {
   const gOut = fileDiff(context).split(/\s+/);
 
+  console.log(context.payload);
+  console.log(context.pull_request);
+
   let temp =
     "\n \n  Filewise diff \n | Info  | Value | \n | ------------- | ------------- |";
   for (let i = 0; i < gOut.length - 1; i += 2) {

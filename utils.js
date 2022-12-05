@@ -43,7 +43,8 @@ export function getApkName(s) {
   apkNameError();
 }
 
-export function fileDiff(mb, fb) {
+export function fileDiff(context) {
+  // const masterBranch 
   return execSync(
     `#!/bin/bash
 USAGE='[--cached] [<rev-list-options>...]

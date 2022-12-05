@@ -19211,10 +19211,10 @@ try {
   console.log(github.context);
   console.log(github.context.payload);
   console.log(github.context.pull_request);
-  console.log(github.context.pull_request.head);
-  console.log(github.context.pull_request.head.ref);
-  console.log(github.context.repository);
   console.log(...github.context);
+  console.log(github.context.pull_request);
+  console.log(github.context.repository);
+
   //   const buildPath = getBuildPath(flavorToBuild);
   //   const masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN);
   //   const featSize = getFeatureBranchSize(flavorToBuild, buildPath, isRN);

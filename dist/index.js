@@ -19211,9 +19211,8 @@ try {
   console.log(github.context);
   console.log(github.context.payload);
   console.log(JSON.stringify(github.context, null, 4));
-  console.log(github.context.pull_request);
-  console.log(...github.context);
-  console.log(github.context.pull_request);
+  console.log(github.context.payload.pull_request.base.ref);
+  console.log(github.context.payload.pull_request.head.ref);
   console.log(github.context.repository);
 
   //   const buildPath = getBuildPath(flavorToBuild);

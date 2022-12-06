@@ -47,17 +47,20 @@ function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
 }
 
 export function getDeltaPayload(masterSize, featSize, context) {
-  const delta = masterSize - featSize;
+  const delta = (masterSize - featSize).toFixed(2);
   const del = delta < 0 ? "Increase" : "Decrease";
+  const sym = delta < 0 ? "&#x1F53A;" : "&#10055;";
   let payload = `
 
-   | Info  | Value | \n | ------------- | ------------- | \n | Master branch size (in MB) | ${
+   | Info  | Value | \n | ------------- | ------------- | \n | Master branch size | ${(
      masterSize / 1024
-   }  | \n | Feature branch size (in MB)  | ${
-    featSize / 1024
-  } | \n| ${del} in size  (in KB)  | ${Math.abs(
+   ).toFixed(2)} MB  | \n | Feature branch size  | ${(featSize / 1024).toFixed(
+    2
+  )} MB | \n| ${del} in size  | ${Math.abs(
     delta
-  )} | \n | ${del} in size  (in MB)  | ${Math.abs(delta) / 1024} | `;
+  )} KB ${sym}| \n | ${del} in size  | ${(Math.abs(delta) / 1024).toFixed(
+    2
+  )} MB ${sym}| `;
 
   return getFileDiff(payload, context);
 }
@@ -68,7 +71,15 @@ function getFileDiff(payload, context) {
   let temp =
     "\n \n  Filewise diff \n | Info  | Value | \n | ------------- | ------------- |";
   for (let i = 0; i < gOut.length - 1; i += 2) {
-    temp += `\n | ${gOut[i + 1]} (in KB) | ${gOut[i] / 1024} |`;
+    temp += `\n | ${gOut[i + 1]} | ${formatSize(gOut[i])} |`;
   }
   return payload.toString() + temp.toString();
+}
+
+function formatSize(n) {
+  if (n < 1024) {
+    return Number(n).toFixed(2) + ` KB`;
+  } else {
+    return (Number(n) / 1024).toFixed(2) + ` MB`;
+  }
 }

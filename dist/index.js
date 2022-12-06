@@ -108,7 +108,7 @@ function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
 function getDeltaPayload(masterSize, featSize, context) {
   const delta = (masterSize - featSize).toFixed(2);
   const del = delta < 0 ? "Increase" : "Decrease";
-  const sym = delta < 0 ? "&#10055;" : "&#x1F53B;";
+  const sym = delta < 0 ? "&#x1F53B;" : "&#10055;";
   let payload = `
 
    | Info  | Value | \n | ------------- | ------------- | \n | Master branch size | ${(
@@ -139,7 +139,7 @@ function formatSize(n) {
   if (n < 1024) {
     return Number(n).toFixed(2) + ` KB`;
   } else {
-    Number(n / 1024).toFixed(2) + ` MB`;
+    (Number(n) / 1024).toFixed(2) + ` MB`;
   }
 }
 

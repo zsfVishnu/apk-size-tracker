@@ -167,9 +167,9 @@ try {
   console.log(`Building flavor:  ${flavorToBuild}!`);
   const buildPath = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getBuildPath */ .HF)(flavorToBuild);
   const masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN);
-  const featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .W)(flavorToBuild, buildPath, isRN).toFixed(
-    2
-  );
+  const featSize = Number(
+    (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .W)(flavorToBuild, buildPath, isRN)
+  ).toFixed(2);
   const deltaPayload = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getDeltaPayload */ .a)(masterSize, featSize, _actions_github__WEBPACK_IMPORTED_MODULE_1__.context);
   await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .postComment */ .w)(deltaPayload, GITHUB_TOKEN);
   if (!(threshold === "")) {

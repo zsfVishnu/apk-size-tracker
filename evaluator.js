@@ -47,17 +47,19 @@ function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
 }
 
 export function getDeltaPayload(masterSize, featSize, context) {
-  const delta = masterSize - featSize;
+  const delta = (masterSize - featSize).toFixed(2);
   const del = delta < 0 ? "Increase" : "Decrease";
   let payload = `
 
-   | Info  | Value | \n | ------------- | ------------- | \n | Master branch size (in MB) | ${
+   | Info  | Value | \n | ------------- | ------------- | \n | Master branch size (in MB) | ${(
      masterSize / 1024
-   }  | \n | Feature branch size (in MB)  | ${
+   ).toFixed(2)}  | \n | Feature branch size (in MB)  | ${(
     featSize / 1024
-  } | \n| ${del} in size  (in KB)  | ${Math.abs(
+  ).toFixed(2)} | \n| ${del} in size  (in KB)  | ${Math.abs(
     delta
-  )} | \n | ${del} in size  (in MB)  | ${Math.abs(delta) / 1024} | `;
+  )} | \n | ${del} in size  (in MB)  | ${(Math.abs(delta) / 1024).toFixed(
+    2
+  )} | `;
 
   return getFileDiff(payload, context);
 }

@@ -106,17 +106,19 @@ function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
 }
 
 function getDeltaPayload(masterSize, featSize, context) {
-  const delta = masterSize - featSize;
+  const delta = (masterSize - featSize).toFixed(2);
   const del = delta < 0 ? "Increase" : "Decrease";
   let payload = `
 
-   | Info  | Value | \n | ------------- | ------------- | \n | Master branch size (in MB) | ${
+   | Info  | Value | \n | ------------- | ------------- | \n | Master branch size (in MB) | ${(
      masterSize / 1024
-   }  | \n | Feature branch size (in MB)  | ${
+   ).toFixed(2)}  | \n | Feature branch size (in MB)  | ${(
     featSize / 1024
-  } | \n| ${del} in size  (in KB)  | ${Math.abs(
+  ).toFixed(2)} | \n| ${del} in size  (in KB)  | ${Math.abs(
     delta
-  )} | \n | ${del} in size  (in MB)  | ${Math.abs(delta) / 1024} | `;
+  )} | \n | ${del} in size  (in MB)  | ${(Math.abs(delta) / 1024).toFixed(
+    2
+  )} | `;
 
   return getFileDiff(payload, context);
 }
@@ -167,9 +169,7 @@ try {
   console.log(`Building flavor:  ${flavorToBuild}!`);
   const buildPath = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getBuildPath */ .HF)(flavorToBuild);
   const masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN);
-  const featSize = Number(
-    (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .W)(flavorToBuild, buildPath, isRN)
-  ).toFixed(2);
+  const featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .W)(flavorToBuild, buildPath, isRN);
   const deltaPayload = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getDeltaPayload */ .a)(masterSize, featSize, _actions_github__WEBPACK_IMPORTED_MODULE_1__.context);
   await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .postComment */ .w)(deltaPayload, GITHUB_TOKEN);
   if (!(threshold === "")) {

@@ -15,9 +15,7 @@ try {
   console.log(`Building flavor:  ${flavorToBuild}!`);
   const buildPath = getBuildPath(flavorToBuild);
   const masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN);
-  const featSize = Number(
-    getFeatureBranchSize(flavorToBuild, buildPath, isRN)
-  ).toFixed(2);
+  const featSize = getFeatureBranchSize(flavorToBuild, buildPath, isRN);
   const deltaPayload = getDeltaPayload(masterSize, featSize, context);
   await postComment(deltaPayload, GITHUB_TOKEN);
   if (!(threshold === "")) {

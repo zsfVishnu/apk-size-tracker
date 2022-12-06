@@ -18,7 +18,7 @@ try {
   const featSize = getFeatureBranchSize(flavorToBuild, buildPath, isRN);
   const deltaPayload = getDeltaPayload(masterSize, featSize, context);
   await postComment(deltaPayload, GITHUB_TOKEN);
-  if (!(threshold instanceof undefined)) {
+  if (!(threshold === "")) {
     console.log("threshold provided");
     handleThreshold(masterSize, featSize, threshold, GITHUB_TOKEN);
   } else {

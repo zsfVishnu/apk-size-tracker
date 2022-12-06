@@ -168,7 +168,7 @@ try {
   const featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .W)(flavorToBuild, buildPath, isRN);
   const deltaPayload = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getDeltaPayload */ .a)(masterSize, featSize, _actions_github__WEBPACK_IMPORTED_MODULE_1__.context);
   await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .postComment */ .w)(deltaPayload, GITHUB_TOKEN);
-  if (!(threshold instanceof undefined)) {
+  if (!(threshold === "")) {
     console.log("threshold provided");
     (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .handleThreshold */ .qo)(masterSize, featSize, threshold, GITHUB_TOKEN);
   } else {

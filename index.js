@@ -13,11 +13,10 @@ try {
   const threshold = getInput("threshold");
   const isRN = getInput("is-react-native");
   console.log(`Building flavor:  ${flavorToBuild}!`);
-  // const pascalFlavor = getPascalCase(flavorToBuild);
   const buildPath = getBuildPath(flavorToBuild);
   const masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN);
   const featSize = getFeatureBranchSize(flavorToBuild, buildPath, isRN);
-  const deltaPayload = getDeltaPayload(masterSize, featSize);
+  const deltaPayload = getDeltaPayload(masterSize, featSize, context);
   await postComment(deltaPayload, GITHUB_TOKEN);
   if (!(threshold instanceof undefined)) {
     console.log("threshold provided");

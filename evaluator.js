@@ -68,7 +68,7 @@ function getFileDiff(payload, context) {
   let temp =
     "\n \n  Filewise diff \n | Info  | Value | \n | ------------- | ------------- |";
   for (let i = 0; i < gOut.length - 1; i += 2) {
-    temp += `\n | ${gOut[i + 1]} (in KB) | ${gOut[i] / 1024} |`;
+    temp += `\n | ${gOut[i + 1]} (in KB) | ${(gOut[i] / 1024).toFixed(2)} |`;
   }
   return payload.toString() + temp.toString();
 }

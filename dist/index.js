@@ -127,7 +127,7 @@ function getFileDiff(payload, context) {
   let temp =
     "\n \n  Filewise diff \n | Info  | Value | \n | ------------- | ------------- |";
   for (let i = 0; i < gOut.length - 1; i += 2) {
-    temp += `\n | ${gOut[i + 1]} (in KB) | ${gOut[i] / 1024} |`;
+    temp += `\n | ${gOut[i + 1]} (in KB) | ${(gOut[i] / 1024).toFixed(2)} |`;
   }
   return payload.toString() + temp.toString();
 }
@@ -165,7 +165,9 @@ try {
   console.log(`Building flavor:  ${flavorToBuild}!`);
   const buildPath = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getBuildPath */ .HF)(flavorToBuild);
   const masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN);
-  const featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .W)(flavorToBuild, buildPath, isRN);
+  const featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .W)(flavorToBuild, buildPath, isRN).toFixed(
+    2
+  );
   const deltaPayload = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getDeltaPayload */ .a)(masterSize, featSize, _actions_github__WEBPACK_IMPORTED_MODULE_1__.context);
   await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .postComment */ .w)(deltaPayload, GITHUB_TOKEN);
   if (!(threshold === "")) {

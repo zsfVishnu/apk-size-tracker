@@ -46,7 +46,7 @@ function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
   return apkSize;
 }
 
-export function getDeltaPayload(masterSize, featSize) {
+export function getDeltaPayload(masterSize, featSize, context) {
   const delta = masterSize - featSize;
   const del = delta < 0 ? "Increase" : "Decrease";
   let payload = `
@@ -59,10 +59,10 @@ export function getDeltaPayload(masterSize, featSize) {
     delta
   )} | \n | ${del} in size  (in MB)  | ${Math.abs(delta) / 1024} | `;
 
-  return getFileDiff(payload);
+  return getFileDiff(payload, context);
 }
 
-function getFileDiff(payload) {
+function getFileDiff(payload, context) {
   const gOut = fileDiff(context).split(/\s+/);
 
   let temp =

@@ -105,7 +105,7 @@ function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
   return apkSize;
 }
 
-function getDeltaPayload(masterSize, featSize) {
+function getDeltaPayload(masterSize, featSize, context) {
   const delta = masterSize - featSize;
   const del = delta < 0 ? "Increase" : "Decrease";
   let payload = `
@@ -118,11 +118,11 @@ function getDeltaPayload(masterSize, featSize) {
     delta
   )} | \n | ${del} in size  (in MB)  | ${Math.abs(delta) / 1024} | `;
 
-  return getFileDiff(payload);
+  return getFileDiff(payload, context);
 }
 
-function getFileDiff(payload) {
-  const gOut = (0,_utils__WEBPACK_IMPORTED_MODULE_2__/* .fileDiff */ .yw)(_actions_github__WEBPACK_IMPORTED_MODULE_0__.context).split(/\s+/);
+function getFileDiff(payload, context) {
+  const gOut = (0,_utils__WEBPACK_IMPORTED_MODULE_2__/* .fileDiff */ .yw)(context).split(/\s+/);
 
   let temp =
     "\n \n  Filewise diff \n | Info  | Value | \n | ------------- | ------------- |";
@@ -163,11 +163,10 @@ try {
   const threshold = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("threshold");
   const isRN = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("is-react-native");
   console.log(`Building flavor:  ${flavorToBuild}!`);
-  // const pascalFlavor = getPascalCase(flavorToBuild);
   const buildPath = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getBuildPath */ .HF)(flavorToBuild);
   const masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN);
   const featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .W)(flavorToBuild, buildPath, isRN);
-  const deltaPayload = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getDeltaPayload */ .a)(masterSize, featSize);
+  const deltaPayload = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getDeltaPayload */ .a)(masterSize, featSize, _actions_github__WEBPACK_IMPORTED_MODULE_1__.context);
   await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .postComment */ .w)(deltaPayload, GITHUB_TOKEN);
   (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .handleThreshold */ .qo)(masterSize, featSize, threshold, GITHUB_TOKEN);
 } catch (error) {
@@ -19022,7 +19021,7 @@ function getApkName(s) {
   apkNameError();
 }
 
-function fileDiff(mb, fb) {
+function fileDiff(context) {
   return (0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(
     `#!/bin/bash
 USAGE='[--cached] [<rev-list-options>...]
@@ -19030,7 +19029,7 @@ USAGE='[--cached] [<rev-list-options>...]
 Show file size changes between two commits or the index and a commit.'
 
 . "$(git --exec-path)/git-sh-setup"
-args=$(git rev-parse --sq origin/master..origin/test3)
+args=$(git rev-parse --sq origin/${context.payload.pull_request.base.ref}..origin/${context.payload.pull_request.head.ref})
 [ -n "$args" ] || usage
 cmd="diff-tree -r"
 [[ $args =~ "--cached" ]] && cmd="diff-index"

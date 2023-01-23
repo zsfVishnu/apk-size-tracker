@@ -62,7 +62,8 @@ export function getDeltaPayload(masterSize, featSize, context) {
     2
   )} MB ${sym}| `;
 
-  return getFileDiff(payload, context);
+  // return getFileDiff(payload, context); // Not calculating filewise diff
+  return payload.toString();
 }
 
 function getFileDiff(payload, context) {
@@ -78,8 +79,10 @@ function getFileDiff(payload, context) {
 
 function formatSize(n) {
   if (n < 1024) {
-    return Number(n).toFixed(2) + ` KB`;
+    return Number(n).toFixed(2) + ` B`;
+  } else if ((Number(n) / 1024).toFixed(2) < 1024) {
+    return (Number(n) / 1024).toFixed(2) + ` KB`;
   } else {
-    return (Number(n) / 1024).toFixed(2) + ` MB`;
+    return (Number(n) / (1024 * 1024)).toFixed(2) + ` MB`;
   }
 }

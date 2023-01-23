@@ -121,11 +121,12 @@ function getDeltaPayload(masterSize, featSize, context) {
     2
   )} MB ${sym}| `;
 
-  return getFileDiff(payload, context);
+  // return getFileDiff(payload, context); // Not calculating filewise diff
+  return payload.toString();
 }
 
 function getFileDiff(payload, context) {
-  const gOut = (0,_utils__WEBPACK_IMPORTED_MODULE_2__/* .fileDiff */ .yw)(context).split(/\s+/);
+  const gOut = fileDiff(context).split(/\s+/);
 
   let temp =
     "\n \n  Filewise diff \n | Info  | Value | \n | ------------- | ------------- |";
@@ -281,9 +282,9 @@ async function postComment(deltaPayload, GITHUB_TOKEN) {
 /* harmony export */   "RJ": () => (/* binding */ getPascalCase),
 /* harmony export */   "HF": () => (/* binding */ getBuildPath),
 /* harmony export */   "sJ": () => (/* binding */ getApkName),
-/* harmony export */   "yw": () => (/* binding */ fileDiff),
 /* harmony export */   "qo": () => (/* binding */ handleThreshold)
 /* harmony export */ });
+/* unused harmony export fileDiff */
 /* harmony import */ var _error__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(873);
 /* harmony import */ var child_process__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(81);
 /* harmony import */ var child_process__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(child_process__WEBPACK_IMPORTED_MODULE_1__);
@@ -336,7 +337,7 @@ function getApkName(s) {
 }
 
 function fileDiff(context) {
-  return (0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(
+  return execSync(
     `#!/bin/bash
 USAGE='[--cached] [<rev-list-options>...]
 

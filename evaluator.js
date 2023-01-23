@@ -78,8 +78,10 @@ function getFileDiff(payload, context) {
 
 function formatSize(n) {
   if (n < 1024) {
-    return Number(n).toFixed(2) + ` KB`;
+    return Number(n).toFixed(2) + ` B`;
+  } else if ((Number(n) / 1024).toFixed(2) < 1024) {
+    return (Number(n) / 1024).toFixed(2) + ` KB`;
   } else {
-    return (Number(n) / 1024).toFixed(2) + ` MB`;
+    return (Number(n) / (1024 * 1024)).toFixed(2) + ` MB`;
   }
 }

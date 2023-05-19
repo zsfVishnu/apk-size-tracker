@@ -46,6 +46,27 @@ function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
   return apkSize;
 }
 
+export function getBundleFeatureSize(bundlePath, flavorToBuild) {
+  const bundleName = "index.android.bundle"
+  const flavor = getPascalCase(flavorToBuild);
+  console.log(
+      execSync(`yarn bundle:${flavor}:android`, {
+        encoding: "utf-8",
+      })
+  );
+
+  const sizeOp = execSync(`cd android/${bundlePath} && du -k ${bundleName}`, {
+    encoding: "utf-8",
+  });
+
+  console.log(sizeOp);
+
+  const bundleSize =
+      typeof sizeOp === `string` ? sizeOp.trim().split(/\s+/)[0] : 0;
+
+  return bundleSize;
+}
+
 export function getDeltaPayload(masterSize, featSize, context) {
   const delta = (masterSize - featSize).toFixed(2);
   const del = delta < 0 ? "Increase" : "Decrease";

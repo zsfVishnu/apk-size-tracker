@@ -27,7 +27,21 @@ export function getBuildPath(s) {
     const fl = s.split("Debug")[0];
     return outputPath + fl + "/debug/";
   }
+
+  if (s.toLowerCase() === "release") {
+    return outputPath + "release/";
+  }
+
+  if (s.includes("Release")) {
+    const fl = s.split("Release")[0];
+    return outputPath + fl + "/release/";
+  }
   buildPathError();
+}
+
+export function getBundlePath() {
+  let outputPath = "android/infra/react/src/main/assets/"
+  return outputPath
 }
 
 export function getApkName(s) {

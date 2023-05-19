@@ -3,7 +3,7 @@ import AdmZip from "adm-zip";
 import { context } from "@actions/github";
 import { noArtifactFoundError } from "./error";
 
-export async function getMasterSizeFromArtifact(GITHUB_TOKEN) {
+export async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
   const config = {
     method: "GET",
     url: `https://api.github.com/repos/${context.repo.owner}/${context.repo.repo}/actions/artifacts`,
@@ -35,7 +35,10 @@ export async function getMasterSizeFromArtifact(GITHUB_TOKEN) {
       var zip = new AdmZip(res2.data);
       var zipEntries = zip.getEntries();
       for (let i = 0; i < zipEntries.length; i++) {
-        if (zipEntries[i].entryName === `apk-metric.json`) {
+        if (metricType === 'apk' && zipEntries[i].entryName === `apk-metric.json`) {
+          return JSON.parse(zip.readAsText(zipEntries[i]))[`master_size`];
+        }
+        if (metricType === 'bundle' && zipEntries[i].entryName === `bundle-metric.json`) {
           return JSON.parse(zip.readAsText(zipEntries[i]))[`master_size`];
         }
       }

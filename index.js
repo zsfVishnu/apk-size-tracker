@@ -16,19 +16,17 @@ try {
   const flavorToBuild = getInput("flavor");
   const threshold = getInput("threshold");
   const isRN = getInput("is-react-native");
-  const bundle_diff = getInput("bundle_diff")
+  const isRNChange = getInput("rn_change")
   const isNativeChange = getInput("native_change")
   console.log(`Building flavor:  ${flavorToBuild}!`);
-  if (isRNChange) {
+  if (isNativeChange) {
     buildPath = getBuildPath(flavorToBuild);
-    masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN);
+    masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN, "apk");
     featSize = getFeatureBranchSize(flavorToBuild, buildPath, isRN);
-  } else {
+  } else if (isRNChange) {
     buildPath = "infra/react/src/main/assets/"
-    //masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN);
-    masterSize = 20
-    //featSize = getBundleFeatureSize(flavorToBuild, buildPath, isRN);
-    featSize = 25
+    masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN, "bundle");
+    featSize = getBundleFeatureSize(flavorToBuild, buildPath, isRN);
   }
   const deltaPayload = getDeltaPayload(masterSize, featSize, context);
   await postComment(deltaPayload, GITHUB_TOKEN);

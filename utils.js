@@ -26,12 +26,12 @@ export function getBundleFlavor(buildFlavor) {
     return "release"
   }
 
-  if (s.includes("Debug")) {
+  if (buildFlavor.includes("Debug")) {
     const fl = buildFlavor.split("Debug")[0];
     return "debug"
   }
 
-  if (s.includes("Release")) {
+  if (buildFlavor.includes("Release")) {
     const fl = buildFlavor.split("Release")[0];
     return "release"
   }

@@ -29,7 +29,7 @@ try {
     buildPath = "android/infra/react/src/main/assets/"
     masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN, "bundle");
     console.log("Master artifact size :: ", masterSize)
-    featSize = getBundleFeatureSize(flavorToBuild, buildPath, isRN);
+    featSize = getBundleFeatureSize(flavorToBuild, buildPath);
     console.log("Feature bundle size :: ", )
   }
   const deltaPayload = getDeltaPayload(masterSize, featSize, context);

@@ -106,7 +106,7 @@ function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
   return apkSize;
 }
 
-function getBundleFeatureSize(bundlePath, flavorToBuild) {
+function getBundleFeatureSize(flavorToBuild, bundlePath) {
   console.log("inside get bundle size method")
   const bundleName = "index.android.bundle"
   const bundleFlavor = (0,_utils__WEBPACK_IMPORTED_MODULE_2__/* .getBundleFlavor */ .e4)(flavorToBuild);
@@ -217,7 +217,7 @@ try {
     buildPath = "android/infra/react/src/main/assets/"
     masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN, "bundle");
     console.log("Master artifact size :: ", masterSize)
-    featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getBundleFeatureSize */ .yd)(flavorToBuild, buildPath, isRN);
+    featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getBundleFeatureSize */ .yd)(flavorToBuild, buildPath);
     console.log("Feature bundle size :: ", )
   }
   const deltaPayload = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getDeltaPayload */ .aI)(masterSize, featSize, _actions_github__WEBPACK_IMPORTED_MODULE_1__.context);

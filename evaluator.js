@@ -46,7 +46,7 @@ function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
   return apkSize;
 }
 
-export function getBundleFeatureSize(bundlePath, flavorToBuild) {
+export function getBundleFeatureSize(flavorToBuild, bundlePath) {
   console.log("inside get bundle size method")
   const bundleName = "index.android.bundle"
   const bundleFlavor = getBundleFlavor(flavorToBuild);

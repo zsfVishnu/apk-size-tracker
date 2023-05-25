@@ -205,12 +205,12 @@ try {
   const isRNChange = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("rn_change")
   const isNativeChange = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("native_change")
   console.log(`Building flavor:  ${flavorToBuild}!`);
-  if (isNativeChange && isRNChange) {
+  if (isNativeChange === 'true' && isRNChange === 'true') {
     buildPath = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getBuildPath */ .HF)(flavorToBuild);
     masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN, "apk");
     console.log("Master artifact size :: ", masterSize)
     featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .WH)(flavorToBuild, buildPath, isRN);
-  } else if (isRNChange) {
+  } else if (isRNChange === 'true') {
     buildPath = "android/infra/react/src/main/assets/"
     masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN, "bundle");
     console.log("Master artifact size :: ", masterSize)

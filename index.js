@@ -19,12 +19,12 @@ try {
   const isRNChange = getInput("rn_change")
   const isNativeChange = getInput("native_change")
   console.log(`Building flavor:  ${flavorToBuild}!`);
-  if (isNativeChange && isRNChange) {
+  if (isNativeChange === 'true' && isRNChange === 'true') {
     buildPath = getBuildPath(flavorToBuild);
     masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN, "apk");
     console.log("Master artifact size :: ", masterSize)
     featSize = getFeatureBranchSize(flavorToBuild, buildPath, isRN);
-  } else if (isRNChange) {
+  } else if (isRNChange === 'true') {
     buildPath = "android/infra/react/src/main/assets/"
     masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN, "bundle");
     console.log("Master artifact size :: ", masterSize)

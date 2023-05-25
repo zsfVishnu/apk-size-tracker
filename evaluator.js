@@ -47,10 +47,12 @@ function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
 }
 
 export function getBundleFeatureSize(bundlePath, flavorToBuild) {
+  console.log("inside get bundle size method")
   const bundleName = "index.android.bundle"
-  const flavor = getBundleFlavor(flavorToBuild);
+  const bundleFlavor = getBundleFlavor(flavorToBuild);
+  console.log("Bundle flavor :: ", bundleFlavor)
   console.log(
-      execSync(`yarn bundle:${flavor}:android`, {
+      execSync(`yarn bundle:${bundleFlavor}:android`, {
         encoding: "utf-8",
       })
   );

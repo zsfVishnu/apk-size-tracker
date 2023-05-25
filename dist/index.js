@@ -107,10 +107,12 @@ function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
 }
 
 function getBundleFeatureSize(bundlePath, flavorToBuild) {
+  console.log("inside get bundle size method")
   const bundleName = "index.android.bundle"
-  const flavor = (0,_utils__WEBPACK_IMPORTED_MODULE_2__/* .getBundleFlavor */ .e4)(flavorToBuild);
+  const bundleFlavor = (0,_utils__WEBPACK_IMPORTED_MODULE_2__/* .getBundleFlavor */ .e4)(flavorToBuild);
+  console.log("Bundle flavor :: ", bundleFlavor)
   console.log(
-      (0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`yarn bundle:${flavor}:android`, {
+      (0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`yarn bundle:${bundleFlavor}:android`, {
         encoding: "utf-8",
       })
   );
@@ -210,7 +212,6 @@ try {
   if (isNativeChange === "true" && isRNChange === "true") {
     buildPath = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getBuildPath */ .HF)(flavorToBuild);
     masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN, "apk");
-    console.log("Master artifact size :: ", masterSize)
     featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .WH)(flavorToBuild, buildPath, isRN);
   } else if (isRNChange === "true") {
     buildPath = "android/infra/react/src/main/assets/"
@@ -19059,21 +19060,11 @@ function getPascalCase(s) {
 
 function getBundleFlavor(buildFlavor) {
   buildFlavor = buildFlavor.trim()
-  if (buildFlavor.toLowerCase() === "debug") {
+  if (buildFlavor.toLowerCase() === "debug" || buildFlavor.includes("Debug")) {
     return "debug"
   }
 
-  if (buildFlavor.toLowerCase() === "release") {
-    return "release"
-  }
-
-  if (buildFlavor.includes("Debug")) {
-    const fl = buildFlavor.split("Debug")[0];
-    return "debug"
-  }
-
-  if (buildFlavor.includes("Release")) {
-    const fl = buildFlavor.split("Release")[0];
+  if (buildFlavor.toLowerCase() === "release" || buildFlavor.includes("Release")) {
     return "release"
   }
   (0,_error__WEBPACK_IMPORTED_MODULE_0__/* .noFlavorFoundError */ .tX)()

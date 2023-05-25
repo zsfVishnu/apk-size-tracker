@@ -18,21 +18,11 @@ export function getPascalCase(s) {
 
 export function getBundleFlavor(buildFlavor) {
   buildFlavor = buildFlavor.trim()
-  if (buildFlavor.toLowerCase() === "debug") {
+  if (buildFlavor.toLowerCase() === "debug" || buildFlavor.includes("Debug")) {
     return "debug"
   }
 
-  if (buildFlavor.toLowerCase() === "release") {
-    return "release"
-  }
-
-  if (buildFlavor.includes("Debug")) {
-    const fl = buildFlavor.split("Debug")[0];
-    return "debug"
-  }
-
-  if (buildFlavor.includes("Release")) {
-    const fl = buildFlavor.split("Release")[0];
+  if (buildFlavor.toLowerCase() === "release" || buildFlavor.includes("Release")) {
     return "release"
   }
   noFlavorFoundError()

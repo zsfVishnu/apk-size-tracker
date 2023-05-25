@@ -24,7 +24,6 @@ try {
   if (isNativeChange === "true" && isRNChange === "true") {
     buildPath = getBuildPath(flavorToBuild);
     masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN, "apk");
-    console.log("Master artifact size :: ", masterSize)
     featSize = getFeatureBranchSize(flavorToBuild, buildPath, isRN);
   } else if (isRNChange === "true") {
     buildPath = "android/infra/react/src/main/assets/"

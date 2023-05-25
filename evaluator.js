@@ -55,7 +55,7 @@ export function getBundleFeatureSize(bundlePath, flavorToBuild) {
       })
   );
 
-  const sizeOp = execSync(`cd android/${bundlePath} && du -k ${bundleName}`, {
+  const sizeOp = execSync(`cd ${bundlePath} && du -k ${bundleName}`, {
     encoding: "utf-8",
   });
 

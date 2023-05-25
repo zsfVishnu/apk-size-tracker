@@ -115,7 +115,7 @@ function getBundleFeatureSize(bundlePath, flavorToBuild) {
       })
   );
 
-  const sizeOp = (0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`cd android/${bundlePath} && du -k ${bundleName}`, {
+  const sizeOp = (0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`cd ${bundlePath} && du -k ${bundleName}`, {
     encoding: "utf-8",
   });
 
@@ -205,16 +205,20 @@ try {
   const isRNChange = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("rn_change")
   const isNativeChange = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("native_change")
   console.log(`Building flavor:  ${flavorToBuild}!`);
-  if (isNativeChange) {
+  if (isNativeChange && isRNChange) {
     buildPath = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getBuildPath */ .HF)(flavorToBuild);
     masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN, "apk");
+    console.log("Master artifact size :: ", masterSize)
     featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .WH)(flavorToBuild, buildPath, isRN);
   } else if (isRNChange) {
-    buildPath = "infra/react/src/main/assets/"
+    buildPath = "android/infra/react/src/main/assets/"
     masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN, "bundle");
+    console.log("Master artifact size :: ", masterSize)
     featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getBundleFeatureSize */ .yd)(flavorToBuild, buildPath, isRN);
+    console.log("Feature bundle size :: ", )
   }
   const deltaPayload = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getDeltaPayload */ .aI)(masterSize, featSize, _actions_github__WEBPACK_IMPORTED_MODULE_1__.context);
+  console.log("Delta payload :: ", deltaPayload)
   await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .postComment */ .w)(deltaPayload, GITHUB_TOKEN);
   if (!(threshold === "")) {
     console.log("threshold provided");

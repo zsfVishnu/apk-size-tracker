@@ -209,7 +209,7 @@ try {
   console.log(`Building flavor:  ${flavorToBuild}!`);
   console.log("isRNChange :: ", isRNChange)
   console.log("isNativeChange :: ", isNativeChange)
-  if (isNativeChange === "true" && isRNChange === "true") {
+  if (isNativeChange === "true") {
     buildPath = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getBuildPath */ .HF)(flavorToBuild);
     masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN, "apk");
     featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .WH)(flavorToBuild, buildPath, isRN);

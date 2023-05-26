@@ -21,7 +21,7 @@ try {
   console.log(`Building flavor:  ${flavorToBuild}!`);
   console.log("isRNChange :: ", isRNChange)
   console.log("isNativeChange :: ", isNativeChange)
-  if (isNativeChange === "true" && isRNChange === "true") {
+  if (isNativeChange === "true") {
     buildPath = getBuildPath(flavorToBuild);
     masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN, "apk");
     featSize = getFeatureBranchSize(flavorToBuild, buildPath, isRN);

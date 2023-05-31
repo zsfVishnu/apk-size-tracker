@@ -18,7 +18,9 @@ try {
   const isRN = getInput("is-react-native");
   const isRNChange = getInput("rn_change")
   const isNativeChange = getInput("native_change")
+  const bundleCommand = getInput("bundle-command")
   console.log(`Building flavor:  ${flavorToBuild}!`);
+  console.log("Bundle command : ", bundleCommand)
   console.log("isRNChange :: ", isRNChange)
   console.log("isNativeChange :: ", isNativeChange)
   if (isNativeChange === "true") {
@@ -29,7 +31,7 @@ try {
     buildPath = "android/infra/react/src/main/assets/"
     masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN, "bundle");
     console.log("Master artifact size :: ", masterSize)
-    featSize = getBundleFeatureSize(flavorToBuild, buildPath);
+    featSize = getBundleFeatureSize(bundleCommand, buildPath);
     console.log("Feature bundle size :: ", )
   }
   const deltaPayload = getDeltaPayload(masterSize, featSize, context);

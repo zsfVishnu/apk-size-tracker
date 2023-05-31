@@ -106,13 +106,11 @@ function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
   return apkSize;
 }
 
-function getBundleFeatureSize(flavorToBuild, bundlePath) {
+function getBundleFeatureSize(bundleCommand, bundlePath) {
   console.log("inside get bundle size method")
   const bundleName = "index.android.bundle"
-  const bundleFlavor = (0,_utils__WEBPACK_IMPORTED_MODULE_2__/* .getBundleFlavor */ .e4)(flavorToBuild);
-  console.log("Bundle flavor :: ", bundleFlavor)
   console.log(
-      (0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`yarn bundle:${bundleFlavor}:android`, {
+      (0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`${bundleCommand}`, {
         encoding: "utf-8",
       })
   );
@@ -206,7 +204,9 @@ try {
   const isRN = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("is-react-native");
   const isRNChange = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("rn_change")
   const isNativeChange = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("native_change")
+  const bundleCommand = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("bundle-command")
   console.log(`Building flavor:  ${flavorToBuild}!`);
+  console.log("Bundle command : ", bundleCommand)
   console.log("isRNChange :: ", isRNChange)
   console.log("isNativeChange :: ", isNativeChange)
   if (isNativeChange === "true") {
@@ -217,7 +217,7 @@ try {
     buildPath = "android/infra/react/src/main/assets/"
     masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN, "bundle");
     console.log("Master artifact size :: ", masterSize)
-    featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getBundleFeatureSize */ .yd)(flavorToBuild, buildPath);
+    featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getBundleFeatureSize */ .yd)(bundleCommand, buildPath);
     console.log("Feature bundle size :: ", )
   }
   const deltaPayload = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getDeltaPayload */ .aI)(masterSize, featSize, _actions_github__WEBPACK_IMPORTED_MODULE_1__.context);
@@ -19029,7 +19029,6 @@ function wrappy (fn, cb) {
 /* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
 /* harmony export */   "HF": () => (/* binding */ getBuildPath),
 /* harmony export */   "RJ": () => (/* binding */ getPascalCase),
-/* harmony export */   "e4": () => (/* binding */ getBundleFlavor),
 /* harmony export */   "qo": () => (/* binding */ handleThreshold),
 /* harmony export */   "sJ": () => (/* binding */ getApkName)
 /* harmony export */ });
@@ -19056,18 +19055,6 @@ function getPascalCase(s) {
     return fl.charAt(0).toUpperCase() + fl.slice(1) + "Debug";
   }
   (0,_error__WEBPACK_IMPORTED_MODULE_0__/* .noFlavorFoundError */ .tX)();
-}
-
-function getBundleFlavor(buildFlavor) {
-  buildFlavor = buildFlavor.trim()
-  if (buildFlavor.toLowerCase() === "debug" || buildFlavor.includes("Debug")) {
-    return "debug"
-  }
-
-  if (buildFlavor.toLowerCase() === "release" || buildFlavor.includes("Release")) {
-    return "release"
-  }
-  (0,_error__WEBPACK_IMPORTED_MODULE_0__/* .noFlavorFoundError */ .tX)()
 }
 
 function getBuildPath(s) {

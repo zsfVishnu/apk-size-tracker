@@ -23,6 +23,9 @@ inputs:
     description: "Native files changed"
     required: true
     default: false
+  bundle-command:
+    description: "Bundle command"
+    required: true
 runs:
   using: "node16"
   main: "dist/index.js"

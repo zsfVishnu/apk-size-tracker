@@ -1,6 +1,6 @@
 import { context } from "@actions/github";
 import { execSync } from "child_process";
-import {fileDiff, getApkName, getBundleFlavor, getPascalCase} from "./utils";
+import {fileDiff, getApkName, getPascalCase} from "./utils";
 
 function evaluateDiff(payload, currentSize) {
   const masterSize = payload.masterSize;
@@ -46,13 +46,11 @@ function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
   return apkSize;
 }
 
-export function getBundleFeatureSize(flavorToBuild, bundlePath) {
+export function getBundleFeatureSize(bundleCommand, bundlePath) {
   console.log("inside get bundle size method")
   const bundleName = "index.android.bundle"
-  const bundleFlavor = getBundleFlavor(flavorToBuild);
-  console.log("Bundle flavor :: ", bundleFlavor)
   console.log(
-      execSync(`yarn bundle:${bundleFlavor}:android`, {
+      execSync(`${bundleCommand}`, {
         encoding: "utf-8",
       })
   );

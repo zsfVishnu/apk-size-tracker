@@ -16,18 +16,6 @@ export function getPascalCase(s) {
   noFlavorFoundError();
 }
 
-export function getBundleFlavor(buildFlavor) {
-  buildFlavor = buildFlavor.trim()
-  if (buildFlavor.toLowerCase() === "debug" || buildFlavor.includes("Debug")) {
-    return "debug"
-  }
-
-  if (buildFlavor.toLowerCase() === "release" || buildFlavor.includes("Release")) {
-    return "release"
-  }
-  noFlavorFoundError()
-}
-
 export function getBuildPath(s) {
   let outputPath = "app/build/outputs/apk/";
   s = s.trim();

@@ -2,7 +2,7 @@ import { getInput, setOutput, setFailed } from "@actions/core";
 import { context } from "@actions/github";
 import {getFeatureBranchSize, getDeltaPayload, getBundleFeatureSize} from "./evaluator";
 import { getMasterSizeFromArtifact, postComment } from "./network";
-import { getBuildPath, getPascalCase, handleThreshold } from "./utils";
+import {getBuildPath, getBundlePath, getPascalCase, handleThreshold} from "./utils";
 
 const core = require("@actions/core");
 const github = require("@actions/github");
@@ -28,10 +28,9 @@ try {
     masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN, "apk");
     featSize = getFeatureBranchSize(flavorToBuild, buildPath, isRN);
   } else if (isRNChange === "true") {
-    buildPath = "android/infra/react/src/main/assets/"
     masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN, "bundle");
     console.log("Master artifact size :: ", masterSize)
-    featSize = getBundleFeatureSize(bundleCommand, buildPath);
+    featSize = getBundleFeatureSize(bundleCommand, getBundlePath());
     console.log("Feature bundle size :: ", )
   }
   const deltaPayload = getDeltaPayload(masterSize, featSize, context);

@@ -214,10 +214,9 @@ try {
     masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN, "apk");
     featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .WH)(flavorToBuild, buildPath, isRN);
   } else if (isRNChange === "true") {
-    buildPath = "android/infra/react/src/main/assets/"
     masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN, "bundle");
     console.log("Master artifact size :: ", masterSize)
-    featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getBundleFeatureSize */ .yd)(bundleCommand, buildPath);
+    featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getBundleFeatureSize */ .yd)(bundleCommand, (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getBundlePath */ .pD)());
     console.log("Feature bundle size :: ", )
   }
   const deltaPayload = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getDeltaPayload */ .aI)(masterSize, featSize, _actions_github__WEBPACK_IMPORTED_MODULE_1__.context);
@@ -19029,10 +19028,11 @@ function wrappy (fn, cb) {
 /* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
 /* harmony export */   "HF": () => (/* binding */ getBuildPath),
 /* harmony export */   "RJ": () => (/* binding */ getPascalCase),
+/* harmony export */   "pD": () => (/* binding */ getBundlePath),
 /* harmony export */   "qo": () => (/* binding */ handleThreshold),
 /* harmony export */   "sJ": () => (/* binding */ getApkName)
 /* harmony export */ });
-/* unused harmony exports getBundlePath, fileDiff */
+/* unused harmony export fileDiff */
 /* harmony import */ var _error__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(2873);
 /* harmony import */ var child_process__WEBPACK_IMPORTED_MODULE_1__ = __nccwpck_require__(2081);
 /* harmony import */ var child_process__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__nccwpck_require__.n(child_process__WEBPACK_IMPORTED_MODULE_1__);

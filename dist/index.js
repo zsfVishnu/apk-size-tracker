@@ -202,8 +202,8 @@ try {
   const flavorToBuild = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("flavor");
   const threshold = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("threshold");
   const isRN = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("is-react-native");
-  const isRNChange = ((0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("rn_change") === "true" || (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("yarn_lock_change") === "true") ? "true" : "false"
-  const isNativeChange = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("native_change")
+  const isNativeChange = ((0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("native_change") === "true" || (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("yarn_lock_change") === "true") ? "true" : "false"
+  const isRNChange = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("rn_change")
   const bundleCommand = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("bundle-command")
   console.log(`Building flavor:  ${flavorToBuild}!`);
   console.log("Bundle command : ", bundleCommand)

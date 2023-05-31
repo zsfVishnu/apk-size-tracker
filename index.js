@@ -16,7 +16,7 @@ try {
   const flavorToBuild = getInput("flavor");
   const threshold = getInput("threshold");
   const isRN = getInput("is-react-native");
-  const isRNChange = getInput("rn_change")
+  const isRNChange = (getInput("rn_change") === "true" || getInput("yarn_lock_change") === "true") ? "true" : "false"
   const isNativeChange = getInput("native_change")
   const bundleCommand = getInput("bundle-command")
   console.log(`Building flavor:  ${flavorToBuild}!`);

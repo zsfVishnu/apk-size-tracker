@@ -4360,26 +4360,27 @@ async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
   } else {
     for (let i = 0; i < artifacts.length; i++) {
       const red_url = artifacts[i].archive_download_url;
+      if (artifacts[i].name === 'metric-artifact') {
+        const config2 = {
+          method: "GET",
+          url: red_url,
+          headers: {
+            accept: "application/vnd.github+json",
+            authorization: "Bearer " + GITHUB_TOKEN,
+          },
+          responseType: "arraybuffer",
+        };
 
-      const config2 = {
-        method: "GET",
-        url: red_url,
-        headers: {
-          accept: "application/vnd.github+json",
-          authorization: "Bearer " + GITHUB_TOKEN,
-        },
-        responseType: "arraybuffer",
-      };
-
-      let res2 = await node_modules_axios(config2);
-      var zip = new (adm_zip_default())(res2.data);
-      var zipEntries = zip.getEntries();
-      for (let i = 0; i < zipEntries.length; i++) {
-        if (metricType === 'apk' && zipEntries[i].entryName === `apk-metric.json`) {
-          return JSON.parse(zip.readAsText(zipEntries[i]))[`master_size`];
-        }
-        if (metricType === 'bundle' && zipEntries[i].entryName === `bundle-metric.json`) {
-          return JSON.parse(zip.readAsText(zipEntries[i]))[`master_size`];
+        let res2 = await node_modules_axios(config2);
+        var zip = new (adm_zip_default())(res2.data);
+        var zipEntries = zip.getEntries();
+        for (let i = 0; i < zipEntries.length; i++) {
+          if (metricType === 'apk' && zipEntries[i].entryName === `apk-metric.json`) {
+            return JSON.parse(zip.readAsText(zipEntries[i]))[`master_size`];
+          }
+          if (metricType === 'bundle' && zipEntries[i].entryName === `bundle-metric.json`) {
+            return JSON.parse(zip.readAsText(zipEntries[i]))[`master_size`];
+          }
         }
       }
       (0,error/* noArtifactFoundError */.kV)();

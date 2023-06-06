@@ -4384,8 +4384,8 @@ async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
           }
         }
       }
-      (0,error/* noArtifactFoundError */.kV)();
     }
+    (0,error/* noArtifactFoundError */.kV)();
   }
 }
 

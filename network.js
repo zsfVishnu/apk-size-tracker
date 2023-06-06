@@ -44,8 +44,8 @@ export async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
           }
         }
       }
-      noArtifactFoundError();
     }
+    noArtifactFoundError();
   }
 }
 

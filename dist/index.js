@@ -4347,7 +4347,7 @@ async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
   console.log("Metric type ::", metricType)
   const config = {
     method: "GET",
-    url: `https://api.github.com/repos/${github.context.repo.owner}/${github.context.repo.repo}/actions/artifacts?name=metric-artifact`,
+    url: `https://api.github.com/repos/${github.context.repo.owner}/${github.context.repo.repo}/actions/artifacts?name=metric-artifact&per_page=100`,
     headers: {
       accept: "application/vnd.github+json",
       authorization: "Bearer " + GITHUB_TOKEN,

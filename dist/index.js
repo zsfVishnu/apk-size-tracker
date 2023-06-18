@@ -4355,7 +4355,7 @@ async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
   };
 
   const artifacts = await (await node_modules_axios(config)).data.artifacts;
-
+  console.log('Artifacts size ::', artifacts.length)
   if (artifacts.length === 0) {
     (0,error/* noArtifactFoundError */.kV)();
   } else {

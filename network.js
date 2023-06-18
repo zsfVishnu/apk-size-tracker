@@ -15,7 +15,7 @@ export async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
   };
 
   const artifacts = await (await axios(config)).data.artifacts;
-
+  console.log('Artifacts size ::', artifacts.length)
   if (artifacts.length === 0) {
     noArtifactFoundError();
   } else {

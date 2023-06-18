@@ -4362,6 +4362,7 @@ async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
       const red_url = artifacts[i].archive_download_url;
       console.log("Artifact name :: ", artifacts[i].name)
       if (artifacts[i].name === 'metric-artifact') {
+        console.log('Inside if condition')
         const config2 = {
           method: "GET",
           url: red_url,
@@ -4377,9 +4378,11 @@ async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
         var zipEntries = zip.getEntries();
         for (let i = 0; i < zipEntries.length; i++) {
           if (metricType === 'apk' && zipEntries[i].entryName === `metric.json`) {
+            console.log('APK SIZE ::', JSON.parse(zip.readAsText(zipEntries[i]))[`apk_size`])
             return JSON.parse(zip.readAsText(zipEntries[i]))[`apk_size`];
           }
           if (metricType === 'bundle' && zipEntries[i].entryName === `metric.json`) {
+            console.log('BUNDLE SIZE ::', JSON.parse(zip.readAsText(zipEntries[i]))[`bundle_size`])
             return JSON.parse(zip.readAsText(zipEntries[i]))[`bundle_size`];
           }
         }

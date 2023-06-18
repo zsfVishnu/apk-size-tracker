@@ -4344,66 +4344,66 @@ var error = __nccwpck_require__(2873);
 
 
 async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
-    const config = {
-        method: "GET",
-        url: `https://api.github.com/repos/${github.context.repo.owner}/${github.context.repo.repo}/actions/artifacts?per_page=100`,
-        headers: {
+  const config = {
+    method: "GET",
+    url: `https://api.github.com/repos/${github.context.repo.owner}/${github.context.repo.repo}/actions/artifacts?name=metric-artifact-new`,
+    headers: {
+      accept: "application/vnd.github+json",
+      authorization: "Bearer " + GITHUB_TOKEN,
+    },
+  };
+
+  const artifacts = await (await node_modules_axios(config)).data.artifacts;
+  console.log('Artifacts size ::', artifacts.length)
+  if (artifacts.length === 0) {
+    (0,error/* noArtifactFoundError */.kV)();
+  } else {
+    for (let i = 0; i < artifacts.length; i++) {
+      const red_url = artifacts[i].archive_download_url;
+      console.log("Artifact name :: ", artifacts[i].name)
+      if (artifacts[i].name === 'metric-artifact-new') {
+        console.log('Inside if condition')
+        const config2 = {
+          method: "GET",
+          url: red_url,
+          headers: {
             accept: "application/vnd.github+json",
             authorization: "Bearer " + GITHUB_TOKEN,
-        },
-    };
+          },
+          responseType: "arraybuffer",
+        };
 
-    let artifacts = await (await node_modules_axios(config)).data.artifacts;
-    console.log('Artifacts size ::', artifacts.length)
-    if (artifacts.length === 0) {
-        (0,error/* noArtifactFoundError */.kV)();
-    } else {
-        for (let i = 0; i < artifacts.length; i++) {
-            const red_url = artifacts[i].archive_download_url;
-            console.log("Artifact name :: ", artifacts[i].name)
-            if (artifacts[i].name === 'metric-artifact-new') {
-                console.log('Inside if condition')
-                const config2 = {
-                    method: "GET",
-                    url: red_url,
-                    headers: {
-                        accept: "application/vnd.github+json",
-                        authorization: "Bearer " + GITHUB_TOKEN,
-                    },
-                    responseType: "arraybuffer",
-                };
-
-                let res2 = await node_modules_axios(config2);
-                var zip = new (adm_zip_default())(res2.data);
-                var zipEntries = zip.getEntries();
-                for (let i = 0; i < zipEntries.length; i++) {
-                    console.log('Zip entry name ::', zipEntries[i].entryName)
-                    if (metricType === 'apk' && zipEntries[i].entryName === `metric.json`) {
-                        console.log('APK SIZE ::', JSON.parse(zip.readAsText(zipEntries[i]))[`apk_size`])
-                        return JSON.parse(zip.readAsText(zipEntries[i]))[`apk_size`];
-                    }
-                    if (metricType === 'bundle' && zipEntries[i].entryName === `metric.json`) {
-                        console.log('BUNDLE SIZE ::', JSON.parse(zip.readAsText(zipEntries[i]))[`bundle_size`])
-                        return JSON.parse(zip.readAsText(zipEntries[i]))[`bundle_size`];
-                    }
-                }
-            }
+        let res2 = await node_modules_axios(config2);
+        var zip = new (adm_zip_default())(res2.data);
+        var zipEntries = zip.getEntries();
+        for (let i = 0; i < zipEntries.length; i++) {
+          console.log('Zip entry name ::', zipEntries[i].entryName)
+          if (metricType === 'apk' && zipEntries[i].entryName === `metric.json`) {
+            console.log('APK SIZE ::', JSON.parse(zip.readAsText(zipEntries[i]))[`apk_size`])
+            return JSON.parse(zip.readAsText(zipEntries[i]))[`apk_size`];
+          }
+          if (metricType === 'bundle' && zipEntries[i].entryName === `metric.json`) {
+            console.log('BUNDLE SIZE ::', JSON.parse(zip.readAsText(zipEntries[i]))[`bundle_size`])
+            return JSON.parse(zip.readAsText(zipEntries[i]))[`bundle_size`];
+          }
         }
-        (0,error/* noArtifactFoundError */.kV)();
+      }
     }
+    (0,error/* noArtifactFoundError */.kV)();
+  }
 }
 
 async function postComment(deltaPayload, GITHUB_TOKEN) {
-    const config = {
-        method: "POST",
-        url: `https://api.github.com/repos/${github.context.repo.owner}/${github.context.repo.repo}/issues/${github.context.payload.number}/comments`,
-        headers: {
-            accept: "application/vnd.github+json",
-            authorization: "Bearer " + GITHUB_TOKEN,
-        },
-        data: {body: deltaPayload},
-    };
-    node_modules_axios(config);
+  const config = {
+    method: "POST",
+    url: `https://api.github.com/repos/${github.context.repo.owner}/${github.context.repo.repo}/issues/${github.context.payload.number}/comments`,
+    headers: {
+      accept: "application/vnd.github+json",
+      authorization: "Bearer " + GITHUB_TOKEN,
+    },
+    data: { body: deltaPayload },
+  };
+  node_modules_axios(config);
 }
 
 

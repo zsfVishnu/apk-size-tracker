@@ -4344,6 +4344,7 @@ var error = __nccwpck_require__(2873);
 
 
 async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
+  console.log("Metric type ::", metricType)
   const config = {
     method: "GET",
     url: `https://api.github.com/repos/${github.context.repo.owner}/${github.context.repo.repo}/actions/artifacts?name=metric-artifact`,
@@ -4377,6 +4378,7 @@ async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
         var zip = new (adm_zip_default())(res2.data);
         var zipEntries = zip.getEntries();
         for (let i = 0; i < zipEntries.length; i++) {
+          console.log('Zip entry name ::', zipEntries[i].entryName)
           if (metricType === 'apk' && zipEntries[i].entryName === `metric.json`) {
             console.log('APK SIZE ::', JSON.parse(zip.readAsText(zipEntries[i]))[`apk_size`])
             return JSON.parse(zip.readAsText(zipEntries[i]))[`apk_size`];

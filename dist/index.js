@@ -4361,7 +4361,7 @@ async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
     for (let i = 0; i < artifacts.length; i++) {
       const red_url = artifacts[i].archive_download_url;
       console.log("Artifact name :: ", artifacts[i].name)
-      if (artifacts[i].name === 'metric-artifact') {
+      if (artifacts[i].name === 'metric-artifact-test') {
         const config2 = {
           method: "GET",
           url: red_url,

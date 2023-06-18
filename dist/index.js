@@ -4344,7 +4344,6 @@ var error = __nccwpck_require__(2873);
 
 
 async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
-  console.log("Metric type ::", metricType)
   const config = {
     method: "GET",
     url: `https://api.github.com/repos/${github.context.repo.owner}/${github.context.repo.repo}/actions/artifacts?name=metric-artifact-new`,
@@ -4354,10 +4353,13 @@ async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
     },
   };
 
-  const artifacts = await (await node_modules_axios(config)).data.artifacts;
+  let artifacts = await (await node_modules_axios(config)).data.artifacts;
   console.log('Artifacts size ::', artifacts.length)
   if (artifacts.length === 0) {
-    (0,error/* noArtifactFoundError */.kV)();
+    artifacts = await (await node_modules_axios(config)).data.artifacts;
+    if (artifacts.length === 0) {
+      (0,error/* noArtifactFoundError */.kV)();
+    }
   } else {
     for (let i = 0; i < artifacts.length; i++) {
       const red_url = artifacts[i].archive_download_url;

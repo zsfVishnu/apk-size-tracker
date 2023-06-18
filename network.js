@@ -4,7 +4,6 @@ import { context } from "@actions/github";
 import { noArtifactFoundError } from "./error";
 
 export async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
-  console.log("Metric type ::", metricType)
   const config = {
     method: "GET",
     url: `https://api.github.com/repos/${context.repo.owner}/${context.repo.repo}/actions/artifacts?name=metric-artifact-new`,
@@ -14,10 +13,13 @@ export async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
     },
   };
 
-  const artifacts = await (await axios(config)).data.artifacts;
+  let artifacts = await (await axios(config)).data.artifacts;
   console.log('Artifacts size ::', artifacts.length)
   if (artifacts.length === 0) {
-    noArtifactFoundError();
+    artifacts = await (await axios(config)).data.artifacts;
+    if (artifacts.length === 0) {
+      noArtifactFoundError();
+    }
   } else {
     for (let i = 0; i < artifacts.length; i++) {
       const red_url = artifacts[i].archive_download_url;

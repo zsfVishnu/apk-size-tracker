@@ -4346,7 +4346,7 @@ var error = __nccwpck_require__(2873);
 async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
   const config = {
     method: "GET",
-    url: `https://api.github.com/repos/${github.context.repo.owner}/${github.context.repo.repo}/actions/artifacts?name=metric-artifact-test`,
+    url: `https://api.github.com/repos/${github.context.repo.owner}/${github.context.repo.repo}/actions/artifacts?name=metric-artifact`,
     headers: {
       accept: "application/vnd.github+json",
       authorization: "Bearer " + GITHUB_TOKEN,
@@ -4361,7 +4361,7 @@ async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
     for (let i = 0; i < artifacts.length; i++) {
       const red_url = artifacts[i].archive_download_url;
       console.log("Artifact name :: ", artifacts[i].name)
-      if (artifacts[i].name === 'metric-artifact-test') {
+      if (artifacts[i].name === 'metric-artifact') {
         const config2 = {
           method: "GET",
           url: red_url,

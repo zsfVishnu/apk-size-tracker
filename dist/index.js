@@ -4347,7 +4347,7 @@ async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
   console.log("Metric type ::", metricType)
   const config = {
     method: "GET",
-    url: `https://api.github.com/repos/${github.context.repo.owner}/${github.context.repo.repo}/actions/artifacts?name=metric-artifact&per_page=100`,
+    url: `https://api.github.com/repos/${github.context.repo.owner}/${github.context.repo.repo}/actions/artifacts?name=metric-artifact-new`,
     headers: {
       accept: "application/vnd.github+json",
       authorization: "Bearer " + GITHUB_TOKEN,
@@ -4362,7 +4362,7 @@ async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
     for (let i = 0; i < artifacts.length; i++) {
       const red_url = artifacts[i].archive_download_url;
       console.log("Artifact name :: ", artifacts[i].name)
-      if (artifacts[i].name === 'metric-artifact') {
+      if (artifacts[i].name === 'metric-artifact-new') {
         console.log('Inside if condition')
         const config2 = {
           method: "GET",

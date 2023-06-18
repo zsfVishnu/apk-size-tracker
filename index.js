@@ -31,7 +31,7 @@ try {
     masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN, "bundle");
     console.log("Master artifact size :: ", masterSize)
     featSize = getBundleFeatureSize(bundleCommand, getBundlePath());
-    console.log("Feature bundle size :: ", )
+    console.log("Feature bundle size :: ", featSize)
   }
   const deltaPayload = getDeltaPayload(masterSize, featSize, context);
   console.log("Delta payload :: ", deltaPayload)

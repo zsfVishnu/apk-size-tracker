@@ -217,7 +217,7 @@ try {
     masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN, "bundle");
     console.log("Master artifact size :: ", masterSize)
     featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getBundleFeatureSize */ .yd)(bundleCommand, (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getBundlePath */ .pD)());
-    console.log("Feature bundle size :: ", )
+    console.log("Feature bundle size :: ", featSize)
   }
   const deltaPayload = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getDeltaPayload */ .aI)(masterSize, featSize, _actions_github__WEBPACK_IMPORTED_MODULE_1__.context);
   console.log("Delta payload :: ", deltaPayload)

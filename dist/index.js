@@ -217,7 +217,7 @@ try {
     masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN, "bundle");
     console.log("Master artifact size :: ", masterSize)
     featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getBundleFeatureSize */ .yd)(bundleCommand, (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getBundlePath */ .pD)());
-    console.log("Feature bundle size :: ", )
+    console.log("Feature bundle size :: ", featSize)
   }
   const deltaPayload = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getDeltaPayload */ .aI)(masterSize, featSize, _actions_github__WEBPACK_IMPORTED_MODULE_1__.context);
   console.log("Delta payload :: ", deltaPayload)
@@ -4346,7 +4346,7 @@ var error = __nccwpck_require__(2873);
 async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
   const config = {
     method: "GET",
-    url: `https://api.github.com/repos/${github.context.repo.owner}/${github.context.repo.repo}/actions/artifacts`,
+    url: `https://api.github.com/repos/${github.context.repo.owner}/${github.context.repo.repo}/actions/artifacts?name=metric-artifact`,
     headers: {
       accept: "application/vnd.github+json",
       authorization: "Bearer " + GITHUB_TOKEN,
@@ -4376,11 +4376,11 @@ async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
         var zip = new (adm_zip_default())(res2.data);
         var zipEntries = zip.getEntries();
         for (let i = 0; i < zipEntries.length; i++) {
-          if (metricType === 'apk' && zipEntries[i].entryName === `apk-metric.json`) {
-            return JSON.parse(zip.readAsText(zipEntries[i]))[`master_size`];
+          if (metricType === 'apk' && zipEntries[i].entryName === `metric.json`) {
+            return JSON.parse(zip.readAsText(zipEntries[i]))[`apk_size`];
           }
-          if (metricType === 'bundle' && zipEntries[i].entryName === `bundle-metric.json`) {
-            return JSON.parse(zip.readAsText(zipEntries[i]))[`master_size`];
+          if (metricType === 'bundle' && zipEntries[i].entryName === `metric.json`) {
+            return JSON.parse(zip.readAsText(zipEntries[i]))[`bundle_size`];
           }
         }
       }

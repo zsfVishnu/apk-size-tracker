@@ -1,6 +1,6 @@
 import { context } from "@actions/github";
 import { execSync } from "child_process";
-import { fileDiff, getApkName, getPascalCase } from "./utils";
+import {fileDiff, getApkName, getPascalCase} from "./utils";
 
 function evaluateDiff(payload, currentSize) {
   const masterSize = payload.masterSize;
@@ -44,6 +44,27 @@ function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
   const apkSize =
     typeof sizeOp === `string` ? sizeOp.trim().split(/\s+/)[0] : 0;
   return apkSize;
+}
+
+export function getBundleFeatureSize(bundleCommand, bundlePath) {
+  console.log("inside get bundle size method")
+  const bundleName = "index.android.bundle"
+  console.log(
+      execSync(`${bundleCommand}`, {
+        encoding: "utf-8",
+      })
+  );
+
+  const sizeOp = execSync(`cd ${bundlePath} && du -k ${bundleName}`, {
+    encoding: "utf-8",
+  });
+
+  console.log(sizeOp);
+
+  const bundleSize =
+      typeof sizeOp === `string` ? sizeOp.trim().split(/\s+/)[0] : 0;
+
+  return bundleSize;
 }
 
 export function getDeltaPayload(masterSize, featSize, context) {

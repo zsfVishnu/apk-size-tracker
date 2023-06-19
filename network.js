@@ -3,10 +3,10 @@ import AdmZip from "adm-zip";
 import { context } from "@actions/github";
 import { noArtifactFoundError } from "./error";
 
-export async function getMasterSizeFromArtifact(GITHUB_TOKEN) {
+export async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
   const config = {
     method: "GET",
-    url: `https://api.github.com/repos/${context.repo.owner}/${context.repo.repo}/actions/artifacts`,
+    url: `https://api.github.com/repos/${context.repo.owner}/${context.repo.repo}/actions/artifacts?name=metric-artifact-new`,
     headers: {
       accept: "application/vnd.github+json",
       authorization: "Bearer " + GITHUB_TOKEN,
@@ -14,33 +14,41 @@ export async function getMasterSizeFromArtifact(GITHUB_TOKEN) {
   };
 
   const artifacts = await (await axios(config)).data.artifacts;
-
+  console.log('Artifacts size ::', artifacts.length)
   if (artifacts.length === 0) {
     noArtifactFoundError();
   } else {
     for (let i = 0; i < artifacts.length; i++) {
       const red_url = artifacts[i].archive_download_url;
+      console.log("Artifact name :: ", artifacts[i].name)
+      if (artifacts[i].name === 'metric-artifact-new') {
+        const config2 = {
+          method: "GET",
+          url: red_url,
+          headers: {
+            accept: "application/vnd.github+json",
+            authorization: "Bearer " + GITHUB_TOKEN,
+          },
+          responseType: "arraybuffer",
+        };
 
-      const config2 = {
-        method: "GET",
-        url: red_url,
-        headers: {
-          accept: "application/vnd.github+json",
-          authorization: "Bearer " + GITHUB_TOKEN,
-        },
-        responseType: "arraybuffer",
-      };
-
-      let res2 = await axios(config2);
-      var zip = new AdmZip(res2.data);
-      var zipEntries = zip.getEntries();
-      for (let i = 0; i < zipEntries.length; i++) {
-        if (zipEntries[i].entryName === `apk-metric.json`) {
-          return JSON.parse(zip.readAsText(zipEntries[i]))[`master_size`];
+        let res2 = await axios(config2);
+        var zip = new AdmZip(res2.data);
+        var zipEntries = zip.getEntries();
+        for (let i = 0; i < zipEntries.length; i++) {
+          console.log('Zip entry name ::', zipEntries[i].entryName)
+          if (metricType === 'apk' && zipEntries[i].entryName === `metric.json`) {
+            console.log('APK SIZE ::', JSON.parse(zip.readAsText(zipEntries[i]))[`apk_size`])
+            return JSON.parse(zip.readAsText(zipEntries[i]))[`apk_size`];
+          }
+          if (metricType === 'bundle' && zipEntries[i].entryName === `metric.json`) {
+            console.log('BUNDLE SIZE ::', JSON.parse(zip.readAsText(zipEntries[i]))[`bundle_size`])
+            return JSON.parse(zip.readAsText(zipEntries[i]))[`bundle_size`];
+          }
         }
       }
-      noArtifactFoundError();
     }
+    noArtifactFoundError();
   }
 }
 

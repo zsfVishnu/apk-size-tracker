@@ -1,4 +1,4 @@
-/******/ (() => { // webpackBootstrap
+require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 2873:
@@ -6,9 +6,9 @@
 
 "use strict";
 /* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
+/* harmony export */   "Y8": () => (/* binding */ thresholdExceededError),
 /* harmony export */   "kV": () => (/* binding */ noArtifactFoundError),
-/* harmony export */   "tX": () => (/* binding */ noFlavorFoundError),
-/* harmony export */   "Y8": () => (/* binding */ thresholdExceededError)
+/* harmony export */   "tX": () => (/* binding */ noFlavorFoundError)
 /* harmony export */ });
 /* unused harmony export buildPathError */
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(6024);
@@ -49,8 +49,9 @@ function buildPathError() {
 
 "use strict";
 /* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
-/* harmony export */   "W": () => (/* binding */ getFeatureBranchSize),
-/* harmony export */   "a": () => (/* binding */ getDeltaPayload)
+/* harmony export */   "WH": () => (/* binding */ getFeatureBranchSize),
+/* harmony export */   "aI": () => (/* binding */ getDeltaPayload),
+/* harmony export */   "yd": () => (/* binding */ getBundleFeatureSize)
 /* harmony export */ });
 /* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(5016);
 /* harmony import */ var _actions_github__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_github__WEBPACK_IMPORTED_MODULE_0__);
@@ -105,6 +106,27 @@ function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
   return apkSize;
 }
 
+function getBundleFeatureSize(bundleCommand, bundlePath) {
+  console.log("inside get bundle size method")
+  const bundleName = "index.android.bundle"
+  console.log(
+      (0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`${bundleCommand}`, {
+        encoding: "utf-8",
+      })
+  );
+
+  const sizeOp = (0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`cd ${bundlePath} && du -k ${bundleName}`, {
+    encoding: "utf-8",
+  });
+
+  console.log(sizeOp);
+
+  const bundleSize =
+      typeof sizeOp === `string` ? sizeOp.trim().split(/\s+/)[0] : 0;
+
+  return bundleSize;
+}
+
 function getDeltaPayload(masterSize, featSize, context) {
   const delta = (masterSize - featSize).toFixed(2);
   const del = delta < 0 ? "Increase" : "Decrease";
@@ -153,7 +175,7 @@ function formatSize(n) {
 /***/ ((module, __webpack_exports__, __nccwpck_require__) => {
 
 "use strict";
-__nccwpck_require__.a(module, async (__webpack_handle_async_dependencies__) => {
+__nccwpck_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
 __nccwpck_require__.r(__webpack_exports__);
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(6024);
 /* harmony import */ var _actions_core__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__nccwpck_require__.n(_actions_core__WEBPACK_IMPORTED_MODULE_0__);
@@ -172,15 +194,33 @@ const core = __nccwpck_require__(6024);
 const github = __nccwpck_require__(5016);
 const GITHUB_TOKEN = core.getInput("GITHUB_TOKEN");
 
+let masterSize
+let featSize
+let buildPath
+
 try {
   const flavorToBuild = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("flavor");
   const threshold = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("threshold");
   const isRN = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("is-react-native");
+  const isNativeChange = ((0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("native_change") === "true" || (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("yarn_lock_change") === "true") ? "true" : "false"
+  const isRNChange = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("rn_change")
+  const bundleCommand = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("bundle-command")
   console.log(`Building flavor:  ${flavorToBuild}!`);
-  const buildPath = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getBuildPath */ .HF)(flavorToBuild);
-  const masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN);
-  const featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .W)(flavorToBuild, buildPath, isRN);
-  const deltaPayload = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getDeltaPayload */ .a)(masterSize, featSize, _actions_github__WEBPACK_IMPORTED_MODULE_1__.context);
+  console.log("Bundle command : ", bundleCommand)
+  console.log("isRNChange :: ", isRNChange)
+  console.log("isNativeChange :: ", isNativeChange)
+  if (isNativeChange === "true") {
+    buildPath = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getBuildPath */ .HF)(flavorToBuild);
+    masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN, "apk");
+    featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .WH)(flavorToBuild, buildPath, isRN);
+  } else if (isRNChange === "true") {
+    masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN, "bundle");
+    console.log("Master artifact size :: ", masterSize)
+    featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getBundleFeatureSize */ .yd)(bundleCommand, (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getBundlePath */ .pD)());
+    console.log("Feature bundle size :: ", featSize)
+  }
+  const deltaPayload = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getDeltaPayload */ .aI)(masterSize, featSize, _actions_github__WEBPACK_IMPORTED_MODULE_1__.context);
+  console.log("Delta payload :: ", deltaPayload)
   await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .postComment */ .w)(deltaPayload, GITHUB_TOKEN);
   if (!(threshold === "")) {
     console.log("threshold provided");
@@ -192,8 +232,8 @@ try {
   (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.setFailed)(error.message);
 }
 
-__webpack_handle_async_dependencies__();
-}, 1);
+__webpack_async_result__();
+} catch(e) { __webpack_async_result__(e); } }, 1);
 
 /***/ }),
 
@@ -4303,10 +4343,10 @@ var error = __nccwpck_require__(2873);
 
 
 
-async function getMasterSizeFromArtifact(GITHUB_TOKEN) {
+async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
   const config = {
     method: "GET",
-    url: `https://api.github.com/repos/${github.context.repo.owner}/${github.context.repo.repo}/actions/artifacts`,
+    url: `https://api.github.com/repos/${github.context.repo.owner}/${github.context.repo.repo}/actions/artifacts?name=metric-artifact-new`,
     headers: {
       accept: "application/vnd.github+json",
       authorization: "Bearer " + GITHUB_TOKEN,
@@ -4314,33 +4354,41 @@ async function getMasterSizeFromArtifact(GITHUB_TOKEN) {
   };
 
   const artifacts = await (await node_modules_axios(config)).data.artifacts;
-
+  console.log('Artifacts size ::', artifacts.length)
   if (artifacts.length === 0) {
     (0,error/* noArtifactFoundError */.kV)();
   } else {
     for (let i = 0; i < artifacts.length; i++) {
       const red_url = artifacts[i].archive_download_url;
+      console.log("Artifact name :: ", artifacts[i].name)
+      if (artifacts[i].name === 'metric-artifact-new') {
+        const config2 = {
+          method: "GET",
+          url: red_url,
+          headers: {
+            accept: "application/vnd.github+json",
+            authorization: "Bearer " + GITHUB_TOKEN,
+          },
+          responseType: "arraybuffer",
+        };
 
-      const config2 = {
-        method: "GET",
-        url: red_url,
-        headers: {
-          accept: "application/vnd.github+json",
-          authorization: "Bearer " + GITHUB_TOKEN,
-        },
-        responseType: "arraybuffer",
-      };
-
-      let res2 = await node_modules_axios(config2);
-      var zip = new (adm_zip_default())(res2.data);
-      var zipEntries = zip.getEntries();
-      for (let i = 0; i < zipEntries.length; i++) {
-        if (zipEntries[i].entryName === `apk-metric.json`) {
-          return JSON.parse(zip.readAsText(zipEntries[i]))[`master_size`];
+        let res2 = await node_modules_axios(config2);
+        var zip = new (adm_zip_default())(res2.data);
+        var zipEntries = zip.getEntries();
+        for (let i = 0; i < zipEntries.length; i++) {
+          console.log('Zip entry name ::', zipEntries[i].entryName)
+          if (metricType === 'apk' && zipEntries[i].entryName === `metric.json`) {
+            console.log('APK SIZE ::', JSON.parse(zip.readAsText(zipEntries[i]))[`apk_size`])
+            return JSON.parse(zip.readAsText(zipEntries[i]))[`apk_size`];
+          }
+          if (metricType === 'bundle' && zipEntries[i].entryName === `metric.json`) {
+            console.log('BUNDLE SIZE ::', JSON.parse(zip.readAsText(zipEntries[i]))[`bundle_size`])
+            return JSON.parse(zip.readAsText(zipEntries[i]))[`bundle_size`];
+          }
         }
       }
-      (0,error/* noArtifactFoundError */.kV)();
     }
+    (0,error/* noArtifactFoundError */.kV)();
   }
 }
 
@@ -18983,10 +19031,11 @@ function wrappy (fn, cb) {
 
 "use strict";
 /* harmony export */ __nccwpck_require__.d(__webpack_exports__, {
-/* harmony export */   "RJ": () => (/* binding */ getPascalCase),
 /* harmony export */   "HF": () => (/* binding */ getBuildPath),
-/* harmony export */   "sJ": () => (/* binding */ getApkName),
-/* harmony export */   "qo": () => (/* binding */ handleThreshold)
+/* harmony export */   "RJ": () => (/* binding */ getPascalCase),
+/* harmony export */   "pD": () => (/* binding */ getBundlePath),
+/* harmony export */   "qo": () => (/* binding */ handleThreshold),
+/* harmony export */   "sJ": () => (/* binding */ getApkName)
 /* harmony export */ });
 /* unused harmony export fileDiff */
 /* harmony import */ var _error__WEBPACK_IMPORTED_MODULE_0__ = __nccwpck_require__(2873);
@@ -19024,7 +19073,21 @@ function getBuildPath(s) {
     const fl = s.split("Debug")[0];
     return outputPath + fl + "/debug/";
   }
+
+  if (s.toLowerCase() === "release") {
+    return outputPath + "release/";
+  }
+
+  if (s.includes("Release")) {
+    const fl = s.split("Release")[0];
+    return outputPath + fl + "/release/";
+  }
   buildPathError();
+}
+
+function getBundlePath() {
+  let outputPath = "android/infra/react/src/main/assets/"
+  return outputPath
 }
 
 function getApkName(s) {
@@ -19298,75 +19361,70 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /************************************************************************/
 /******/ 	/* webpack/runtime/async module */
 /******/ 	(() => {
-/******/ 		var webpackThen = typeof Symbol === "function" ? Symbol("webpack then") : "__webpack_then__";
+/******/ 		var webpackQueues = typeof Symbol === "function" ? Symbol("webpack queues") : "__webpack_queues__";
 /******/ 		var webpackExports = typeof Symbol === "function" ? Symbol("webpack exports") : "__webpack_exports__";
-/******/ 		var completeQueue = (queue) => {
-/******/ 			if(queue) {
+/******/ 		var webpackError = typeof Symbol === "function" ? Symbol("webpack error") : "__webpack_error__";
+/******/ 		var resolveQueue = (queue) => {
+/******/ 			if(queue && !queue.d) {
+/******/ 				queue.d = 1;
 /******/ 				queue.forEach((fn) => (fn.r--));
 /******/ 				queue.forEach((fn) => (fn.r-- ? fn.r++ : fn()));
 /******/ 			}
 /******/ 		}
-/******/ 		var completeFunction = (fn) => (!--fn.r && fn());
-/******/ 		var queueFunction = (queue, fn) => (queue ? queue.push(fn) : completeFunction(fn));
 /******/ 		var wrapDeps = (deps) => (deps.map((dep) => {
 /******/ 			if(dep !== null && typeof dep === "object") {
-/******/ 				if(dep[webpackThen]) return dep;
+/******/ 				if(dep[webpackQueues]) return dep;
 /******/ 				if(dep.then) {
 /******/ 					var queue = [];
+/******/ 					queue.d = 0;
 /******/ 					dep.then((r) => {
 /******/ 						obj[webpackExports] = r;
-/******/ 						completeQueue(queue);
-/******/ 						queue = 0;
+/******/ 						resolveQueue(queue);
+/******/ 					}, (e) => {
+/******/ 						obj[webpackError] = e;
+/******/ 						resolveQueue(queue);
 /******/ 					});
 /******/ 					var obj = {};
-/******/ 												obj[webpackThen] = (fn, reject) => (queueFunction(queue, fn), dep['catch'](reject));
+/******/ 					obj[webpackQueues] = (fn) => (fn(queue));
 /******/ 					return obj;
 /******/ 				}
 /******/ 			}
 /******/ 			var ret = {};
-/******/ 								ret[webpackThen] = (fn) => (completeFunction(fn));
-/******/ 								ret[webpackExports] = dep;
-/******/ 								return ret;
+/******/ 			ret[webpackQueues] = x => {};
+/******/ 			ret[webpackExports] = dep;
+/******/ 			return ret;
 /******/ 		}));
 /******/ 		__nccwpck_require__.a = (module, body, hasAwait) => {
-/******/ 			var queue = hasAwait && [];
+/******/ 			var queue;
+/******/ 			hasAwait && ((queue = []).d = 1);
+/******/ 			var depQueues = new Set();
 /******/ 			var exports = module.exports;
 /******/ 			var currentDeps;
 /******/ 			var outerResolve;
 /******/ 			var reject;
-/******/ 			var isEvaluating = true;
-/******/ 			var nested = false;
-/******/ 			var whenAll = (deps, onResolve, onReject) => {
-/******/ 				if (nested) return;
-/******/ 				nested = true;
-/******/ 				onResolve.r += deps.length;
-/******/ 				deps.map((dep, i) => (dep[webpackThen](onResolve, onReject)));
-/******/ 				nested = false;
-/******/ 			};
 /******/ 			var promise = new Promise((resolve, rej) => {
 /******/ 				reject = rej;
-/******/ 				outerResolve = () => (resolve(exports), completeQueue(queue), queue = 0);
+/******/ 				outerResolve = resolve;
 /******/ 			});
 /******/ 			promise[webpackExports] = exports;
-/******/ 			promise[webpackThen] = (fn, rejectFn) => {
-/******/ 				if (isEvaluating) { return completeFunction(fn); }
-/******/ 				if (currentDeps) whenAll(currentDeps, fn, rejectFn);
-/******/ 				queueFunction(queue, fn);
-/******/ 				promise['catch'](rejectFn);
-/******/ 			};
+/******/ 			promise[webpackQueues] = (fn) => (queue && fn(queue), depQueues.forEach(fn), promise["catch"](x => {}));
 /******/ 			module.exports = promise;
 /******/ 			body((deps) => {
-/******/ 				if(!deps) return outerResolve();
 /******/ 				currentDeps = wrapDeps(deps);
-/******/ 				var fn, result;
-/******/ 				var promise = new Promise((resolve, reject) => {
-/******/ 					fn = () => (resolve(result = currentDeps.map((d) => (d[webpackExports]))));
+/******/ 				var fn;
+/******/ 				var getResult = () => (currentDeps.map((d) => {
+/******/ 					if(d[webpackError]) throw d[webpackError];
+/******/ 					return d[webpackExports];
+/******/ 				}))
+/******/ 				var promise = new Promise((resolve) => {
+/******/ 					fn = () => (resolve(getResult));
 /******/ 					fn.r = 0;
-/******/ 					whenAll(currentDeps, fn, reject);
+/******/ 					var fnQueue = (q) => (q !== queue && !depQueues.has(q) && (depQueues.add(q), q && !q.d && (fn.r++, q.push(fn))));
+/******/ 					currentDeps.map((dep) => (dep[webpackQueues](fnQueue)));
 /******/ 				});
-/******/ 				return fn.r ? promise : result;
-/******/ 			}).then(outerResolve, reject);
-/******/ 			isEvaluating = false;
+/******/ 				return fn.r ? promise : getResult();
+/******/ 			}, (err) => ((err ? reject(promise[webpackError] = err) : outerResolve(exports)), resolveQueue(queue)));
+/******/ 			queue && (queue.d = 0);
 /******/ 		};
 /******/ 	})();
 /******/ 	
@@ -19424,3 +19482,4 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 	
 /******/ })()
 ;
+//# sourceMappingURL=index.js.map

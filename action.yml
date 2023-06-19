@@ -15,6 +15,21 @@ inputs:
     description: "is it a react native project"
     required: false
     default: false
+  rn_change:
+    description: "RN files changed"
+    required: true
+    default: false
+  native_change:
+    description: "Native files changed"
+    required: true
+    default: false
+  yarn_lock_change:
+    description: "yarn.lock file changes"
+    required: true
+    default: false
+  bundle-command:
+    description: "Bundle command"
+    required: true
 runs:
   using: "node16"
   main: "dist/index.js"

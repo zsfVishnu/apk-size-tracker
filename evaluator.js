@@ -1,6 +1,8 @@
 import { context } from "@actions/github";
 import { execSync } from "child_process";
 import {fileDiff, getApkName, getPascalCase} from "./utils";
+import fs from 'fs'
+import path from 'path'
 
 function evaluateDiff(payload, currentSize) {
   const masterSize = payload.masterSize;
@@ -38,12 +40,10 @@ function getRNFeatureBranchSize(apkName, flavorToBuild, buildPath) {
 
 function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
   execSync(`./gradlew assemble${flavorToBuild}`, { encoding: "utf-8" });
-  const sizeOp = execSync(`cd ${buildPath} && du -k ${apkName}`, {
-    encoding: "utf-8",
-  });
-  const apkSize =
-    typeof sizeOp === `string` ? sizeOp.trim().split(/\s+/)[0] : 0;
-  return apkSize;
+  const apkPath = path.join(buildPath, apkName)
+  const stats = fs.statSync(apkPath)
+  const apkSize = stats.size / 1024
+  return apkSize
 }
 
 export function getBundleFeatureSize(bundleCommand, bundlePath) {

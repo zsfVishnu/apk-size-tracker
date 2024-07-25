@@ -1,6 +1,8 @@
 import { context } from "@actions/github";
 import { execSync } from "child_process";
 import {fileDiff, getApkName, getPascalCase} from "./utils";
+import fs from 'fs'
+import path from 'path'
 
 function evaluateDiff(payload, currentSize) {
   const masterSize = payload.masterSize;
@@ -24,26 +26,20 @@ function getRNFeatureBranchSize(apkName, flavorToBuild, buildPath) {
     })
   );
 
-  const sizeOp = execSync(`cd android/${buildPath} && du -k ${apkName}`, {
-    encoding: "utf-8",
-  });
-
-  console.log(sizeOp);
-
-  const apkSize =
-    typeof sizeOp === `string` ? sizeOp.trim().split(/\s+/)[0] : 0;
-
-  return apkSize;
+  const apkPath = path.join(buildPath, apkName)
+  const stats = fs.statSync(apkPath)
+  const apkSize = stats.size / 1024
+  console.log(apkSize);
+  return apkSize
 }
 
 function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
   execSync(`./gradlew assemble${flavorToBuild}`, { encoding: "utf-8" });
-  const sizeOp = execSync(`cd ${buildPath} && du -k ${apkName}`, {
-    encoding: "utf-8",
-  });
-  const apkSize =
-    typeof sizeOp === `string` ? sizeOp.trim().split(/\s+/)[0] : 0;
-  return apkSize;
+  const apkPath = path.join(buildPath, apkName)
+  const stats = fs.statSync(apkPath)
+  const apkSize = stats.size / 1024
+  console.log(apkSize);
+  return apkSize
 }
 
 export function getBundleFeatureSize(bundleCommand, bundlePath) {
@@ -55,16 +51,11 @@ export function getBundleFeatureSize(bundleCommand, bundlePath) {
       })
   );
 
-  const sizeOp = execSync(`cd ${bundlePath} && du -k ${bundleName}`, {
-    encoding: "utf-8",
-  });
-
-  console.log(sizeOp);
-
-  const bundleSize =
-      typeof sizeOp === `string` ? sizeOp.trim().split(/\s+/)[0] : 0;
-
-  return bundleSize;
+  const bundlePath = path.join(bundlePath, bundleName)
+  const stats = fs.statSync(bundlePath)
+  const bundleSize = stats.size / 1024
+  console.log(bundleSize);
+  return bundleSize
 }
 
 export function getDeltaPayload(masterSize, featSize, context) {

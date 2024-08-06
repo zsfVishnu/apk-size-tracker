@@ -51,8 +51,8 @@ export function getBundleFeatureSize(bundleCommand, bundlePath) {
       })
   );
 
-  const bundlePath = path.join(bundlePath, bundleName)
-  const stats = fs.statSync(bundlePath)
+  const bp = path.join(bundlePath, bundleName)
+  const stats = fs.statSync(bp)
   const bundleSize = stats.size / 1024
   console.log(bundleSize);
   return bundleSize

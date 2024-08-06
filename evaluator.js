@@ -25,20 +25,25 @@ function getRNFeatureBranchSize(apkName, flavorToBuild, buildPath) {
       encoding: "utf-8",
     })
   );
-
+  console.log('buildPath => ', buildPath);
+  console.log('apkName => ', apkName);
   const apkPath = path.join(buildPath, apkName)
+  console.log('apkPath => ', apkPath);
   const stats = fs.statSync(apkPath)
   const apkSize = stats.size / 1024
-  console.log(apkSize);
+  console.log('apkSize => ', apkSize);
   return apkSize
 }
 
 function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
   execSync(`./gradlew assemble${flavorToBuild}`, { encoding: "utf-8" });
+  console.log('buildPath => ', buildPath);
+  console.log('apkName => ', apkName);
   const apkPath = path.join(buildPath, apkName)
+  console.log('apkPath => ', apkPath);
   const stats = fs.statSync(apkPath)
   const apkSize = stats.size / 1024
-  console.log(apkSize);
+  console.log('apkSize => ', apkSize);
   return apkSize
 }
 

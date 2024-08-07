@@ -103,7 +103,7 @@ function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
   console.log(`buildPath :: ${buildPath}`)
   ;(0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`ls ${buildPath}`)
   ;(0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`./gradlew assemble${flavorToBuild}`, { encoding: "utf-8" });
-  const apkPath = __nccwpck_require__.ab + "apk-size-tracker/" + buildPath + '/' + apkName
+  const apkPath = path__WEBPACK_IMPORTED_MODULE_4___default().join(buildPath, apkName)
   console.log(`apkPath :: ${apkPath}`)
   const stats = fs__WEBPACK_IMPORTED_MODULE_3___default().statSync(apkPath)
   const apkSize = stats.size / 1024

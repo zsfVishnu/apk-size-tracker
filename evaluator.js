@@ -20,7 +20,7 @@ export function getFeatureBranchSize(fb, buildPath, isRN) {
 }
 
 function getRNFeatureBranchSize(apkName, flavorToBuild, buildPath) {
-  onsole.log(`apkname :: ${apkName}`)
+  console.log(`apkname :: ${apkName}`)
   console.log(`flavourToBuild :: ${flavorToBuild}`)
   console.log(`buildPath :: ${buildPath}`)
   execSync(`ls ${buildPath}`)

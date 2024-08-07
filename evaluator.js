@@ -23,7 +23,7 @@ function getRNFeatureBranchSize(apkName, flavorToBuild, buildPath) {
   console.log(`apkname :: ${apkName}`)
   console.log(`flavourToBuild :: ${flavorToBuild}`)
   console.log(`buildPath :: ${buildPath}`)
-  execSync(`ls ${buildPath}`)
+
   console.log(
     execSync(`cd android && ./gradlew assemble${flavorToBuild}`, {
       encoding: "utf-8",
@@ -41,7 +41,7 @@ function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
   console.log(`apkname :: ${apkName}`)
   console.log(`flavourToBuild :: ${flavorToBuild}`)
   console.log(`buildPath :: ${buildPath}`)
-  execSync(`ls ${buildPath}`)
+
   execSync(`./gradlew assemble${flavorToBuild}`, { encoding: "utf-8" });
   const apkPath = path.join(process.cwd(),buildPath, apkName)
   console.log(`apkPath :: ${apkPath}`)

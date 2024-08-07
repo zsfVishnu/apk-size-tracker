@@ -87,7 +87,7 @@ function getRNFeatureBranchSize(apkName, flavorToBuild, buildPath) {
   console.log(`apkname :: ${apkName}`)
   console.log(`flavourToBuild :: ${flavorToBuild}`)
   console.log(`buildPath :: ${buildPath}`)
-  ;(0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`ls ${buildPath}`)
+
   console.log(
     (0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`cd android && ./gradlew assemble${flavorToBuild}`, {
       encoding: "utf-8",
@@ -105,7 +105,7 @@ function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
   console.log(`apkname :: ${apkName}`)
   console.log(`flavourToBuild :: ${flavorToBuild}`)
   console.log(`buildPath :: ${buildPath}`)
-  ;(0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`ls ${buildPath}`)
+
   ;(0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`./gradlew assemble${flavorToBuild}`, { encoding: "utf-8" });
   const apkPath = __nccwpck_require__.ab + "apk-size-tracker/" + buildPath + '/' + apkName
   console.log(`apkPath :: ${apkPath}`)

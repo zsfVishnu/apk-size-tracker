@@ -20,13 +20,17 @@ export function getFeatureBranchSize(fb, buildPath, isRN) {
 }
 
 function getRNFeatureBranchSize(apkName, flavorToBuild, buildPath) {
+  onsole.log(`apkname :: ${apkName}`)
+  console.log(`flavourToBuild :: ${flavorToBuild}`)
+  console.log(`buildPath :: ${buildPath}`)
+  execSync(`ls ${buildPath}`)
   console.log(
     execSync(`cd android && ./gradlew assemble${flavorToBuild}`, {
       encoding: "utf-8",
     })
   );
 
-  const apkPath = path.join(buildPath, apkName)
+  const apkPath = path.join(process.cwd(),buildPath, apkName)
   const stats = fs.statSync(apkPath)
   const apkSize = stats.size / 1024
   console.log(apkSize);

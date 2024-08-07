@@ -84,13 +84,17 @@ function getFeatureBranchSize(fb, buildPath, isRN) {
 }
 
 function getRNFeatureBranchSize(apkName, flavorToBuild, buildPath) {
+  onsole.log(`apkname :: ${apkName}`)
+  console.log(`flavourToBuild :: ${flavorToBuild}`)
+  console.log(`buildPath :: ${buildPath}`)
+  ;(0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`ls ${buildPath}`)
   console.log(
     (0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`cd android && ./gradlew assemble${flavorToBuild}`, {
       encoding: "utf-8",
     })
   );
 
-  const apkPath = path__WEBPACK_IMPORTED_MODULE_4___default().join(buildPath, apkName)
+  const apkPath = __nccwpck_require__.ab + "apk-size-tracker/" + buildPath + '/' + apkName
   const stats = fs__WEBPACK_IMPORTED_MODULE_3___default().statSync(apkPath)
   const apkSize = stats.size / 1024
   console.log(apkSize);

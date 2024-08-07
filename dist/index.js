@@ -1,4 +1,4 @@
-require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 2873:
@@ -98,8 +98,13 @@ function getRNFeatureBranchSize(apkName, flavorToBuild, buildPath) {
 }
 
 function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
-  (0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`./gradlew assemble${flavorToBuild}`, { encoding: "utf-8" });
+  console.log(`apkname :: ${apkName}`)
+  console.log(`flavourToBuild :: ${flavorToBuild}`)
+  console.log(`buildPath :: ${buildPath}`)
+  ;(0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`ls ${buildPath}`)
+  ;(0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`./gradlew assemble${flavorToBuild}`, { encoding: "utf-8" });
   const apkPath = path__WEBPACK_IMPORTED_MODULE_4___default().join(buildPath, apkName)
+  console.log(`apkPath :: ${apkPath}`)
   const stats = fs__WEBPACK_IMPORTED_MODULE_3___default().statSync(apkPath)
   const apkSize = stats.size / 1024
   console.log(apkSize);
@@ -19482,4 +19487,3 @@ module.exports = JSON.parse('[[[0,44],"disallowed_STD3_valid"],[[45,46],"valid"]
 /******/ 	
 /******/ })()
 ;
-//# sourceMappingURL=index.js.map

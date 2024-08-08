@@ -10,16 +10,16 @@ function evaluateDiff(payload, currentSize) {
   return diff;
 }
 
-export function getFeatureBranchSize(fb, buildPath, isRN) {
+export function getFeatureBranchSize(dir,fb, buildPath, isRN) {
   const apkName = getApkName(fb);
   const flavorToBuild = getPascalCase(fb);
 
   return isRN === "true"
-    ? getRNFeatureBranchSize(apkName, flavorToBuild, buildPath)
-    : getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath);
+    ? getRNFeatureBranchSize(dir,apkName, flavorToBuild, buildPath)
+    : getNativeFeatureBranchSize(dir,apkName, flavorToBuild, buildPath);
 }
 
-function getRNFeatureBranchSize(apkName, flavorToBuild, buildPath) {
+function getRNFeatureBranchSize(dir,apkName, flavorToBuild, buildPath) {
   console.log(`apkname :: ${apkName}`)
   console.log(`flavourToBuild :: ${flavorToBuild}`)
   console.log(`buildPath :: ${buildPath}`)
@@ -30,20 +30,20 @@ function getRNFeatureBranchSize(apkName, flavorToBuild, buildPath) {
     })
   );
 
-  const apkPath = path.join(process.cwd(),buildPath, apkName)
+  const apkPath = path.join(dir,buildPath, apkName)
   const stats = fs.statSync(apkPath)
   const apkSize = stats.size / 1024
   console.log(apkSize);
   return apkSize
 }
 
-function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
+function getNativeFeatureBranchSize(dir,apkName, flavorToBuild, buildPath) {
   console.log(`apkname :: ${apkName}`)
   console.log(`flavourToBuild :: ${flavorToBuild}`)
   console.log(`buildPath :: ${buildPath}`)
 
   execSync(`./gradlew assemble${flavorToBuild}`, { encoding: "utf-8" });
-  const apkPath = path.join(process.cwd(),buildPath, apkName)
+  const apkPath = path.join(dir,buildPath, apkName)
   console.log(`apkPath :: ${apkPath}`)
   const stats = fs.statSync(apkPath)
   const apkSize = stats.size / 1024

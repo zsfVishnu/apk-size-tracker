@@ -74,16 +74,16 @@ function evaluateDiff(payload, currentSize) {
   return diff;
 }
 
-function getFeatureBranchSize(fb, buildPath, isRN) {
+function getFeatureBranchSize(dir,fb, buildPath, isRN) {
   const apkName = (0,_utils__WEBPACK_IMPORTED_MODULE_2__/* .getApkName */ .sJ)(fb);
   const flavorToBuild = (0,_utils__WEBPACK_IMPORTED_MODULE_2__/* .getPascalCase */ .RJ)(fb);
 
   return isRN === "true"
-    ? getRNFeatureBranchSize(apkName, flavorToBuild, buildPath)
-    : getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath);
+    ? getRNFeatureBranchSize(dir,apkName, flavorToBuild, buildPath)
+    : getNativeFeatureBranchSize(dir,apkName, flavorToBuild, buildPath);
 }
 
-function getRNFeatureBranchSize(apkName, flavorToBuild, buildPath) {
+function getRNFeatureBranchSize(dir,apkName, flavorToBuild, buildPath) {
   console.log(`apkname :: ${apkName}`)
   console.log(`flavourToBuild :: ${flavorToBuild}`)
   console.log(`buildPath :: ${buildPath}`)
@@ -94,20 +94,20 @@ function getRNFeatureBranchSize(apkName, flavorToBuild, buildPath) {
     })
   );
 
-  const apkPath = __nccwpck_require__.ab + "apk-size-tracker/" + buildPath + '/' + apkName
+  const apkPath = path__WEBPACK_IMPORTED_MODULE_4___default().join(dir,buildPath, apkName)
   const stats = fs__WEBPACK_IMPORTED_MODULE_3___default().statSync(apkPath)
   const apkSize = stats.size / 1024
   console.log(apkSize);
   return apkSize
 }
 
-function getNativeFeatureBranchSize(apkName, flavorToBuild, buildPath) {
+function getNativeFeatureBranchSize(dir,apkName, flavorToBuild, buildPath) {
   console.log(`apkname :: ${apkName}`)
   console.log(`flavourToBuild :: ${flavorToBuild}`)
   console.log(`buildPath :: ${buildPath}`)
 
   ;(0,child_process__WEBPACK_IMPORTED_MODULE_1__.execSync)(`./gradlew assemble${flavorToBuild}`, { encoding: "utf-8" });
-  const apkPath = __nccwpck_require__.ab + "apk-size-tracker/" + buildPath + '/' + apkName
+  const apkPath = path__WEBPACK_IMPORTED_MODULE_4___default().join(dir,buildPath, apkName)
   console.log(`apkPath :: ${apkPath}`)
   const stats = fs__WEBPACK_IMPORTED_MODULE_3___default().statSync(apkPath)
   const apkSize = stats.size / 1024
@@ -206,6 +206,7 @@ try {
   const flavorToBuild = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("flavor");
   const threshold = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("threshold");
   const isRN = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("is-react-native");
+  const wdir = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("workingDir");
   const isNativeChange = ((0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("native_change") === "true" || (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("yarn_lock_change") === "true") ? "true" : "false"
   const isRNChange = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("rn_change")
   const bundleCommand = (0,_actions_core__WEBPACK_IMPORTED_MODULE_0__.getInput)("bundle-command")
@@ -213,10 +214,11 @@ try {
   console.log("Bundle command : ", bundleCommand)
   console.log("isRNChange :: ", isRNChange)
   console.log("isNativeChange :: ", isNativeChange)
+  console.log("working dir :: ", wdir)
   if (isNativeChange === "true") {
     buildPath = (0,_utils__WEBPACK_IMPORTED_MODULE_4__/* .getBuildPath */ .HF)(flavorToBuild);
     masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN, "apk");
-    featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .WH)(flavorToBuild, buildPath, isRN);
+    featSize = (0,_evaluator__WEBPACK_IMPORTED_MODULE_2__/* .getFeatureBranchSize */ .WH)(wdir,flavorToBuild, buildPath, isRN);
   } else if (isRNChange === "true") {
     masterSize = await (0,_network__WEBPACK_IMPORTED_MODULE_3__/* .getMasterSizeFromArtifact */ .I)(GITHUB_TOKEN, "bundle");
     console.log("Master artifact size :: ", masterSize)

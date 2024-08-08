@@ -16,6 +16,7 @@ try {
   const flavorToBuild = getInput("flavor");
   const threshold = getInput("threshold");
   const isRN = getInput("is-react-native");
+  const wdir = getInput("workingDir");
   const isNativeChange = (getInput("native_change") === "true" || getInput("yarn_lock_change") === "true") ? "true" : "false"
   const isRNChange = getInput("rn_change")
   const bundleCommand = getInput("bundle-command")
@@ -23,10 +24,11 @@ try {
   console.log("Bundle command : ", bundleCommand)
   console.log("isRNChange :: ", isRNChange)
   console.log("isNativeChange :: ", isNativeChange)
+  console.log("working dir :: ", wdir)
   if (isNativeChange === "true") {
     buildPath = getBuildPath(flavorToBuild);
     masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN, "apk");
-    featSize = getFeatureBranchSize(flavorToBuild, buildPath, isRN);
+    featSize = getFeatureBranchSize(wdir,flavorToBuild, buildPath, isRN);
   } else if (isRNChange === "true") {
     masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN, "bundle");
     console.log("Master artifact size :: ", masterSize)

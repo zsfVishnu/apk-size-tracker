@@ -4,7 +4,7 @@ import { getFeatureBranchSize, getDeltaPayload, getBundleFeatureSize } from "./e
 import { getMasterSizeFromArtifact, postComment } from "./network";
 import { getBuildPath, getBundlePath, handleThreshold } from "./utils";
 import * as core from "@actions/core";
-import {getInputOrDefault, logInputs} from "./input.utils";
+import {logInputs} from "./input.utils";
 
 const GITHUB_TOKEN = core.getInput("GITHUB_TOKEN");
 

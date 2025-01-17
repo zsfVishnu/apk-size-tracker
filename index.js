@@ -10,7 +10,7 @@ const GITHUB_TOKEN = core.getInput("GITHUB_TOKEN");
 
 async function main() {
   try {
-    const flavorToBuild = getInput("threshold")
+    const flavorToBuild = getInput("flavor")
     const threshold = getInput("threshold");
     const isRN = getInput("is_react_native");
     const workingDir = getInput("working_directory");

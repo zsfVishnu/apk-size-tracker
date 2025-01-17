@@ -35,7 +35,7 @@ inputs:
       description: "Working Directory"
       required: false
   stream_output_max_buffer:
-    description: "Bundle command"
+    description: "stream_output_max_buffer command"
     required: false
     default: "1"
 runs:

@@ -1,49 +1,64 @@
-import { getInput, setOutput, setFailed } from "@actions/core";
+import {getInput, setFailed} from "@actions/core";
 import { context } from "@actions/github";
-import {getFeatureBranchSize, getDeltaPayload, getBundleFeatureSize} from "./evaluator";
+import { getFeatureBranchSize, getDeltaPayload, getBundleFeatureSize } from "./evaluator";
 import { getMasterSizeFromArtifact, postComment } from "./network";
-import {getBuildPath, getBundlePath, getPascalCase, handleThreshold} from "./utils";
+import { getBuildPath, getBundlePath, handleThreshold } from "./utils";
+import * as core from "@actions/core";
+import {getInputOrDefault, logInputs} from "./input.utils";
 
-const core = require("@actions/core");
-const github = require("@actions/github");
 const GITHUB_TOKEN = core.getInput("GITHUB_TOKEN");
 
-let masterSize
-let featSize
-let buildPath
+async function main() {
+  try {
+    const flavorToBuild = getInput("threshold")
+    const threshold = getInput("threshold");
+    const isRN = getInput("is_react_native");
+    const workingDir = getInput("working_directory");
+    const isNativeChange =
+        getInput("native_change") === "true" || getInput("yarn_lock_change") === "true";
+    const isRNChange = getInput("rn_change") === "true";
+    const bundleCommand = getInput("bundle_command");
+    const streamOutputMaxBuffer = Number.parseInt(getInput("stream_output_max_buffer"));
 
-try {
-  const flavorToBuild = getInput("flavor");
-  const threshold = getInput("threshold");
-  const isRN = getInput("is-react-native");
-  const wdir = getInput("workingDir");
-  const isNativeChange = (getInput("native_change") === "true" || getInput("yarn_lock_change") === "true") ? "true" : "false"
-  const isRNChange = getInput("rn_change")
-  const bundleCommand = getInput("bundle-command")
-  console.log(`Building flavor:  ${flavorToBuild}!`);
-  console.log("Bundle command : ", bundleCommand)
-  console.log("isRNChange :: ", isRNChange)
-  console.log("isNativeChange :: ", isNativeChange)
-  console.log("working dir :: ", wdir)
-  if (isNativeChange === "true") {
-    buildPath = getBuildPath(flavorToBuild);
-    masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN, "apk");
-    featSize = getFeatureBranchSize(wdir,flavorToBuild, buildPath, isRN);
-  } else if (isRNChange === "true") {
-    masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN, "bundle");
-    console.log("Master artifact size :: ", masterSize)
-    featSize = getBundleFeatureSize(bundleCommand, getBundlePath());
-    console.log("Feature bundle size :: ", featSize)
+    logInputs({
+      flavorToBuild,
+      threshold,
+      isRN,
+      workingDir,
+      isNativeChange,
+      isRNChange,
+      bundleCommand,
+      streamOutputMaxBuffer
+    });
+
+    let masterSize, featSize, buildPath;
+
+    if (isNativeChange) {
+      buildPath = getBuildPath(flavorToBuild);
+      masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN, "apk");
+      featSize = getFeatureBranchSize(workingDir, flavorToBuild, buildPath, isRN, streamOutputMaxBuffer);
+    } else if (isRNChange) {
+      masterSize = await getMasterSizeFromArtifact(GITHUB_TOKEN, "bundle");
+      featSize = getBundleFeatureSize(bundleCommand, getBundlePath(), streamOutputMaxBuffer);
+    }
+
+    if (masterSize && featSize) {
+      const deltaPayload = getDeltaPayload(masterSize, featSize, context);
+      console.log("Delta payload:", deltaPayload);
+      await postComment(deltaPayload, GITHUB_TOKEN);
+
+      if (threshold) {
+        console.log("Threshold provided, handling it...");
+        handleThreshold(masterSize, featSize, threshold, GITHUB_TOKEN);
+      } else {
+        console.log("No threshold provided.");
+      }
+    } else {
+      console.error("Master or feature size is undefined.");
+    }
+  } catch (error) {
+    setFailed(error.message);
   }
-  const deltaPayload = getDeltaPayload(masterSize, featSize, context);
-  console.log("Delta payload :: ", deltaPayload)
-  await postComment(deltaPayload, GITHUB_TOKEN);
-  if (!(threshold === "")) {
-    console.log("threshold provided");
-    handleThreshold(masterSize, featSize, threshold, GITHUB_TOKEN);
-  } else {
-    console.log("threshold not provided");
-  }
-} catch (error) {
-  setFailed(error.message);
 }
+
+main();

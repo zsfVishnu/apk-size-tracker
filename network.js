@@ -4,52 +4,69 @@ import { context } from "@actions/github";
 import { noArtifactFoundError } from "./error";
 
 export async function getMasterSizeFromArtifact(GITHUB_TOKEN, metricType) {
+  const artifacts = await fetchArtifacts(GITHUB_TOKEN);
+
+  if (!artifacts.length) {
+    noArtifactFoundError();
+  }
+
+  for (const artifact of artifacts) {
+    if (artifact.name === "metric-artifact-new") {
+      const artifactSize = await extractArtifactSize(artifact.archive_download_url, GITHUB_TOKEN, metricType);
+      if (artifactSize !== null) {
+        return artifactSize;
+      }
+    }
+  }
+
+  noArtifactFoundError();
+}
+
+async function fetchArtifacts(GITHUB_TOKEN) {
   const config = {
     method: "GET",
     url: `https://api.github.com/repos/${context.repo.owner}/${context.repo.repo}/actions/artifacts?name=metric-artifact-new`,
     headers: {
       accept: "application/vnd.github+json",
-      authorization: "Bearer " + GITHUB_TOKEN,
+      authorization: `Bearer ${GITHUB_TOKEN}`,
     },
   };
 
-  const artifacts = await (await axios(config)).data.artifacts;
-  console.log('Artifacts size ::', artifacts.length)
-  if (artifacts.length === 0) {
-    noArtifactFoundError();
-  } else {
-    for (let i = 0; i < artifacts.length; i++) {
-      const red_url = artifacts[i].archive_download_url;
-      console.log("Artifact name :: ", artifacts[i].name)
-      if (artifacts[i].name === 'metric-artifact-new') {
-        const config2 = {
-          method: "GET",
-          url: red_url,
-          headers: {
-            accept: "application/vnd.github+json",
-            authorization: "Bearer " + GITHUB_TOKEN,
-          },
-          responseType: "arraybuffer",
-        };
+  const response = await axios(config);
+  console.log("Artifacts size:", response.data.artifacts.length);
+  return response.data.artifacts;
+}
 
-        let res2 = await axios(config2);
-        var zip = new AdmZip(res2.data);
-        var zipEntries = zip.getEntries();
-        for (let i = 0; i < zipEntries.length; i++) {
-          console.log('Zip entry name ::', zipEntries[i].entryName)
-          if (metricType === 'apk' && zipEntries[i].entryName === `metric.json`) {
-            console.log('APK SIZE ::', JSON.parse(zip.readAsText(zipEntries[i]))[`apk_size`])
-            return JSON.parse(zip.readAsText(zipEntries[i]))[`apk_size`];
-          }
-          if (metricType === 'bundle' && zipEntries[i].entryName === `metric.json`) {
-            console.log('BUNDLE SIZE ::', JSON.parse(zip.readAsText(zipEntries[i]))[`bundle_size`])
-            return JSON.parse(zip.readAsText(zipEntries[i]))[`bundle_size`];
-          }
-        }
-      }
+async function extractArtifactSize(downloadUrl, GITHUB_TOKEN, metricType) {
+  const zipData = await downloadArtifact(downloadUrl, GITHUB_TOKEN);
+  const zip = new AdmZip(zipData);
+
+  for (const zipEntry of zip.getEntries()) {
+    console.log("Zip entry name:", zipEntry.entryName);
+    if (zipEntry.entryName === "metric.json") {
+      const metrics = JSON.parse(zip.readAsText(zipEntry));
+      const sizeKey = metricType === "apk" ? "apk_size" : "bundle_size";
+      console.log(`${metricType.toUpperCase()} SIZE:`, metrics[sizeKey]);
+      return metrics[sizeKey] || null;
     }
-    noArtifactFoundError();
   }
+
+  return null;
+}
+
+async function downloadArtifact(downloadUrl, GITHUB_TOKEN) {
+  const config = {
+    method: "GET",
+    url: downloadUrl,
+    headers: {
+      accept: "application/vnd.github+json",
+      authorization: `Bearer ${GITHUB_TOKEN}`,
+    },
+    responseType: "arraybuffer",
+  };
+
+  const response = await axios(config);
+  return response.data;
 }
 
 export async function postComment(deltaPayload, GITHUB_TOKEN) {
@@ -58,9 +75,10 @@ export async function postComment(deltaPayload, GITHUB_TOKEN) {
     url: `https://api.github.com/repos/${context.repo.owner}/${context.repo.repo}/issues/${context.payload.number}/comments`,
     headers: {
       accept: "application/vnd.github+json",
-      authorization: "Bearer " + GITHUB_TOKEN,
+      authorization: `Bearer ${GITHUB_TOKEN}`,
     },
     data: { body: deltaPayload },
   };
-  axios(config);
+
+  await axios(config);
 }

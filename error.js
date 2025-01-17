@@ -25,3 +25,7 @@ export function thresholdExceededError() {
 export function buildPathError() {
   setFailed("Build Path error. Make sure the flavor provided is correct");
 }
+
+export function apkNameError() {
+  setFailed("apk name error. Make sure the apk name provided is correct");
+}

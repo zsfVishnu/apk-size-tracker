@@ -5,13 +5,14 @@ inputs:
     description: "flavor of the apk to build"
     required: true
     default: "staging"
-  GITHUB_TOKEN:
+  github_token:
     description: "GitHub token"
     required: true
   threshold:
     description: "Permissible size threshold above which merging will be blocked"
     required: false
-  is-react-native:
+    default: "100"
+  is_react_native:
     description: "is it a react native project"
     required: false
     default: false
@@ -27,9 +28,16 @@ inputs:
     description: "yarn.lock file changes"
     required: true
     default: false
-  bundle-command:
+  bundle_command:
     description: "Bundle command"
     required: true
+  working_directory:
+      description: "Working Directory"
+      required: false
+  stream_output_max_buffer:
+    description: "Bundle command"
+    required: false
+    default: "1"
 runs:
   using: "node16"
   main: "dist/index.js"
